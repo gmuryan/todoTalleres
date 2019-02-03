@@ -10,7 +10,7 @@ class ProveedorList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {proveedores: [], isLoading: true};
+    this.state = {proveedores: [], isLoading: true, nombre: '', nit: ''};
     this.remove = this.remove.bind(this);
   }
 
@@ -51,21 +51,31 @@ class ProveedorList extends Component {
     })
   };
 
+  filterUpdate = e => {
+      this.setState({nombre : e.target.value});
+      this.setState({nit : e.target.value})
+  }
+
   render() {
-    const {proveedores, isLoading} = this.state;
+    const {proveedores, isLoading, nombre, nit} = this.state;
+    const filterProveedores = proveedores.filter(prov => {
+        return prov.razonSocial.toLowerCase().indexOf( nombre.toLowerCase()) !== -1
+        || prov.cuit.indexOf(nit) !== -1
+    })
 
     if (isLoading) {
       return <p>Loading...</p>;
       
     }
 
-    const proveedorList = proveedores.map(prov => {
+    const proveedorList = filterProveedores.map(prov => {
       return <tr key={prov.idProveedor}>
         <td style={{whiteSpace: 'nowrap'}}>{prov.razonSocial}</td>
         <td>{prov.cuit}</td>
         <td>
           <ButtonGroup>
             <Button size="sm" color="primary" tag={Link} to={"/proveedores/" + prov.idProveedor}>Edit</Button>
+            &nbsp;&nbsp;
             <Button size="sm" color="danger" onClick={() => this.dialog(prov)}>Delete</Button>
           </ButtonGroup>
         </td>
@@ -80,7 +90,9 @@ class ProveedorList extends Component {
             <Button color="success" tag={Link} to="/proveedores/new">Add Supplier</Button>
           </div>
           <h3>My Suppliers</h3>
-          <input type="text" name="razonSocial" id="razonSocial" placeholder="Razon Social..."></input>
+          <input type="text" onChange={this.filterUpdate} placeholder="Razon Social..."></input>
+          &nbsp;&nbsp;
+          <input type="text" onChange={this.filterUpdate} placeholder="Cuit..."></input>
           <Table className="mt-4">
             <thead>
             <tr>
