@@ -21,8 +21,8 @@ class ProveedorEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const group = await (await fetch(`/api/proveedor/${this.props.match.params.id}`)).json();
-      this.setState({item: group});
+      const prov = await (await fetch(`/api/proveedor/${this.props.match.params.id}`)).json();
+      this.setState({item: prov});
     }
   }
 
@@ -52,7 +52,7 @@ class ProveedorEdit extends Component {
 
   render() {
     const {item} = this.state;
-    const title = <h2>{item.id ? 'Edit Supplier' : 'Add Supplier'}</h2>;
+    const title = <h2>{item.idProveedor ? 'Edit Supplier' : 'Add Supplier'}</h2>;
 
     return <div>
       <AppNavbar/>

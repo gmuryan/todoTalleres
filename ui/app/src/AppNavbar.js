@@ -19,6 +19,7 @@ export default class AppNavbar extends Component {
     return <Navbar color="dark" dark expand="md">
       <NavbarBrand tag={Link} to="/">Home</NavbarBrand>
       <NavbarBrand tag={Link} to="/proveedores">Suppliers</NavbarBrand>
+      <NavbarBrand tag={Link} to="/materiales">Materials</NavbarBrand>
       <NavbarToggler onClick={this.toggle}/>
       <Collapse isOpen={this.state.isOpen} navbar>
         <Nav className="ml-auto" navbar>
