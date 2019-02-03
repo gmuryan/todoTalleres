@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { Link } from 'react-router-dom';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
+
+
 class ProveedorList extends Component {
 
   constructor(props) {
@@ -31,11 +35,28 @@ class ProveedorList extends Component {
     });
   }
 
+        dialog(prov) {
+    confirmAlert({
+      title: 'Confirm to delete',
+      message: 'Are you sure to do this?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => this.remove(prov.idProveedor)
+        },
+        {
+          label: 'No'
+        }
+      ]
+    })
+  };
+
   render() {
     const {proveedores, isLoading} = this.state;
 
     if (isLoading) {
       return <p>Loading...</p>;
+      
     }
 
     const proveedorList = proveedores.map(prov => {
@@ -45,7 +66,7 @@ class ProveedorList extends Component {
         <td>
           <ButtonGroup>
             <Button size="sm" color="primary" tag={Link} to={"/proveedores/" + prov.idProveedor}>Edit</Button>
-            <Button size="sm" color="danger" onClick={() => this.remove(prov.idProveedor)}>Delete</Button>
+            <Button size="sm" color="danger" onClick={() => this.dialog(prov)}>Delete</Button>
           </ButtonGroup>
         </td>
       </tr>

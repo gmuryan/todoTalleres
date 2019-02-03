@@ -6,6 +6,9 @@ import ProveedorList from './ProveedorList';
 import ProveedorEdit from './ProveedorEdit';
 
 class App extends Component {
+    componentDidMount(){
+        document.title = "Fabrica React"
+    }
   render() {
     return (
       <Router>
