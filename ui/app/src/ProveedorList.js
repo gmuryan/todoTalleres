@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 
-
 class ProveedorList extends Component {
 
   constructor(props) {
@@ -19,7 +18,8 @@ class ProveedorList extends Component {
 
     fetch('api/proveedores')
       .then(response => response.json())
-      .then(data => this.setState({proveedores: data, isLoading: false}));
+      .then(data => this.setState({proveedores: data, isLoading: false}))
+
   }
 
   async remove(id) {
@@ -111,4 +111,4 @@ class ProveedorList extends Component {
   }
 }
 
-export default ProveedorList;
+export default ProveedorList

@@ -13,6 +13,7 @@ class App extends Component {
     }
   render() {
     return (
+        <div><Home mssg = "I like cheese"/></div>,
       <Router>
         <Switch>
           <Route path='/' exact={true} component={Home}/>

@@ -9,6 +9,12 @@ import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 
 class Home extends Component {
 
+      constructor(props) {
+    super(props);
+    console.log(this.props);
+  }
+
+
     
 
       submit = () => {
@@ -37,6 +43,7 @@ class Home extends Component {
           <Button color="link"><Link to="/proveedores">Manage Suppliers</Link></Button>
                 <div className="container">
         <button onClick={this.submit}>Confirm dialog</button>
+        <p>My name is: {this.props.mssg}</p>
       </div>
         </Container>
       </div>

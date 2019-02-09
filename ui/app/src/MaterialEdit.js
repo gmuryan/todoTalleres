@@ -15,16 +15,22 @@ class MaterialEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      item: this.emptyItem
+      item: this.emptyItem,
+      proveedores : []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   async componentDidMount() {
+
     if (this.props.match.params.id !== 'new') {
       const mat = await (await fetch(`/api/material/${this.props.match.params.id}`)).json();
-      this.setState({item: mat});
+      const provs = await (await fetch(`/api/proveedores`)).json();
+      this.setState({item: mat, proveedores: provs});
+    }else{
+        const provs = await (await fetch(`/api/proveedores`)).json();
+        this.setState({proveedores: provs});
     }
   }
 
@@ -42,7 +48,7 @@ class MaterialEdit extends Component {
     const {item} = this.state;
 
     await fetch('/api/material', {
-      method: (item.id) ? 'PUT' : 'POST',
+      method: (item.idMaterial) ? 'PUT' : 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -53,9 +59,12 @@ class MaterialEdit extends Component {
   }
 
   render() {
-    const {item} = this.state;
+    const {item, proveedores} = this.state;
+    console.log(this.state.proveedores);
+    let optionItems = proveedores.map((prov) => 
+        <option key={prov.idProveedor}>{prov.razonSocial}</option>
+    );
     const title = <h2>{item.idMaterial ? 'Edit Material' : 'Add Material'}</h2>;
-
     return <div>
       <AppNavbar/>
       <Container>
@@ -81,8 +90,13 @@ class MaterialEdit extends Component {
             <Input type="text" name="precio" id="precio" value={item.precio || ''}
                    onChange={this.handleChange} autoComplete="precio"/>
           </FormGroup>
+          <FormGroup>
+            <select>
+                {optionItems}
+                {/* <option key={item.proveedor.idProveedor}>{item.proveedor.razonSocial}</option>  */}
+            </select>
+          </FormGroup>          
             <FormGroup>
-            <select></select>
           </FormGroup>
           <FormGroup>
             <Button color="primary" type="submit">Save</Button>{' '}

@@ -40,7 +40,7 @@ class ProveedorEdit extends Component {
     const {item} = this.state;
 
     await fetch('/api/proveedor', {
-      method: (item.id) ? 'PUT' : 'POST',
+      method: (item.idProveedor) ? 'PUT' : 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
