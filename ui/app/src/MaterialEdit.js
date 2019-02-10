@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
+import './App.css';
 
 class MaterialEdit extends Component {
 
@@ -62,7 +63,7 @@ class MaterialEdit extends Component {
   render() {
     const {item, proveedores} = this.state;
     let optionItems = proveedores.map((prov) => 
-        <option key={prov.idProveedor} value={JSON.stringify(prov)}>{prov.razonSocial}</option>
+        <option key={prov.idProveedor} selected={item.proveedor.idProveedor == prov.idProveedor} value={JSON.stringify(prov)}>{prov.razonSocial}</option>
     );
     const title = <h2>{item.idMaterial ? 'Edit Material' : 'Add Material'}</h2>;
     return <div>
@@ -91,9 +92,13 @@ class MaterialEdit extends Component {
                    onChange={this.handleChange} autoComplete="precio"/>
           </FormGroup>
           <FormGroup>
-            <select value={item.proveedor} name="proveedor" id="proveedor" onChange={this.handleChange} autoComplete="proveedor">
+              <Label for="proveedor">Proveedor</Label>
+              <br></br>
+              <div>
+            <select className="select" name="proveedor" id="proveedor" onChange={this.handleChange} autoComplete="proveedor">
                 {optionItems}
             </select>
+            </div>
           </FormGroup>          
             <FormGroup>
           </FormGroup>

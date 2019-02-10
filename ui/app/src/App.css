@@ -26,6 +26,12 @@
   margin-top: 20px;
 }  
 
+.select{
+    width: 100%;
+    height: calc(2.5rem + 1px);
+    border-radius: .25rem;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -10,7 +10,7 @@ class MaterialList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {materiales: [], isLoading: true, nombre: ''};
+    this.state = {materiales: [], isLoading: true, nombre: '', razonSocial: ''};
     this.remove = this.remove.bind(this);
   }
 
@@ -53,12 +53,14 @@ class MaterialList extends Component {
 
   filterUpdate = e => {
       this.setState({nombre : e.target.value});
+      this.setState({razonSocial: e.target.value});
   }
 
   render() {
-    const {materiales, isLoading, nombre} = this.state;
+    const {materiales, isLoading, nombre, razonSocial} = this.state;
     const filterMateriales = materiales.filter(mat => {
         return mat.nombre.toLowerCase().indexOf( nombre.toLowerCase()) !== -1
+        || mat.proveedor.razonSocial.toLowerCase().indexOf(razonSocial.toLowerCase()) !== -1
     })
 
     if (isLoading) {
@@ -92,7 +94,7 @@ class MaterialList extends Component {
           <h3>My Materials</h3>
           <input type="text" onChange={this.filterUpdate} placeholder="Nombre..."></input>
           &nbsp;&nbsp;
-          <input type="text" onChange={this.filterUpdate} placeholder="Cuit..."></input>
+          <input type="text" onChange={this.filterUpdate} placeholder="Proveedor..."></input>
           <Table className="mt-4">
             <thead>
             <tr>
