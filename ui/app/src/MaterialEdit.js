@@ -9,7 +9,8 @@ class MaterialEdit extends Component {
     nombre: '',
     stock: '',
     puntoDePedido: '',
-    precio: ''
+    precio: '',
+    proveedor: ''
   };
 
   constructor(props) {
@@ -60,9 +61,8 @@ class MaterialEdit extends Component {
 
   render() {
     const {item, proveedores} = this.state;
-    console.log(this.state.proveedores);
     let optionItems = proveedores.map((prov) => 
-        <option key={prov.idProveedor}>{prov.razonSocial}</option>
+        <option key={prov.idProveedor} value={JSON.stringify(prov)}>{prov.razonSocial}</option>
     );
     const title = <h2>{item.idMaterial ? 'Edit Material' : 'Add Material'}</h2>;
     return <div>
@@ -91,9 +91,8 @@ class MaterialEdit extends Component {
                    onChange={this.handleChange} autoComplete="precio"/>
           </FormGroup>
           <FormGroup>
-            <select>
+            <select value={item.proveedor} name="proveedor" id="proveedor" onChange={this.handleChange} autoComplete="proveedor">
                 {optionItems}
-                {/* <option key={item.proveedor.idProveedor}>{item.proveedor.razonSocial}</option>  */}
             </select>
           </FormGroup>          
             <FormGroup>

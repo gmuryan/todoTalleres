@@ -3,6 +3,7 @@ package com.fabricaReact.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,9 @@ public class MaterialService {
 		return materialRepository.save(mat);
 	}
 	
-	public Material findById (long id) {
-		return materialRepository.findById(id).orElse(null);
+	public Optional<Material> findById (long id) {
+		Optional<Material> mat = materialRepository.findById(id);
+		return mat;
 		
 	}
 	
@@ -44,10 +46,8 @@ public class MaterialService {
 		
 	}
 
-
-	public void saveMat(Material mat) {
-		materialRepository.save(mat);
-		
+	public void deleteById(Long id) {
+		materialRepository.deleteById(id);
 	}
 	
 	public List<Material> findMatByProvs(List<Proveedor> provs) {

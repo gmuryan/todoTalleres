@@ -1,11 +1,20 @@
 package com.fabricaReact.model;
 
+import java.io.IOException;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+
 
 @Entity
 @Table(name="Proveedor")
@@ -22,7 +31,6 @@ public class Proveedor {
 	private String cuit;
 	
 	public Proveedor() {
-		super();
 	}
 
 	public Proveedor(String razonSocial, String cuit) {
@@ -30,6 +38,16 @@ public class Proveedor {
 		this.razonSocial = razonSocial;
 		this.cuit = cuit;
 	}
+	
+	//Para pasar los json a clase de java
+    @JsonCreator
+    public static Proveedor Create(String jsonString) throws JsonParseException, JsonMappingException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Proveedor prov = null;
+        prov = mapper.readValue(jsonString, Proveedor.class);
+        return prov;
+    }
+
 
 	public long getIdProveedor() {
 		return idProveedor;
