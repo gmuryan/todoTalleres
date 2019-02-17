@@ -27,10 +27,10 @@ public class Prenda {
 	@JoinColumn(name="idPrenda")
 	private List<DetallePrenda> detallePrendas;
 	
-	@Column
+	@Column (nullable = true)
 	private String estacion;
 	
-	@Column
+	@Column (nullable = true)
 	private float porcentaje;
 	
 	@Column

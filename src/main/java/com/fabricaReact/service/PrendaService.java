@@ -1,7 +1,7 @@
 package com.fabricaReact.service;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -30,12 +30,17 @@ public class PrendaService {
 		prendaRepository.delete(prenda);
 	}
 
-	public void save(Prenda prenda) {
-		prendaRepository.save(prenda);
+	public Prenda save(Prenda prenda) {
+		return prendaRepository.save(prenda);
 	}
 
-	public Prenda findById(long idPrenda) {
-		return prendaRepository.findById(idPrenda).orElse(null);
+	public Optional<Prenda> findById(long id) {
+		Optional<Prenda> prenda = prendaRepository.findById(id);
+		return prenda;
+	}
+	
+	public void deleteById(Long id) {
+		prendaRepository.deleteById(id);
 	}
 	
 	

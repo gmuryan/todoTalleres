@@ -6,6 +6,8 @@ import ProveedorList from './ProveedorList';
 import ProveedorEdit from './ProveedorEdit';
 import MaterialList from './MaterialList';
 import MaterialEdit from './MaterialEdit';
+import PrendaList from './PrendaList'
+import PrendaEdit from './PrendaEdit'
 
 class App extends Component {
     componentDidMount(){
@@ -21,6 +23,8 @@ class App extends Component {
           <Route path='/proveedores/:id' component={ProveedorEdit}/>
           <Route path='/materiales' exact={true} component={MaterialList}/>
           <Route path='/materiales/:id' component={MaterialEdit}/>
+          <Route path='/prendas' exact={true} component={PrendaList}/>
+          <Route path='/prendas/:id' component={PrendaEdit}/>
         </Switch>
       </Router>
     )
