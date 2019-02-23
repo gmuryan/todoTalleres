@@ -1,6 +1,5 @@
 package com.fabricaReact.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +20,7 @@ public class DetallePrenda {
 	@Column
 	private int cantidad;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="idMaterial")
 	private Material material;
 

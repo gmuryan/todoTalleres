@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import { ButtonGroup, Table } from 'reactstrap';
 import AppNavbar from './AppNavbar';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import './App.css';
 
 class PrendaEdit extends Component {
@@ -17,7 +20,8 @@ class PrendaEdit extends Component {
     super(props);
     this.state = {
       item: this.emptyItem,
-      temporada: false
+      temporada: false,
+      detalles: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,7 +30,8 @@ class PrendaEdit extends Component {
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
       const prenda = await (await fetch(`/api/prenda/${this.props.match.params.id}`)).json();
-      this.setState({item: prenda, temporada: prenda.temporada});
+      const dets = await (await fetch(`/api/detallesPrenda/${this.props.match.params.id}`)).json();
+      this.setState({item: prenda, temporada: prenda.temporada, detalles: dets});
     }
   }
 
@@ -50,6 +55,34 @@ class PrendaEdit extends Component {
       })
   }
 
+    dialog(detalle) {
+    confirmAlert({
+      title: 'Confirm to delete',
+      message: 'Are you sure to do this?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => this.remove(detalle.idDetallePrenda)
+        },
+        {
+          label: 'No'
+        }
+      ]
+    })
+  };
+
+    async remove(id) {
+    await fetch(`/api/detallePrenda/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(() => {
+      let updatedDetalles = [...this.state.detalles].filter(i => i.idDetallePrenda !== id);
+      this.setState({detalles: updatedDetalles});
+    });
+  }
 
 
   async handleSubmit(event) {
@@ -68,7 +101,20 @@ class PrendaEdit extends Component {
   }
 
   render() {
-    const {item, temporada} = this.state;
+    const {item, temporada, detalles} = this.state;
+    const detalleList = detalles.map (detalle => {
+        return <tr key={detalle.idDetallePrenda}>
+        <td>{detalle.material.nombre}</td>
+        <td>{detalle.cantidad}</td>
+        <td>
+          <ButtonGroup>
+            <Button size="sm" color="primary" tag={Link} to={"/detallePrendas/" + detalle.idDetallePrenda}>Edit</Button>
+            &nbsp;&nbsp;
+            <Button size="sm" color="danger" onClick={() => this.dialog(detalle)}>Delete</Button>
+          </ButtonGroup>
+        </td>
+        </tr>
+    });
     const title = <h2>{item.idPrenda ? 'Edit Prenda' : 'Add Prenda'}</h2>;
     return <div>
       <AppNavbar/>
@@ -104,6 +150,28 @@ class PrendaEdit extends Component {
              onChange={this.handleChange} autoComplete="estacion"/>   
           </FormGroup>
           )}
+          <br></br>
+          <div>
+           <Container fluid>
+          <div className="float-right">
+            <Button color="success" tag={Link} to={"/detallePrendas/new"}>Add Detalle</Button>
+          </div>
+          <h3>Detalle Prenda</h3>
+          <Table className="mt-4">
+            <thead>
+            <tr>
+              <th width="20%">Material</th>
+              <th width="20%">Cantidad</th>
+              <th width="10%">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {detalleList}
+            </tbody>
+          </Table>
+        </Container>
+        </div>
+        <br></br>
           <FormGroup>
             <Button color="primary" type="submit">Save</Button>{' '}
             <Button color="secondary" tag={Link} to="/prendas">Cancel</Button>

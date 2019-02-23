@@ -8,6 +8,7 @@ import MaterialList from './MaterialList';
 import MaterialEdit from './MaterialEdit';
 import PrendaList from './PrendaList'
 import PrendaEdit from './PrendaEdit'
+import DetallePrendaEdit from './DetallePrendaEdit'
 
 class App extends Component {
     componentDidMount(){
@@ -25,6 +26,7 @@ class App extends Component {
           <Route path='/materiales/:id' component={MaterialEdit}/>
           <Route path='/prendas' exact={true} component={PrendaList}/>
           <Route path='/prendas/:id' component={PrendaEdit}/>
+          <Route path='/detallePrendas/:id' component={DetallePrendaEdit}/>
         </Switch>
       </Router>
     )

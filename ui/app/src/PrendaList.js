@@ -4,12 +4,13 @@ import AppNavbar from './AppNavbar';
 import { Link } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
+import './App.css';
 
 class PrendaList extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {prendas: [], isLoading: true, nombre: '', nit: ''};
+    this.state = {prendas: [], isLoading: true, nombre: ''};
     this.remove = this.remove.bind(this);
   }
 
@@ -110,9 +111,7 @@ class PrendaList extends Component {
             <Button color="success" tag={Link} to="/prendas/new">Add Prenda</Button>
           </div>
           <h3>My Prendas</h3>
-          <input type="text" onChange={this.filterUpdate} placeholder="Razon Social..."></input>
-          &nbsp;&nbsp;
-          <input type="text" onChange={this.filterUpdate} placeholder="Cuit..."></input>
+          <input type="text" onChange={this.filterUpdate} placeholder="Prenda..."></input>
           <Table className="mt-4">
             <thead>
             <tr>

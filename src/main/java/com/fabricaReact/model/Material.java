@@ -1,5 +1,6 @@
 package com.fabricaReact.model;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 import javax.persistence.Column;
@@ -10,6 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Entity
 @Table(name="Material")
@@ -50,7 +56,13 @@ public class Material {
 		this.precio = precio;
 	}
 	
-	
+	@JsonCreator
+	public static Material Create(String jsonString)throws JsonParseException, JsonMappingException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Material mat = null;
+        mat = mapper.readValue(jsonString, Material.class);
+        return mat;
+	}
 	
 	public Material(String nombre, int stock, int puntoDePedido, BigDecimal precio) {
 		super();
