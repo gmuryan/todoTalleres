@@ -154,7 +154,7 @@ class PrendaEdit extends Component {
           <div>
            <Container fluid>
           <div className="float-right">
-            <Button color="success" tag={Link} to={"/detallePrendas/new"}>Add Detalle</Button>
+            <Button color="success" tag={Link} to={"/detallePrendas/new/" + item.idPrenda}>Add Detalle</Button>
           </div>
           <h3>Detalle Prenda</h3>
           <Table className="mt-4">

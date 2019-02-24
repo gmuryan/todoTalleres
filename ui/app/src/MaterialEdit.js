@@ -65,6 +65,10 @@ class MaterialEdit extends Component {
     let optionItems = proveedores.map((prov) => 
         <option key={prov.idProveedor} selected={item.proveedor.idProveedor == prov.idProveedor} value={JSON.stringify(prov)}>{prov.razonSocial}</option>
     );
+
+    let newOptions = proveedores.map((prov) =>
+        <option key={prov.idProveedor} value={JSON.stringify(prov)}>{prov.razonSocial}</option>
+    );
     const title = <h2>{item.idMaterial ? 'Edit Material' : 'Add Material'}</h2>;
     return <div>
       <AppNavbar/>
@@ -91,6 +95,7 @@ class MaterialEdit extends Component {
             <Input type="text" name="precio" id="precio" value={item.precio || ''}
                    onChange={this.handleChange} autoComplete="precio"/>
           </FormGroup>
+          {item.idMaterial && (
           <FormGroup>
               <Label for="proveedor">Proveedor</Label>
               <br></br>
@@ -99,7 +104,20 @@ class MaterialEdit extends Component {
                 {optionItems}
             </select>
             </div>
-          </FormGroup>          
+          </FormGroup>
+          )}          
+          {item.idMaterial == null && (
+          <FormGroup>
+              <Label for="proveedor">Proveedor</Label>
+              <br></br>
+              <div>
+            <select className="select" name="proveedor" id="proveedor" onChange={this.handleChange} autoComplete="proveedor">
+                <option default>Select a Supplier...</option>
+                {newOptions}
+            </select>
+            </div>
+          </FormGroup>
+          )}
             <FormGroup>
           </FormGroup>
           <FormGroup>

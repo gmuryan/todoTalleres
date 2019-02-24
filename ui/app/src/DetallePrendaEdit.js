@@ -57,9 +57,13 @@ class DetallePrendaEdit extends Component {
   }
 
   render() {
+    console.log(this.props.match);
     const {item, materiales} = this.state;
     let optionItems = materiales.map((mat) =>
         <option key={mat.idMaterial} selected={item.material.idMaterial == mat.idMaterial} value={JSON.stringify(mat)}>{mat.nombre}</option>
+    );
+    let newOptions = materiales.map((mat) =>
+        <option key={mat.idMaterial} value={JSON.stringify(mat)}>{mat.nombre}</option>
     );
     const title = <h2>{item.idDetallePrenda ? 'Edit Detalle Prenda' : 'Add Detalle Prenda'}</h2>;
 
@@ -68,6 +72,7 @@ class DetallePrendaEdit extends Component {
       <Container>
         {title}
         <Form onSubmit={this.handleSubmit}>
+        {item.idDetallePrenda && ( 
           <FormGroup>
               <Label for="material">Material</Label>
               <br></br>
@@ -77,6 +82,19 @@ class DetallePrendaEdit extends Component {
             </select>
             </div>
           </FormGroup>
+          )}
+          {item.idDetallePrenda == null && ( 
+          <FormGroup>
+              <Label for="material">Material</Label>
+              <br></br>
+              <div>
+            <select className="select" name="material" id="material" onChange={this.handleChange} autoComplete="material">
+                <option default>Select a Material...</option>
+                {newOptions}
+            </select>
+            </div>
+          </FormGroup>
+          )}
           <FormGroup>
             <Label for="cantidad">Cantidad</Label>
             <Input type="text" name="cantidad" id="cantidad" value={item.cantidad || ''}
