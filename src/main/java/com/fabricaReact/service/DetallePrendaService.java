@@ -20,7 +20,7 @@ public class DetallePrendaService {
 	}
 	
 	public List<DetallePrenda> findAll(){
-		return detallePrendaRepository.findAll();
+		return detallePrendaRepository.findAllNull();
 	}
 	
 	public List<DetallePrenda> findAllById(long id){

@@ -91,7 +91,7 @@ class PrendaList extends Component {
         <td>{prenda.stock}</td>
         <td>{prenda.temporada.toString()}</td>
         <td></td>
-        <td>{prenda.estacion}</td>
+        <td></td>
         <td>
           <ButtonGroup>
             <Button size="sm" color="primary" tag={Link} to={"/prendas/" + prenda.idPrenda}>Edit</Button>

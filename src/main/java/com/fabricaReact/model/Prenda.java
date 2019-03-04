@@ -39,8 +39,11 @@ public class Prenda {
 	@Column
 	private boolean temporada;
 
+	@Column
+	private int puntoDePedido;
+
 	public Prenda(String nombre, List<DetallePrenda> detallePrendas, String estacion, float porcentaje, int stock,
-			boolean temporada) {
+			boolean temporada, int puntoDePedido) {
 		super();
 		this.nombre = nombre;
 		this.detallePrendas = detallePrendas;
@@ -48,6 +51,7 @@ public class Prenda {
 		this.porcentaje = porcentaje;
 		this.stock = stock;
 		this.temporada = temporada;
+		this.puntoDePedido = puntoDePedido;
 	}
 	
 	public Prenda() {
@@ -109,8 +113,12 @@ public class Prenda {
 	public void setTemporada(boolean temporada) {
 		this.temporada = temporada;
 	}
-	
-	
-	
-	
+
+	public int getPuntoDePedido() {
+		return puntoDePedido;
+	}
+
+	public void setPuntoDePedido(int puntoDePedido) {
+		this.puntoDePedido = puntoDePedido;
+	}
 }

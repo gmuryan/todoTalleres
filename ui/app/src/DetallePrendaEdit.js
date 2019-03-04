@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import './App.css';
@@ -10,6 +10,7 @@ class DetallePrendaEdit extends Component {
     material: '',
     cantidad: ''
   };
+
 
   constructor(props) {
     super(props);
@@ -44,7 +45,6 @@ class DetallePrendaEdit extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
-
     await fetch('/api/detallePrenda', {
       method: (item.idDetallePrenda) ? 'PUT' : 'POST',
       headers: {
@@ -52,12 +52,12 @@ class DetallePrendaEdit extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(item),
+      idPrenda: 1,
     });
-    this.props.history.push('/prendas');
+      this.props.history.goBack();
   }
 
   render() {
-    console.log(this.props.match);
     const {item, materiales} = this.state;
     let optionItems = materiales.map((mat) =>
         <option key={mat.idMaterial} selected={item.material.idMaterial == mat.idMaterial} value={JSON.stringify(mat)}>{mat.nombre}</option>
@@ -102,7 +102,7 @@ class DetallePrendaEdit extends Component {
           </FormGroup>
           <FormGroup>
             <Button color="primary" type="submit">Save</Button>{' '}
-            <Button color="secondary" tag={Link} to="/prendas">Cancel</Button>
+            <Button color="secondary" onClick={this.props.history.goBack}>Cancel</Button>
           </FormGroup>
         </Form>
       </Container>

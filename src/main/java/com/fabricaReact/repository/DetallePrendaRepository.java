@@ -12,8 +12,11 @@ import com.fabricaReact.model.DetallePrenda;
 @Repository("detallePrendaRepository")
 public interface DetallePrendaRepository extends JpaRepository<DetallePrenda, Long>{
 	
-	@Query(value = "SELECT * FROM DETALLE_PRENDA WHERE ID_PRENDA = ?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM DETALLE_PRENDA WHERE ID_PRENDA = ?1 OR ID_PRENDA IS NULL", nativeQuery = true)
 	List<DetallePrenda> findAllByIdPrenda(long id);
+
+	@Query(value= "SELECT * FROM DETALLE_PRENDA WHERE ID_PRENDA IS NULL", nativeQuery = true)
+	List<DetallePrenda> findAllNull();
 	
 	@Modifying
 	@Query(value = "UPDATE DETALLE_PRENDA SET ID_PRENDA = ?1 WHERE ID_DETALLE_PRENDA = ?2", nativeQuery = true)

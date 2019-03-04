@@ -49,21 +49,24 @@ private final Logger log = LoggerFactory.getLogger(PrendaController.class);
 
 	@PostMapping("/prenda")
 	ResponseEntity<Prenda> createPrenda(@Valid @RequestBody Prenda prenda) throws URISyntaxException {
-		log.info("Request to create a material: {}", prenda);
-		Prenda result = prendaService.save(prenda);
-		return ResponseEntity.created(new URI("/api/material" + result.getIdPrenda())).body(result);
+		log.info("Request to create a prenda: {}", prenda);
+		Prenda aux = new Prenda(prenda.getNombre(), null, prenda.getEstacion(), prenda.getPorcentaje(), prenda.getStock(), prenda.isTemporada(), prenda.getPuntoDePedido());
+		aux = prendaService.save(aux);
+		aux.setDetallePrendas(prenda.getDetallePrendas());
+		Prenda result = prendaService.save(aux);
+		return ResponseEntity.created(new URI("/api/prenda" + result.getIdPrenda())).body(result);
 	}
 	
 	@PutMapping("/prenda")
 	ResponseEntity<Prenda> updatePrenda(@Valid @RequestBody Prenda prenda){
-		log.info("Request to update material: {}", prenda);
+		log.info("Request to update prenda: {}", prenda);
 		Prenda result = prendaService.save(prenda);
 		return ResponseEntity.ok().body(result);
 	}
 	
 	@DeleteMapping("/prenda/{id}")
 	public ResponseEntity<?> deletePrenda (@PathVariable Long id){
-		log.info("Request to delete material: {}", id);
+		log.info("Request to delete prenda: {}", id);
 		prendaService.deleteById(id);
 		return ResponseEntity.ok().build();
 	}
