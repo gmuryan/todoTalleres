@@ -20,7 +20,7 @@ public class OrdenCompra {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long idOC;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="idProveedor")
 	private Proveedor proveedor;
 	

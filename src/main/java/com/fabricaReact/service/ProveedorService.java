@@ -41,6 +41,10 @@ public class ProveedorService {
 		return prov;
 	}
 
+	public Proveedor findProveedorById (long id){
+		return proveedorRepository.findById(id).orElse(null);
+	}
+
 	public List<Proveedor> findAllByCuit(String cuit) {
 		return proveedorRepository.findByCuitStartingWith(cuit);
 	}

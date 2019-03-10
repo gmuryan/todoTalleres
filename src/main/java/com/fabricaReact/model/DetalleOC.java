@@ -21,7 +21,7 @@ public class DetalleOC {
 	@Column
 	private int cantidad;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="idMaterial")
 	private Material material;
 	

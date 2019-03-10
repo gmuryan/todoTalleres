@@ -20,12 +20,9 @@ public class DetalleFactura {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long idDetalleFactura;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="idPrenda")
 	private Prenda prenda;
-	
-	@Column(name = "importe", precision = 10, scale = 2)
-	private BigDecimal importe;
 	
 	@Column
 	private int cantidad;
@@ -34,10 +31,9 @@ public class DetalleFactura {
 		super();
 	}
 
-	public DetalleFactura(Prenda prenda, BigDecimal importe, int cantidad) {
+	public DetalleFactura(Prenda prenda, int cantidad) {
 		super();
 		this.prenda = prenda;
-		this.importe = importe;
 		this.cantidad = cantidad;
 	}
 
@@ -69,14 +65,6 @@ public class DetalleFactura {
 
 	public void setPrenda(Prenda prenda) {
 		this.prenda = prenda;
-	}
-
-	public BigDecimal getImporte() {
-		return importe;
-	}
-
-	public void setImporte(BigDecimal importe) {
-		this.importe = importe;
 	}
 	
 	

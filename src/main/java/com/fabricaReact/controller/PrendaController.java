@@ -1,5 +1,6 @@
 package com.fabricaReact.controller;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -30,8 +31,8 @@ public class PrendaController {
 private final Logger log = LoggerFactory.getLogger(PrendaController.class);
 	
 	private PrendaService prendaService;
-	
-	public PrendaController (PrendaService prendaService) {
+
+	public PrendaController (PrendaService prendaService ) {
 		this.prendaService = prendaService;
 	}
 	
@@ -53,6 +54,8 @@ private final Logger log = LoggerFactory.getLogger(PrendaController.class);
 		Prenda aux = new Prenda(prenda.getNombre(), null, prenda.getEstacion(), prenda.getPorcentaje(), prenda.getStock(), prenda.isTemporada(), prenda.getPuntoDePedido());
 		aux = prendaService.save(aux);
 		aux.setDetallePrendas(prenda.getDetallePrendas());
+		BigDecimal precio = aux.calcularPrecio();
+		aux.setPrecio(precio);
 		Prenda result = prendaService.save(aux);
 		return ResponseEntity.created(new URI("/api/prenda" + result.getIdPrenda())).body(result);
 	}

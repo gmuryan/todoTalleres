@@ -1,45 +1,75 @@
 package com.fabricaReact;
 
-import com.fabricaReact.model.DetallePrenda;
-import com.fabricaReact.model.Material;
-import com.fabricaReact.model.Prenda;
-import com.fabricaReact.service.DetallePrendaService;
-import com.fabricaReact.service.MaterialService;
-import com.fabricaReact.service.PrendaService;
+import com.fabricaReact.model.*;
+import com.fabricaReact.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class DataBaseLoader implements CommandLineRunner {
 
     private final PrendaService prendaService;
 
-    private final MaterialService materialService;
+    private final FacturaService facturaService;
 
-    private final DetallePrendaService detallePrendaService;
+    private final DetalleFacturaService detalleFacturaService;
 
     @Autowired
-    public DataBaseLoader (PrendaService prendaService, MaterialService materialService, DetallePrendaService detallePrendaService){
+    private MaterialService materialService;
+
+    @Autowired
+    private OrdenCompraService ordenCompraService;
+
+    private final Logger log = LoggerFactory.getLogger(DataBaseLoader.class);
+
+
+    @Autowired
+    public DataBaseLoader (PrendaService prendaService, FacturaService facturaService, DetalleFacturaService detalleFacturaService){
         this.prendaService = prendaService;
-        this.materialService = materialService;
-        this.detallePrendaService = detallePrendaService;
+        this.facturaService = facturaService;
+        this.detalleFacturaService = detalleFacturaService;
     }
 
 
     @Override
     public void run(String... args) throws Exception {
-//            List<DetallePrenda> dets = new ArrayList<>();
-//            List<Material> mats = materialService.findAll();
-//            DetallePrenda dp1 = new DetallePrenda(2, mats.get(0));
-//            DetallePrenda dp2 = new DetallePrenda(1, mats.get(1));
-//            detallePrendaService.save(dp1);
-//            detallePrendaService.save(dp2);
-//            dets.add(dp1);
-//            dets.add(dp2);
-//            this.prendaService.save(new Prenda("testDet", dets, "", 0, 15, false));
+            BigDecimal importe = new BigDecimal(0);
+            List<DetalleFactura> dets = new ArrayList<>();
+            List<Prenda> prendas = prendaService.findAll();
+            DetalleFactura df3 = new DetalleFactura(prendas.get(1), 1);
+            dets.add(df3);
+            for (DetalleFactura df : dets){
+                importe = importe.add(df.getPrenda().getPrecio().multiply(new BigDecimal(df.getCantidad())));
+            }
+            Factura factura = new Factura(dets, importe);
+            facturaService.save(factura);
+            prendaService.descontarStockPrendas(factura);
+            List<Material> mats = materialService.findMaterialesParaOC();
+            Set<Long> repetidos = new HashSet<Long>();
+            Set<Long> todos = new HashSet<Long>();
+            for (Material m : mats){
+                if (todos.contains(m.getProveedor().getIdProveedor())) {
+                    ordenCompraService.generarOC(m.getProveedor().getIdProveedor());
+                    repetidos.add(m.getProveedor().getIdProveedor());
+                }else{
+                    todos.add(m.getProveedor().getIdProveedor());
+                }
+
+            }
+            for (Material m : mats){
+                if (!repetidos.contains(m.getProveedor().getIdProveedor()))
+                    ordenCompraService.generarOC(m.getProveedor().getIdProveedor());
+            }
+
+
     }
 }

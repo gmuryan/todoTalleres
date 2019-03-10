@@ -58,6 +58,7 @@ class MaterialList extends Component {
 
   render() {
     const {materiales, isLoading, nombre, razonSocial} = this.state;
+    console.log(this.state.materiales);
     const filterMateriales = materiales.filter(mat => {
         return mat.nombre.toLowerCase().indexOf( nombre.toLowerCase()) !== -1
         || mat.proveedor.razonSocial.toLowerCase().indexOf(razonSocial.toLowerCase()) !== -1

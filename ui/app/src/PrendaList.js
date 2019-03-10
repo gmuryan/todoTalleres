@@ -72,6 +72,7 @@ class PrendaList extends Component {
     if (prenda.temporada == true){  
       return <tr key={prenda.idPrenda}>
         <td style={{whiteSpace: 'nowrap'}}>{prenda.nombre}</td>
+        <td>{prenda.precio}</td>
         <td>{prenda.stock}</td>
         <td>{prenda.temporada.toString()}</td>
         <td>{prenda.porcentaje}</td>
@@ -88,6 +89,7 @@ class PrendaList extends Component {
       }else{
         return <tr key={prenda.idPrenda}>
         <td style={{whiteSpace: 'nowrap'}}>{prenda.nombre}</td>
+          <td>{prenda.precio}</td>
         <td>{prenda.stock}</td>
         <td>{prenda.temporada.toString()}</td>
         <td></td>
@@ -115,11 +117,12 @@ class PrendaList extends Component {
           <Table className="mt-4">
             <thead>
             <tr>
-              <th width="20%">Nombre</th>
-              <th width="20%">Stock</th>
-              <th width="20%">Temporada</th>
-              <th width="20%">Porcentaje</th>
-              <th width="20%">Estacion</th>
+              <th width="10%">Nombre</th>
+              <th width="10%">Precio</th>
+              <th width="10%">Stock</th>
+              <th width="10%">Temporada</th>
+              <th width="10%">Porcentaje</th>
+              <th width="10%">Estacion</th>
               <th width="10%">Actions</th>
             </tr>
             </thead>

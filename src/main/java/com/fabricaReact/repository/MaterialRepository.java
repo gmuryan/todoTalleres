@@ -17,4 +17,10 @@ public interface MaterialRepository extends JpaRepository<Material, Long>{
 	@Query(value = "SELECT * FROM MATERIAL WHERE ID_PROVEEDOR = ?1", nativeQuery = true)
 	List<Material> findMatByProvId(long idProveedor);
 
+	@Query(value= "SELECT * FROM MATERIAL WHERE PUNTO_DE_PEDIDO >= STOCK", nativeQuery = true)
+	List<Material> findMatsParaOC();
+
+	@Query(value = "SELECT * FROM MATERIAL WHERE PUNTO_DE_PEDIDO  >= STOCK AND ID_PROVEEDOR = ?1", nativeQuery = true)
+	List<Material> findMatsParaOCByProveedor(long idProveedor);
+
 }

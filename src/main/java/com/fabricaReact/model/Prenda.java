@@ -1,16 +1,9 @@
 package com.fabricaReact.model;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="Prenda")
@@ -42,6 +35,9 @@ public class Prenda {
 	@Column
 	private int puntoDePedido;
 
+	@Column(name = "precio", precision = 10, scale = 2)
+	private BigDecimal precio;
+
 	public Prenda(String nombre, List<DetallePrenda> detallePrendas, String estacion, float porcentaje, int stock,
 			boolean temporada, int puntoDePedido) {
 		super();
@@ -52,6 +48,24 @@ public class Prenda {
 		this.stock = stock;
 		this.temporada = temporada;
 		this.puntoDePedido = puntoDePedido;
+		if (this.detallePrendas != null)
+			this.precio = this.calcularPrecio();
+	}
+
+	public BigDecimal calcularPrecio(){
+		BigDecimal precio = new BigDecimal(0);
+		for (DetallePrenda dp : this.detallePrendas){
+			precio = precio.add(dp.getMaterial().getPrecio().multiply(new BigDecimal(dp.getCantidad())));
+		}
+		if (this.temporada){
+			BigDecimal extra = new BigDecimal(0);
+			float aux = this.porcentaje/100;
+			BigDecimal porc = new BigDecimal(aux);
+			extra = precio.multiply(porc);
+			precio = precio.add(extra);
+		}
+
+		return precio;
 	}
 	
 	public Prenda() {
@@ -120,5 +134,13 @@ public class Prenda {
 
 	public void setPuntoDePedido(int puntoDePedido) {
 		this.puntoDePedido = puntoDePedido;
+	}
+
+	public BigDecimal getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(BigDecimal precio) {
+		this.precio = precio;
 	}
 }
