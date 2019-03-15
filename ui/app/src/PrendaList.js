@@ -69,14 +69,13 @@ class PrendaList extends Component {
     }
 
     const prendaList = filterPrendas.map(prenda => {
-    if (prenda.temporada == true){  
       return <tr key={prenda.idPrenda}>
         <td style={{whiteSpace: 'nowrap'}}>{prenda.nombre}</td>
         <td>{prenda.precio}</td>
         <td>{prenda.stock}</td>
-        <td>{prenda.temporada.toString()}</td>
-        <td>{prenda.porcentaje}</td>
-        <td>{prenda.estacion}</td>
+        <td>{prenda.estacion ? 'Si' : 'No'}</td>
+        <td>{prenda.porcentaje ? prenda.porcentaje : ''}</td>
+        <td>{prenda.estacion ? prenda.estacion : ''}</td>
 
         <td>
           <ButtonGroup>
@@ -86,23 +85,6 @@ class PrendaList extends Component {
           </ButtonGroup>
         </td>
       </tr>
-      }else{
-        return <tr key={prenda.idPrenda}>
-        <td style={{whiteSpace: 'nowrap'}}>{prenda.nombre}</td>
-          <td>{prenda.precio}</td>
-        <td>{prenda.stock}</td>
-        <td>{prenda.temporada.toString()}</td>
-        <td></td>
-        <td></td>
-        <td>
-          <ButtonGroup>
-            <Button size="sm" color="primary" tag={Link} to={"/prendas/" + prenda.idPrenda}>Edit</Button>
-            &nbsp;&nbsp;
-            <Button size="sm" color="danger" onClick={() => this.dialog(prenda)}>Delete</Button>
-          </ButtonGroup>
-        </td>
-      </tr>
-      }
     });
 
     return (

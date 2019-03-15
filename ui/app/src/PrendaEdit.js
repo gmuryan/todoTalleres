@@ -165,8 +165,16 @@ class PrendaEdit extends Component {
                     {this.state.temporada == true && (
                         <FormGroup>
                             <Label for="estacion">Estacion</Label>
-                            <Input type="text" name="estacion" id="estacion" value={item.estacion || ''}
-                                   onChange={this.handleChange} autoComplete="estacion"/>
+                            <br></br>
+                            <div>
+                             <select className="select" name="estacion" id="estacion" onChange={this.handleChange} autoComplete="estacion">
+                                 <option default>Select a Season...</option>
+                                 <option value="Verano" selected={item.estacion == 'Verano'}>Verano</option>
+                                 <option value="Invierno" selected={item.estacion == 'Invierno'}>Invierno</option>
+                                 <option value="Primavera" selected={item.estacion == 'Primavera'}>Primavera</option>
+                                 <option value="Otoño" selected={item.estacion == 'Otoño'}>Otoño</option>
+                             </select>
+                            </div>
                         </FormGroup>
                     )}
                     <br></br>

@@ -42,33 +42,33 @@ public class DataBaseLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-            BigDecimal importe = new BigDecimal(0);
-            List<DetalleFactura> dets = new ArrayList<>();
-            List<Prenda> prendas = prendaService.findAll();
-            DetalleFactura df3 = new DetalleFactura(prendas.get(1), 1);
-            dets.add(df3);
-            for (DetalleFactura df : dets){
-                importe = importe.add(df.getPrenda().getPrecio().multiply(new BigDecimal(df.getCantidad())));
-            }
-            Factura factura = new Factura(dets, importe);
-            facturaService.save(factura);
-            prendaService.descontarStockPrendas(factura);
-            List<Material> mats = materialService.findMaterialesParaOC();
-            Set<Long> repetidos = new HashSet<Long>();
-            Set<Long> todos = new HashSet<Long>();
-            for (Material m : mats){
-                if (todos.contains(m.getProveedor().getIdProveedor())) {
-                    ordenCompraService.generarOC(m.getProveedor().getIdProveedor());
-                    repetidos.add(m.getProveedor().getIdProveedor());
-                }else{
-                    todos.add(m.getProveedor().getIdProveedor());
-                }
-
-            }
-            for (Material m : mats){
-                if (!repetidos.contains(m.getProveedor().getIdProveedor()))
-                    ordenCompraService.generarOC(m.getProveedor().getIdProveedor());
-            }
+//            BigDecimal importe = new BigDecimal(0);
+//            List<DetalleFactura> dets = new ArrayList<>();
+//            List<Prenda> prendas = prendaService.findAll();
+//            DetalleFactura df3 = new DetalleFactura(prendas.get(1), 1);
+//            dets.add(df3);
+//            for (DetalleFactura df : dets){
+//                importe = importe.add(df.getPrenda().getPrecio().multiply(new BigDecimal(df.getCantidad())));
+//            }
+//            Factura factura = new Factura(dets, importe);
+//            facturaService.save(factura);
+//            prendaService.descontarStockPrendas(factura);
+//            List<Material> mats = materialService.findMaterialesParaOC();
+//            Set<Long> repetidos = new HashSet<Long>();
+//            Set<Long> todos = new HashSet<Long>();
+//            for (Material m : mats){
+//                if (todos.contains(m.getProveedor().getIdProveedor())) {
+//                    ordenCompraService.generarOC(m.getProveedor().getIdProveedor());
+//                    repetidos.add(m.getProveedor().getIdProveedor());
+//                }else{
+//                    todos.add(m.getProveedor().getIdProveedor());
+//                }
+//
+//            }
+//            for (Material m : mats){
+//                if (!repetidos.contains(m.getProveedor().getIdProveedor()))
+//                    ordenCompraService.generarOC(m.getProveedor().getIdProveedor());
+//            }
 
 
     }
