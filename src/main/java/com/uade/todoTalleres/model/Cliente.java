@@ -1,16 +1,30 @@
 package com.uade.todoTalleres.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "cliente")
 public class Cliente {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idCliente;
 
+    @Column
     private String nombre;
 
+    @Column
     private String apellido;
 
+    @Column
     private String telefono;
 
+    @Column
     private String mail;
+
+    public Cliente(){
+
+    }
 
     public Cliente(Long idCliente, String nombre, String apellido, String telefono, String mail) {
         this.idCliente = idCliente;

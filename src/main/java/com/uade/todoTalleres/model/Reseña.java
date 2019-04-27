@@ -1,14 +1,29 @@
 package com.uade.todoTalleres.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "reseña")
 public class Reseña {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idReseña;
 
+    @OneToOne
+    @JoinColumn(name = "idCliente")
     private Cliente cliente;
 
+    @OneToOne
+    @JoinColumn(name = "idTaller")
     private Taller taller;
 
+    @Column
     private String comentario;
+
+    public Reseña(){
+
+    }
 
     public Reseña(Long idReseña, Cliente cliente, Taller taller, String comentario) {
         this.idReseña = idReseña;

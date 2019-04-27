@@ -1,10 +1,21 @@
 package com.uade.todoTalleres.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table
 public class Marca {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idMarca;
 
+    @Column
     private String descripcion;
+
+    public Marca(){
+
+    }
 
     public Marca(Long idMarca) {
         this.idMarca = idMarca;

@@ -1,10 +1,21 @@
 package com.uade.todoTalleres.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "estado")
 public class Estado {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idEstado;
 
+    @Column
     private String descripcion;
+
+    public Estado(){
+
+    }
 
     public Estado(Long idEstado, String descripcion) {
         this.idEstado = idEstado;

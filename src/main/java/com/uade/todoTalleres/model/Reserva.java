@@ -1,18 +1,33 @@
 package com.uade.todoTalleres.model;
 
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "reserva")
 public class Reserva {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idReserva;
 
+    @OneToOne
+    @JoinColumn(name = "idTaller")
     private Taller taller;
 
+    @OneToOne
+    @JoinColumn(name = "idCliente")
     private Cliente cliente;
 
+    @Column
     private String horaReserva;
 
+    @Column
     private Date diaReserva;
+
+    public Reserva(){
+
+    }
 
     public Reserva(Long idReserva, Taller taller, Cliente cliente , String horaReserva, Date diaReserva) {
         this.idReserva = idReserva;

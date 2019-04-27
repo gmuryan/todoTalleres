@@ -1,34 +1,57 @@
 package com.uade.todoTalleres.model;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+@Entity
+@Table(name = "reparacion")
 public class Reparacion {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idReparacion;
 
+    @OneToMany
+    @JoinColumn(name = "idMecanico")
     private List<Mecanico> mecanicos;
 
+    @Column
     private Date fechaDevolucion;
 
+    @Column
     private String horaDevolucion;
 
+    @Column
     private Date fechaEntrada;
 
+    @Column
     private String horaEntrada;
 
+    @Column(precision = 10, scale = 2)
     private BigDecimal importeTotal;
 
+    @OneToOne
+    @JoinColumn(name = "idEstado")
     private Estado estadoReparacion;
 
+    @Column
     private String descripcionProblema;
 
+    @Column
     private String descripcionReparacion;
 
+    @Column
     private boolean nuevoPresupuesto;
 
+    @OneToOne
+    @JoinColumn(name = "idReserva")
     private Reserva reserva;
+
+    public Reparacion(){
+
+    }
 
     public Reparacion(Long idReparacion, Taller taller, Cliente cliente, List<Mecanico> mecanicos, Date fechaDevolucion, String horaDevolucion, Date fechaEntrada, String horaEntrada, BigDecimal importeTotal, Estado estadoReparacion, String descripcionProblema, String descripcionReparacion, boolean nuevoPresupuesto, Reserva reserva) {
         this.idReparacion = idReparacion;

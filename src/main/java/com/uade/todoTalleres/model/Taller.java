@@ -1,34 +1,60 @@
 package com.uade.todoTalleres.model;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "taller")
 public class Taller {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idTaller;
 
+    @Column
     private String nombre;
 
+    @Column
     private String telefono;
 
+    @Column
     private String barrio;
 
+    @Column
     private String mail;
 
+    @Column
     private String ubicacion;
 
+    @OneToMany
+    @JoinColumn(name = "idMarca")
     private List<Marca> marcas;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idReserva")
     private List<Reserva> reservas;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idReparacion")
     private List<Reparacion> reparaciones;
 
+    @OneToMany
+    @JoinColumn(name = "idReseña")
     private List<Reseña> reseñas;
 
+    @OneToOne
+    @JoinColumn(name = "idClasificacion")
     private Clasificacion clasificacion;
 
+    @Column
     private int maximosVehiculos;
 
+    @Column
     private int retrasosContemplados;
+
+    public Taller(){
+
+    }
 
     public Taller(Long idTaller, String nombre, String telefono, String barrio, String mail, String ubicacion, List<Marca> marcas, List<Reserva> reservas, List<Reparacion> reparaciones, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados) {
         this.idTaller = idTaller;
