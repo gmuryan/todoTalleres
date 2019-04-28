@@ -51,20 +51,30 @@ class ClienteList extends Component {
         })
     };
 
-    filterUpdate = e => {
-        this.setState({nombre: e.target.value});
-        this.setState({apellido: e.target.value});
-        this.setState({id: e.target.value});
+    filterMail = e => {
         this.setState({mail: e.target.value});
+    }
+
+    filterNombre = e => {
+        this.setState({nombre: e.target.value});
+    }
+
+    filterApellido = e =>{
+        this.setState({apellido: e.target.value});
     }
 
     render() {
         const {clientes, isLoading, nombre, apellido, mail} = this.state;
-        const filterClientes = clientes.filter(cliente => {
-            return cliente.nombre.toLowerCase().indexOf(nombre.toLowerCase()) !== -1
-                || cliente.apellido.toLowerCase().indexOf(apellido.toLowerCase()) !== -1
-                || cliente.mail.toLowerCase().indexOf(mail.toLowerCase()) !== -1
-        })
+        let filterClientes = this.state.clientes.slice();
+        if (this.state.nombre){
+            filterClientes = filterClientes.filter(cliente => cliente.nombre.toLowerCase().indexOf(nombre.toLowerCase()) !== -1);
+        }
+        if (this.state.apellido){
+            filterClientes = filterClientes.filter(cliente => cliente.apellido.toLowerCase().indexOf(apellido.toLowerCase()) !== -1);
+        }
+        if (this.state.mail){
+            filterClientes = filterClientes.filter(cliente => cliente.mail.toLowerCase().indexOf(mail.toLowerCase()) !== -1);
+        }
 
         if (isLoading) {
             return <p>Loading...</p>;
@@ -96,11 +106,11 @@ class ClienteList extends Component {
                         <Button color="success" tag={Link} to="/clientes/new">Crear Cliente</Button>
                     </div>
                     <h3>Clientes</h3>
-                    <input type="text" onChange={this.filterUpdate} placeholder="Nombre..."></input>
+                    <input type="text" onChange={this.filterNombre} placeholder="Nombre..."></input>
                     &nbsp;&nbsp;
-                    <input type="text" onChange={this.filterUpdate} placeholder="Apellido..."></input>
+                    <input type="text" onChange={this.filterApellido} placeholder="Apellido..."></input>
                     &nbsp;&nbsp;
-                    <input type="text" onChange={this.filterUpdate} placeholder="Mail..."></input>
+                    <input type="text" onChange={this.filterMail} placeholder="Mail..."></input>
                     <Table className="mt-4">
                         <thead>
                         <tr>
