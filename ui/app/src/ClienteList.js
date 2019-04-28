@@ -1,16 +1,32 @@
 import React, {Component} from 'react';
-import {Button, ButtonGroup, Container, Table} from 'reactstrap';
+import {Button, ButtonGroup, Container, Label, Table} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {Link} from 'react-router-dom';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
+import './App.css';
 
 class ClienteList extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {clientes: [], isLoading: true, nombre: '', apellido: '', mail: ''};
+        this.state = {
+            clientes: [],
+            isLoading: true,
+            nombre: '',
+            apellido: '',
+            mail: '',
+            currentPage: 1,
+            todosPerPage: 10
+        };
+        this.handleClick = this.handleClick.bind(this);
         this.remove = this.remove.bind(this);
+    }
+
+    handleClick(event) {
+        this.setState({
+            currentPage: Number(event.target.id)
+        });
     }
 
     componentDidMount() {
@@ -59,20 +75,20 @@ class ClienteList extends Component {
         this.setState({nombre: e.target.value});
     }
 
-    filterApellido = e =>{
+    filterApellido = e => {
         this.setState({apellido: e.target.value});
     }
 
     render() {
-        const {clientes, isLoading, nombre, apellido, mail} = this.state;
+        const {clientes, isLoading, nombre, apellido, mail, currentPage, todosPerPage} = this.state;
         let filterClientes = this.state.clientes.slice();
-        if (this.state.nombre){
+        if (this.state.nombre) {
             filterClientes = filterClientes.filter(cliente => cliente.nombre.toLowerCase().indexOf(nombre.toLowerCase()) !== -1);
         }
-        if (this.state.apellido){
+        if (this.state.apellido) {
             filterClientes = filterClientes.filter(cliente => cliente.apellido.toLowerCase().indexOf(apellido.toLowerCase()) !== -1);
         }
-        if (this.state.mail){
+        if (this.state.mail) {
             filterClientes = filterClientes.filter(cliente => cliente.mail.toLowerCase().indexOf(mail.toLowerCase()) !== -1);
         }
 
@@ -81,7 +97,29 @@ class ClienteList extends Component {
 
         }
 
-        const clienteList = filterClientes.map(cliente => {
+        // Logic for displaying current todos
+        const indexOfLastTodo = currentPage * todosPerPage;
+        const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
+        const currentTodos = filterClientes.slice(indexOfFirstTodo, indexOfLastTodo);
+
+        // Logic for displaying page numbers
+        const pageNumbers = [];
+        for (let i = 1; i <= Math.ceil(clientes.length / todosPerPage); i++) {
+            pageNumbers.push(i);
+        }
+        const renderPageNumbers = pageNumbers.map(number => {
+            return (
+                <li
+                    key={number}
+                    id={number}
+                    onClick={this.handleClick}
+                >
+                    [{number}]
+                </li>
+            );
+        });
+
+        const clienteList = currentTodos.map(cliente => {
             return <tr key={cliente.idCliente}>
                 <td>{cliente.idCliente}</td>
                 <td style={{whiteSpace: 'nowrap'}}>{cliente.nombre}</td>
@@ -90,7 +128,8 @@ class ClienteList extends Component {
                 <td>{cliente.mail}</td>
                 <td>
                     <ButtonGroup>
-                        <Button size="sm" color="primary" tag={Link} to={"/clientes/" + cliente.idCliente}>Editar</Button>
+                        <Button size="sm" color="primary" tag={Link}
+                                to={"/clientes/" + cliente.idCliente}>Editar</Button>
                         &nbsp;&nbsp;
                         <Button size="sm" color="danger" onClick={() => this.dialog(cliente)}>Eliminar</Button>
                     </ButtonGroup>
@@ -126,6 +165,11 @@ class ClienteList extends Component {
                         {clienteList}
                         </tbody>
                     </Table>
+                    <ul id="page-numbers">
+                        <Label>Paginas:</Label>
+                        <span>&nbsp;&nbsp;</span>
+                        {renderPageNumbers}
+                    </ul>
                 </Container>
             </div>
         );

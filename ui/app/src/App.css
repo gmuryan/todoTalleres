@@ -32,6 +32,21 @@
     border-radius: .25rem;
 }
 
+#page-numbers {
+    list-style: none;
+    display: flex;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+#page-numbers > li {
+    margin-right: 0.3em;
+    color: #000000;
+    user-select: none;
+    cursor: pointer;
+
+}
+
 input[type=checkbox]{
     position: relative;
     left: 20px;
