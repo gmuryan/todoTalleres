@@ -32,6 +32,12 @@
     border-radius: .25rem;
 }
 
+.error{
+    margin-left: 5px;
+    font-size: 13px;
+    color: red;
+}
+
 #page-numbers {
     list-style: none;
     display: flex;
