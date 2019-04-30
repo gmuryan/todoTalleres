@@ -26,9 +26,9 @@ public class Taller {
     @Column
     private String ubicacion;
 
-    @OneToMany
+    @OneToOne
     @JoinColumn(name = "idMarca")
-    private List<Marca> marcas;
+    private Marca marca;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "idReserva")
@@ -41,6 +41,10 @@ public class Taller {
     @OneToMany
     @JoinColumn(name = "idReseña")
     private List<Reseña> reseñas;
+
+    @OneToMany
+    @JoinColumn(name = "idMecanico")
+    private List<Mecanico> mecanicos;
 
     @OneToOne
     @JoinColumn(name = "idClasificacion")
@@ -56,16 +60,17 @@ public class Taller {
 
     }
 
-    public Taller(Long idTaller, String nombre, String telefono, String barrio, String mail, String ubicacion, List<Marca> marcas, List<Reserva> reservas, List<Reparacion> reparaciones, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados) {
+    public Taller(Long idTaller, String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reserva> reservas, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados) {
         this.idTaller = idTaller;
         this.nombre = nombre;
         this.telefono = telefono;
         this.barrio = barrio;
         this.mail = mail;
         this.ubicacion = ubicacion;
-        this.marcas = marcas;
+        this.marca = marca;
         this.reservas = reservas;
         this.reparaciones = reparaciones;
+        this.mecanicos = mecanicos;
         this.reseñas = reseñas;
         this.clasificacion = clasificacion;
         this.maximosVehiculos = maximosVehiculos;
@@ -120,12 +125,12 @@ public class Taller {
         this.ubicacion = ubicacion;
     }
 
-    public List<Marca> getMarcas() {
-        return marcas;
+    public Marca getMarca() {
+        return marca;
     }
 
-    public void setMarcas(List<Marca> marcas) {
-        this.marcas = marcas;
+    public void setMarca(Marca marca) {
+        this.marca = marca;
     }
 
     public List<Reserva> getReservas() {
@@ -174,5 +179,13 @@ public class Taller {
 
     public void setRetrasosContemplados(int retrasosContemplados) {
         this.retrasosContemplados = retrasosContemplados;
+    }
+
+    public List<Mecanico> getMecanicos() {
+        return mecanicos;
+    }
+
+    public void setMecanicos(List<Mecanico> mecanicos) {
+        this.mecanicos = mecanicos;
     }
 }

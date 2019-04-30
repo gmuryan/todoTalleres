@@ -19,7 +19,7 @@ export default class AppNavbar extends Component {
     return <Navbar color="dark" dark expand="md">
       <NavbarBrand tag={Link} to="/">Home</NavbarBrand>
       <NavbarBrand tag={Link} to="/clientes">Clientes</NavbarBrand>
-      <NavbarBrand tag={Link} to="/materiales">Materials</NavbarBrand>
+      <NavbarBrand tag={Link} to="/talleres">Talleres</NavbarBrand>
       <NavbarBrand tag={Link} to="/prendas">Prendas</NavbarBrand>
       <NavbarBrand tag={Link} to="/ordenesCompra">Ordenes de Compra</NavbarBrand>
       <NavbarToggler onClick={this.toggle}/>

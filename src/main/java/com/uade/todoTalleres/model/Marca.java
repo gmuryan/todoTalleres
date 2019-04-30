@@ -1,6 +1,12 @@
 package com.uade.todoTalleres.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.persistence.*;
+import java.io.IOException;
 
 @Entity
 @Table
@@ -20,6 +26,14 @@ public class Marca {
     public Marca(Long idMarca) {
         this.idMarca = idMarca;
         this.descripcion = descripcion;
+    }
+
+    @JsonCreator
+    public static Marca Create(String jsonString) throws JsonParseException, JsonMappingException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Marca marca = null;
+        marca = mapper.readValue(jsonString, Marca.class);
+        return marca;
     }
 
     public Long getIdMarca() {
