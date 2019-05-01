@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
+import {confirmAlert} from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 
 class TallerEdit extends Component {
 
@@ -140,6 +142,18 @@ class TallerEdit extends Component {
         return formIsValid;
     }
 
+    dialogCreado(){
+        confirmAlert({
+            title: 'Operacion Exitosa',
+            message: 'Taller Creado',
+            buttons: [
+                {
+                    label: 'Aceptar'
+                }
+            ]
+        })
+    }
+
     async handleSubmit(event) {
         event.preventDefault();
         if (this.handleValidation()){
@@ -154,6 +168,7 @@ class TallerEdit extends Component {
                 body: JSON.stringify(item),
             });
             this.props.history.push('/talleres');
+            this.dialogCreado();
         }
     }
 

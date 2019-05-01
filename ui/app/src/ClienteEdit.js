@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
+import {confirmAlert} from "react-confirm-alert";
 
 class ClienteEdit extends Component {
 
@@ -101,6 +102,19 @@ class ClienteEdit extends Component {
         return formIsValid;
     }
 
+    dialogCreado(){
+        confirmAlert({
+            title: 'Operacion Exitosa',
+            message: 'Cliente Creado',
+            buttons: [
+                {
+                    label: 'Aceptar'
+                }
+            ]
+        })
+    }
+
+
     async handleSubmit(event) {
         event.preventDefault();
         if (this.handleValidation()){
@@ -115,6 +129,7 @@ class ClienteEdit extends Component {
             body: JSON.stringify(item),
         });
         this.props.history.push('/clientes');
+        this.dialogCreado();
         }
     }
 

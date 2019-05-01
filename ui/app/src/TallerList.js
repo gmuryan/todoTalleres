@@ -49,7 +49,20 @@ class TallerList extends Component {
         }).then(() => {
             let updatedTalleres = [...this.state.talleres].filter(i => i.idTaller !== id);
             this.setState({talleres: updatedTalleres});
+            this.dialogEliminado();
         });
+    }
+
+    dialogEliminado(){
+        confirmAlert({
+            title: 'Operacion Exitosa',
+            message: 'Taller Eliminado',
+            buttons: [
+                {
+                    label: 'Aceptar'
+                }
+            ]
+        })
     }
 
     dialog(taller) {

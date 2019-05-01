@@ -48,7 +48,20 @@ class ClienteList extends Component {
         }).then(() => {
             let updatedClientes = [...this.state.clientes].filter(i => i.idCliente !== id);
             this.setState({clientes: updatedClientes});
+            this.dialogEliminado();
         });
+    }
+
+    dialogEliminado(){
+        confirmAlert({
+            title: 'Operacion Exitosa',
+            message: 'Cliente Eliminado',
+            buttons: [
+                {
+                    label: 'Aceptar'
+                }
+            ]
+        })
     }
 
     dialog(cliente) {
