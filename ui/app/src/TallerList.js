@@ -16,6 +16,7 @@ class TallerList extends Component {
             nombre: '',
             barrio: '',
             clasificacion: '',
+            marca: '',
             currentPage: 1,
             todosPerPage: 10
         };
@@ -67,20 +68,24 @@ class TallerList extends Component {
         })
     };
 
-    filterMail = e => {
-        this.setState({mail: e.target.value});
+    filterBarrio = e => {
+        this.setState({barrio: e.target.value});
     }
 
     filterNombre = e => {
         this.setState({nombre: e.target.value});
     }
 
-    filterApellido = e => {
-        this.setState({apellido: e.target.value});
+    filterClasificacion = e => {
+        this.setState({clasificacion: e.target.value});
+    }
+
+    filterMarca = e => {
+        this.setState({marca: e.target.value});
     }
 
     render() {
-        const {talleres, isLoading, nombre, barrio, clasificacion, currentPage, todosPerPage} = this.state;
+        const {talleres, isLoading, nombre, barrio, clasificacion, marca, currentPage, todosPerPage} = this.state;
         let filterTalleres = this.state.talleres.slice();
         if (this.state.nombre) {
             filterTalleres = filterTalleres.filter(taller => taller.nombre.toLowerCase().indexOf(nombre.toLowerCase()) !== -1);
@@ -89,7 +94,10 @@ class TallerList extends Component {
             filterTalleres = filterTalleres.filter(taller => taller.barrio.toLowerCase().indexOf(barrio.toLowerCase()) !== -1);
         }
         if (this.state.clasificacion) {
-            filterTalleres = filterTalleres.filter(taller => taller.clasificacion.toLowerCase().indexOf(clasificacion.toLowerCase()) !== -1);
+            filterTalleres = filterTalleres.filter(taller => taller.clasificacion.descripcion.toLowerCase().indexOf(clasificacion.toLowerCase()) !== -1);
+        }
+        if (this.state.marca){
+            filterTalleres = filterTalleres.filter(taller => taller.marca.descripcion.toLowerCase().indexOf(marca.toLowerCase()) !== -1 || taller.marca.descripcion.match("Todas"));
         }
 
         if (isLoading) {
@@ -126,6 +134,7 @@ class TallerList extends Component {
                 <td>{taller.barrio}</td>
                 <td>{taller.telefono}</td>
                 <td>{taller.mail}</td>
+                <td>{taller.marca.descripcion}</td>
                 <td>{taller.clasificacion.descripcion}</td>
                 <td>
                     <ButtonGroup>
@@ -148,9 +157,11 @@ class TallerList extends Component {
                     <h3>Talleres</h3>
                     <input type="text" onChange={this.filterNombre} placeholder="Nombre..."></input>
                     &nbsp;&nbsp;
-                    <input type="text" onChange={this.filterApellido} placeholder="Barrio..."></input>
+                    <input type="text" onChange={this.filterBarrio} placeholder="Barrio..."></input>
                     &nbsp;&nbsp;
-                    <input type="text" onChange={this.filterMail} placeholder="Clasificacion..."></input>
+                    <input type="text" onChange={this.filterMarca} placeholder="Marca..."></input>
+                    &nbsp;&nbsp;
+                    <input type="text" onChange={this.filterClasificacion} placeholder="Clasificacion..."></input>
                     <Table className="mt-4">
                         <thead>
                         <tr>
@@ -159,6 +170,7 @@ class TallerList extends Component {
                             <th width="10%">Barrio</th>
                             <th width="10%">Telefono</th>
                             <th width="10%">Mail</th>
+                            <th width="10%">Marca</th>
                             <th width="10%">Clasificacion</th>
                             <th width="10%">Acciones</th>
                         </tr>

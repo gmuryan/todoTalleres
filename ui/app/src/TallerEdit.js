@@ -63,12 +63,6 @@ class TallerEdit extends Component {
             formIsValid = false;
             errors["nombre"] = "No puede estar vacio";
         }
-        else if(typeof fields["nombre"] !== "undefined"){
-            if(!fields["nombre"].match(/^[a-zA-Z]+$/)){
-                formIsValid = false;
-                errors["nombre"] = "Solo letras";
-            }
-        }
 
         //Barrio
         if(fields["barrio"].length === 0){
@@ -76,7 +70,7 @@ class TallerEdit extends Component {
             errors["barrio"] = "No puede estar vacio";
         }
         else if(typeof fields["barrio"] !== "undefined"){
-            if(!fields["barrio"].match(/^[a-zA-Z]+$/)){
+            if(!fields["barrio"].match(/^[a-zA-Z ]+$/)){
                 formIsValid = false;
                 errors["barrio"] = "Solo letras";
             }
@@ -122,11 +116,13 @@ class TallerEdit extends Component {
             errors["maximosVehiculos"] = "No puede estar vacio";
         }
         else if(typeof fields["maximosVehiculos"] !== "undefined"){
-            if(!fields["maximosVehiculos"].match(/^[0-9]+$/)){
+            console.log(fields["maximosVehiculos"])
+            if(!fields["maximosVehiculos"].toString().match(/^[0-9]+$/)){
                 formIsValid = false;
                 errors["maximosVehiculos"] = "Solo numeros";
             }
         }
+
 
         //RetrasosContemplados
         if(fields["retrasosContemplados"].length === 0){
@@ -134,7 +130,7 @@ class TallerEdit extends Component {
             errors["retrasosContemplados"] = "No puede estar vacio";
         }
         else if(typeof fields["retrasosContemplados"] !== "undefined"){
-            if(!fields["retrasosContemplados"].match(/^[0-9]+$/)){
+            if(!fields["retrasosContemplados"].toString().match(/^[0-9]+$/)){
                 formIsValid = false;
                 errors["retrasosContemplados"] = "Solo numeros";
             }
