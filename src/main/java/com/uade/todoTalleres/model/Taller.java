@@ -42,7 +42,7 @@ public class Taller {
     @JoinColumn(name = "idReseña")
     private List<Reseña> reseñas;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "idMecanico")
     private List<Mecanico> mecanicos;
 

@@ -22,16 +22,21 @@ public class Mecanico {
     @Column
     private String mail;
 
+    @OneToOne
+    @JoinColumn(name="idTaller")
+    private Taller taller;
+
     public Mecanico(){
 
     }
 
-    public Mecanico(Long idMecanico, String nombre, String apellido, String telefono, String mail) {
+    public Mecanico(Long idMecanico, String nombre, String apellido, String telefono, String mail, Taller taller) {
         this.idMecanico = idMecanico;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.mail = mail;
+        this.taller = taller;
     }
 
     public Long getIdMecanico() {
@@ -72,5 +77,13 @@ public class Mecanico {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public Taller getTaller() {
+        return taller;
+    }
+
+    public void setTaller(Taller taller) {
+        this.taller = taller;
     }
 }
