@@ -13,7 +13,7 @@ public class Reparacion {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idReparacion;
 
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "idMecanico")
     private List<Mecanico> mecanicos;
 
