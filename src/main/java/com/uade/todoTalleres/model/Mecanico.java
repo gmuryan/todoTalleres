@@ -1,6 +1,7 @@
 package com.uade.todoTalleres.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "mecanico")
@@ -26,8 +27,19 @@ public class Mecanico {
     @JoinColumn(name="idTaller")
     private Taller taller;
 
+    @ManyToMany(fetch =FetchType.LAZY, mappedBy = "mecanicos")
+    private List<Reparacion> reparaciones;
+
     public Mecanico(){
 
+    }
+
+    public Mecanico(String nombre, String apellido, String telefono, String mail, Taller taller) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.telefono = telefono;
+        this.mail = mail;
+        this.taller = taller;
     }
 
     public Mecanico(Long idMecanico, String nombre, String apellido, String telefono, String mail, Taller taller) {
@@ -85,5 +97,13 @@ public class Mecanico {
 
     public void setTaller(Taller taller) {
         this.taller = taller;
+    }
+
+    public List<Reparacion> getReparaciones() {
+        return reparaciones;
+    }
+
+    public void setReparaciones(List<Reparacion> reparaciones) {
+        this.reparaciones = reparaciones;
     }
 }

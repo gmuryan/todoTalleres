@@ -31,19 +31,19 @@ public class Taller {
     private Marca marca;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idReserva")
+    @JoinColumn(name = "idTaller")
     private List<Reserva> reservas;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idReparacion")
+    @JoinColumn(name = "idTaller")
     private List<Reparacion> reparaciones;
 
     @OneToMany
-    @JoinColumn(name = "idReseña")
+    @JoinColumn(name = "idTaller")
     private List<Reseña> reseñas;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idMecanico")
+    @JoinColumn(name = "idTaller")
     private List<Mecanico> mecanicos;
 
     @OneToOne

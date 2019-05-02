@@ -13,8 +13,10 @@ public class Reparacion {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idReparacion;
 
-    @ManyToMany
-    @JoinColumn(name = "idMecanico")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "reparacion_mecanicos", joinColumns = {
+            @JoinColumn(name = "idReparacion") },
+            inverseJoinColumns = { @JoinColumn(name = "idMecanico") })
     private List<Mecanico> mecanicos;
 
     @Column
