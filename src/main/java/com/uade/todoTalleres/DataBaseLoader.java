@@ -1,13 +1,9 @@
 package com.uade.todoTalleres;
 
-import com.uade.todoTalleres.model.Mecanico;
-import com.uade.todoTalleres.model.Reparacion;
-import com.uade.todoTalleres.model.Taller;
-import com.uade.todoTalleres.service.TallerService;
+import com.uade.todoTalleres.model.*;
+import com.uade.todoTalleres.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.uade.todoTalleres.service.MecanicoService;
-import com.uade.todoTalleres.service.ReparacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -27,10 +23,26 @@ public class DataBaseLoader implements CommandLineRunner {
     @Autowired
     private TallerService tallerService;
 
+    @Autowired
+    private MarcaService marcaService;
+
+    @Autowired
+    private ClasificacionService clasificacionService;
+
     private final Logger log = LoggerFactory.getLogger(DataBaseLoader.class);
 
     @Override
     public void run(String... args) throws Exception {
+        Marca todas = new Marca("Todas");
+        marcaService.save(todas);
+        Marca renault = new Marca("Renault");
+        marcaService.save(renault);
+        Marca toyota = new Marca("Toyota");
+        marcaService.save(toyota);
+        Clasificacion electricidad = new Clasificacion("Electricidad");
+        clasificacionService.save(electricidad);
+        Clasificacion escapes = new Clasificacion("Escapes");
+        clasificacionService.save(escapes);
 //        List<Taller> ts = tallerService.findAll();
 //        Taller t = ts.get(0);
 //        Mecanico m = new Mecanico("Pablo", "Perez", "4444", "pepe@tg.com", t);

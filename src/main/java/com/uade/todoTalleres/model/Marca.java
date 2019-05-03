@@ -23,8 +23,12 @@ public class Marca {
 
     }
 
-    public Marca(Long idMarca) {
+    public Marca(Long idMarca, String descripcion) {
         this.idMarca = idMarca;
+        this.descripcion = descripcion;
+    }
+
+    public Marca(String descripcion){
         this.descripcion = descripcion;
     }
 

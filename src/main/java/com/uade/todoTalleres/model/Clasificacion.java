@@ -28,6 +28,10 @@ public class Clasificacion {
         this.descripcion = descripcion;
     }
 
+    public Clasificacion(String descripcion){
+        this.descripcion = descripcion;
+    }
+
     @JsonCreator
     public static Clasificacion Create(String jsonString) throws JsonParseException, JsonMappingException, IOException {
         ObjectMapper mapper = new ObjectMapper();
