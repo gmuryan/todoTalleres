@@ -33,16 +33,16 @@ public class DataBaseLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Marca todas = new Marca("Todas");
-        marcaService.save(todas);
-        Marca renault = new Marca("Renault");
-        marcaService.save(renault);
-        Marca toyota = new Marca("Toyota");
-        marcaService.save(toyota);
-        Clasificacion electricidad = new Clasificacion("Electricidad");
-        clasificacionService.save(electricidad);
-        Clasificacion escapes = new Clasificacion("Escapes");
-        clasificacionService.save(escapes);
+//        Marca todas = new Marca("Todas");
+//        marcaService.save(todas);
+//        Marca renault = new Marca("Renault");
+//        marcaService.save(renault);
+//        Marca toyota = new Marca("Toyota");
+//        marcaService.save(toyota);
+//        Clasificacion electricidad = new Clasificacion("Electricidad");
+//        clasificacionService.save(electricidad);
+//        Clasificacion escapes = new Clasificacion("Escapes");
+//        clasificacionService.save(escapes);
 //        List<Taller> ts = tallerService.findAll();
 //        Taller t = ts.get(0);
 //        Mecanico m = new Mecanico("Pablo", "Perez", "4444", "pepe@tg.com", t);

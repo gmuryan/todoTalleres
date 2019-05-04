@@ -56,11 +56,19 @@ public class Taller {
     @Column
     private int retrasosContemplados;
 
+    @Column
+    private String password;
+
+    @Transient
+    private String repeatPassword;
+
+
+
     public Taller(){
 
     }
 
-    public Taller(Long idTaller, String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reserva> reservas, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados) {
+    public Taller(Long idTaller, String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reserva> reservas, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados, String password) {
         this.idTaller = idTaller;
         this.nombre = nombre;
         this.telefono = telefono;
@@ -75,6 +83,7 @@ public class Taller {
         this.clasificacion = clasificacion;
         this.maximosVehiculos = maximosVehiculos;
         this.retrasosContemplados = retrasosContemplados;
+        this.password = password;
     }
 
     public Long getIdTaller() {
@@ -187,5 +196,13 @@ public class Taller {
 
     public void setMecanicos(List<Mecanico> mecanicos) {
         this.mecanicos = mecanicos;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -17,7 +17,9 @@ class TallerEdit extends Component {
         marca: '',
         clasificacion: '',
         maximosVehiculos: '',
-        retrasosContemplados: ''
+        retrasosContemplados: '',
+        password: '',
+        repeatPassword: ''
     };
 
 
@@ -27,7 +29,8 @@ class TallerEdit extends Component {
             item: this.emptyItem,
             errors: {},
             marcas: [],
-            clasificaciones: []
+            clasificaciones: [],
+            flag: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -138,6 +141,21 @@ class TallerEdit extends Component {
             }
         }
 
+        //Contraseña
+        if(!fields["password"]){
+            formIsValid = false;
+            errors["password"] = "No puede estar vacio";
+        }
+
+        //RepetirContraseña
+        if(!fields["repeatPassword"]){
+            formIsValid = false;
+            errors["repeatPassword"] = "No puede estar vacio";
+        }else if(fields["password"] !== fields["repeatPassword"]){
+            formIsValid = false;
+            errors["repeatPassword"] = "Debe ser igual a la contraseña";
+        }
+
         this.setState({errors: errors});
         return formIsValid;
     }
@@ -145,7 +163,6 @@ class TallerEdit extends Component {
     dialogCreado(){
         confirmAlert({
             title: 'Operacion Exitosa',
-            message: 'Taller Creado',
             buttons: [
                 {
                     label: 'Aceptar'
@@ -173,8 +190,13 @@ class TallerEdit extends Component {
     }
 
     render() {
-        const {item, marcas, clasificaciones} = this.state;
-        console.log(this.state.marcas);
+        const {item, marcas, clasificaciones, flag} = this.state;
+
+        if (flag == false && item.idTaller){
+            item.repeatPassword = item.password;
+            this.setState({flag: !this.state.flag});
+        }
+
         let optionItemsMarcas = marcas.map((marca) =>
             <option key={marca.idMarca} selected={item.marca.idMarca == marca.idMarca} value={JSON.stringify(marca)}>{marca.descripcion}</option>
         );
@@ -227,6 +249,20 @@ class TallerEdit extends Component {
                                onChange={this.handleChange} autoComplete="ubicacion"/>
                         <span className="error">{this.state.errors["ubicacion"]}</span>
                     </FormGroup>
+                    </div>
+                    <div className="row">
+                        <FormGroup className="col-md-6 mb-3">
+                            <Label for="password">Contraseña</Label>
+                            <Input type="password" name="password" id="password" value={item.password || ''}
+                                   onChange={this.handleChange} autoComplete="password"/>
+                            <span className="error">{this.state.errors["password"]}</span>
+                        </FormGroup>
+                        <FormGroup className="col-md-6 mb-3">
+                            <Label for="repeatPassword">Repetir Contraseña</Label>
+                            <Input type="password" name="repeatPassword" id="repeatPassword" value={item.repeatPassword || ''}
+                                   onChange={this.handleChange} autoComplete="repeatPassword"/>
+                            <span className="error">{this.state.errors["repeatPassword"]}</span>
+                        </FormGroup>
                     </div>
                     {item.idTaller && (
                         <FormGroup>

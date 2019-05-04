@@ -22,16 +22,23 @@ public class Cliente {
     @Column
     private String mail;
 
+    @Column
+    private String password;
+
+    @Transient
+    private String repeatPassword;
+
     public Cliente(){
 
     }
 
-    public Cliente(Long idCliente, String nombre, String apellido, String telefono, String mail) {
+    public Cliente(Long idCliente, String nombre, String apellido, String telefono, String mail, String password) {
         this.idCliente = idCliente;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.mail = mail;
+        this.password = password;
     }
 
     public Long getIdCliente() {
@@ -72,5 +79,13 @@ public class Cliente {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
