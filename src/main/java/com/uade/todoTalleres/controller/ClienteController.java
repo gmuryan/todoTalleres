@@ -38,6 +38,13 @@ public class ClienteController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/clienteByMail")
+    ResponseEntity<?> getClienteByMail(String mail) {
+        Optional<Cliente> cliente = clienteService.findClienteByMail(mail);
+        return cliente.map(response -> ResponseEntity.ok().body(response))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @PostMapping("/cliente")
     ResponseEntity<Cliente> createCliente(@Valid @RequestBody Cliente cliente) throws URISyntaxException {
         log.info("Request to create a client: {}", cliente);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import AppNavbar from './AppNavbar';
-import { Link } from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import { Button, Container } from 'reactstrap';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
@@ -12,6 +12,8 @@ class Home extends Component {
       constructor(props) {
     super(props);
     console.log(this.props);
+    const cliente = JSON.parse(localStorage.getItem("currentUser"));
+    console.log(cliente);
   }
 
 
@@ -51,4 +53,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default withRouter (Home);

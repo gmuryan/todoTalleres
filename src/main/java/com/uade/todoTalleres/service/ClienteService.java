@@ -29,6 +29,11 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
+    public Optional<Cliente> findClienteByMail(String mail){
+        Optional<Cliente> cliente = clienteRepository.findByMail(mail);
+        return cliente;
+    }
+
     public void delete (Cliente cli){
         clienteRepository.delete(cli);
     }

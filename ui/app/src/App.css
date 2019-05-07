@@ -45,6 +45,20 @@
     margin-left: 0;
 }
 
+h2.headertekst {
+    text-align: center;
+}
+
+.button-allign{
+    position:absolute;
+    left:50%;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
 #page-numbers > li {
     margin-right: 0.3em;
     color: #000000;
