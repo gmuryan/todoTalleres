@@ -15,26 +15,6 @@ class Home extends Component {
     const cliente = JSON.parse(localStorage.getItem("currentUser"));
     console.log(cliente);
   }
-
-
-    
-
-      submit = () => {
-    confirmAlert({
-      title: 'Confirm to submit',
-      message: 'Are you sure to do this.',
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: () => alert('Click Yes')
-        },
-        {
-          label: 'No'
-        }
-      ]
-    })
-  };
-
   
 
   render() {
@@ -42,11 +22,11 @@ class Home extends Component {
       <div>
         <AppNavbar/>
         <Container fluid>
-          <Button color="link"><Link to="/proveedores">Manage Suppliers</Link></Button>
-                <div className="container">
-        <button onClick={this.submit}>Confirm dialog</button>
-        <p>My name is: {this.props.mssg}</p>
-      </div>
+      {/*    <Button color="link"><Link to="/proveedores">Manage Suppliers</Link></Button>*/}
+      {/*          <div className="container">*/}
+      {/*  <button onClick={this.submit}>Confirm dialog</button>*/}
+      {/*  <p>My name is: {this.props.mssg}</p>*/}
+      {/*</div>*/}
         </Container>
       </div>
     );

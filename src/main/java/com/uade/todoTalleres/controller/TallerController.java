@@ -38,6 +38,13 @@ public class TallerController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/tallerByMail")
+    ResponseEntity<?> getTallerByMail(String mail) {
+        Optional<Taller> taller = tallerService.findTallerByMail(mail);
+        return taller.map(response -> ResponseEntity.ok().body(response))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @PostMapping("/taller")
     ResponseEntity<Taller> createTaller(@Valid @RequestBody Taller taller) throws URISyntaxException {
         log.info("Request to create a taller: {}", taller);

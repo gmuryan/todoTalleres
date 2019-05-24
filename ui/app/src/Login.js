@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import React, {Component} from "react";
+import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import './App.css';
 import {Link, Redirect} from "react-router-dom";
 
@@ -25,11 +25,41 @@ class Login extends Component {
         const {email, password} = this.state;
         if (email == 'admin' && password == 'admin') {
             this.props.history.push('/home');
-        }
-        const cliente = await (await fetch(`/api/clienteByMail?mail=${encodeURIComponent(email)}`)).json();
-        if (email == cliente.mail && password == cliente.password){
-            localStorage.setItem("currentUser", JSON.stringify(cliente));
-            this.props.history.push('/home');
+        } else {
+            await fetch(`/api/tallerByMail?mail=${encodeURIComponent(email)}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok){
+                    response.json().then(json => {
+                        if (email == json.mail && password == json.password) {
+                            localStorage.setItem("currentUser", JSON.stringify(json));
+                            this.props.history.push('/home');
+                        }
+                    })
+                }
+            });
+
+            await fetch(`/api/clienteByMail?mail=${encodeURIComponent(email)}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok){
+                    response.json().then(json => {
+                        if (email == json.mail && password == json.password) {
+                            localStorage.setItem("currentUser", JSON.stringify(json));
+                            this.props.history.push('/home');
+                        }
+                    })
+                }
+            });
+
         }
 
 
@@ -62,12 +92,8 @@ class Login extends Component {
                     </div>
                     <FormGroup>
                         <Button className="button-allign" color="primary" type="submit">Login</Button>{' '}
-                    </FormGroup>
-                    &nbsp;&nbsp;
-                    &nbsp;&nbsp;
-                    &nbsp;&nbsp;
-                    <FormGroup>
-                        <Button className="button-allign"  color="secondary" tag={Link} to="/registracion">Registrarse</Button>
+                        <Button className="button-allign2" color="secondary" tag={Link}
+                                to="/registracion">Registrarse</Button>
                     </FormGroup>
                 </Form>
             </Container>

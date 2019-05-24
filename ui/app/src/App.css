@@ -51,6 +51,11 @@ h2.headertekst {
 
 .button-allign{
     position:absolute;
+    left:42%;
+}
+
+.button-allign2{
+    position:absolute;
     left:50%;
 }
 

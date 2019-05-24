@@ -29,6 +29,11 @@ public class TallerService {
         return tallerRepository.findAll();
     }
 
+    public Optional<Taller> findTallerByMail(String mail){
+        Optional<Taller> taller = tallerRepository.findByMail(mail);
+        return taller;
+    }
+
     public void delete (Taller taller){
         tallerRepository.delete(taller);
     }
