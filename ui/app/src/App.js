@@ -10,6 +10,8 @@ import Login from './Login'
 import Registracion from './Registracion'
 import HomeTaller from './HomeTaller'
 import HomeCliente from './HomeCliente'
+import MecanicoList from './MecanicoList'
+import MecanicoEdit from './MecanicoEdit'
 
 class App extends Component {
     componentDidMount(){
@@ -29,6 +31,8 @@ class App extends Component {
           <Route path='/talleres/:id' component={TallerEdit}/>
           <Route path='/' exact={true} component={Login}/>
           <Route path='/registracion' exact={true} component={Registracion}/>
+          <Route path='/mecanicos' exact={true} component={MecanicoList}/>
+          <Route path='/mecanicos/:id' component={MecanicoEdit}/>
         </Switch>
       </Router>
     )

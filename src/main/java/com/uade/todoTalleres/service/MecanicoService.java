@@ -29,6 +29,10 @@ public class MecanicoService {
         return mecanicoRepository.findAll();
     }
 
+    public List<Mecanico> findAllByTaller(Long id){
+        return mecanicoRepository.findAllByTaller(id);
+    }
+
     public void delete (Mecanico mecanico){
         mecanicoRepository.delete(mecanico);
     }

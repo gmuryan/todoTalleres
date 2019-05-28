@@ -1,6 +1,13 @@
 package com.uade.todoTalleres.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.persistence.*;
+import java.io.IOException;
 import java.util.List;
 
 @Entity
@@ -42,6 +49,7 @@ public class Taller {
     @JoinColumn(name = "idTaller")
     private List<Reseña> reseñas;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "idTaller")
     private List<Mecanico> mecanicos;
@@ -66,6 +74,14 @@ public class Taller {
 
     public Taller(){
 
+    }
+
+    @JsonCreator
+    public static Taller Create(String jsonString) throws JsonParseException, JsonMappingException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Taller taller = null;
+        taller = mapper.readValue(jsonString, Taller.class);
+        return taller;
     }
 
     public Taller(Long idTaller, String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reserva> reservas, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados, String password) {
