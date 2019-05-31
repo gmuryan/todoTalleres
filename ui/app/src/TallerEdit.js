@@ -31,7 +31,8 @@ class TallerEdit extends Component {
             marcas: [],
             clasificaciones: [],
             flag: false,
-            formIsValid: true
+            formIsValid: true,
+            mailCargado: ''
         };
         this.validateMailTaller = this.validateMailTaller.bind(this);
         this.validateMailCliente = this.validateMailCliente.bind(this);
@@ -42,6 +43,7 @@ class TallerEdit extends Component {
     async componentDidMount() {
         if (this.props.match.params.id !== 'new') {
             const taller = await (await fetch(`/api/taller/${this.props.match.params.id}`)).json();
+            this.setState({mailCargado: taller.mail});
             const mrcs = await (await fetch(`/api/marcas`)).json();
             const clasifs = await (await fetch(`/api/clasificaciones`)).json();
             this.setState({item: taller, marcas: mrcs, clasificaciones: clasifs});
@@ -85,11 +87,9 @@ class TallerEdit extends Component {
 
 
     handleValidation() {
-        const {item} = this.state;
         let fields = this.state.item;
         let errors = {};
         this.setState({formIsValid: true});
-        console.log(item);
 
         //Name
         if (fields["nombre"].length === 0) {
@@ -184,14 +184,14 @@ class TallerEdit extends Component {
             }
         }
         return this.validateMailTaller().then((response) => {
-            if (response.ok && item.idTaller === null){
+            if (response.ok && this.state.mailCargado !== fields["mail"]){
                 console.log("aca");
                 this.setState({formIsValid: false});
                 errors["mail"] = "Este mail ya esta registrado";
                 this.setState({errors: errors});
             }else{
                 return this.validateMailCliente().then((response) => {
-                    if (response.ok && item.idTaller === null){
+                    if (response.ok && this.state.mailCargado !== fields["mail"]){
                         this.setState({formIsValid: false});
                         errors["mail"] = "Este mail ya esta registrado";
                         this.setState({errors: errors});
@@ -207,14 +207,11 @@ class TallerEdit extends Component {
             title: 'Operacion Exitosa',
             buttons: [
                 {
-                    label: 'Aceptar'
+                    label: 'Aceptar',
+                    onClick: () =>  this.props.history.push('/talleres')
                 }
             ]
         })
-    }
-
-    redireccion() {
-
     }
 
     async handleSubmit(event) {
@@ -232,8 +229,6 @@ class TallerEdit extends Component {
                     },
                     body: JSON.stringify(item),
                 });
-                setTimeout(this.redireccion, 15000);
-                this.props.history.push('/talleres');
                 this.dialogCreado();
             }
         })

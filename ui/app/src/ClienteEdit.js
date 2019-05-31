@@ -23,7 +23,8 @@ class ClienteEdit extends Component {
             item: this.emptyItem,
             errors: {},
             flag: false,
-            formIsValid: true
+            formIsValid: true,
+            mailCargado: ''
         };
         this.validateMailTaller = this.validateMailTaller.bind(this);
         this.validateMailCliente = this.validateMailCliente.bind(this);
@@ -34,6 +35,7 @@ class ClienteEdit extends Component {
     async componentDidMount() {
         if (this.props.match.params.id !== 'new') {
             const cliente = await (await fetch(`/api/cliente/${this.props.match.params.id}`)).json();
+            this.setState({mailCargado: cliente.mail});
             this.setState({item: cliente});
         }
     }
@@ -143,14 +145,14 @@ class ClienteEdit extends Component {
             }
         }
         return this.validateMailTaller().then((response) => {
-            if (response.ok && item.idCliente === null){
+            if (response.ok && this.state.mailCargado !== fields["mail"]){
                 console.log("aca");
                 this.setState({formIsValid: false});
                 errors["mail"] = "Este mail ya esta registrado";
                 this.setState({errors: errors});
             }else{
                 return this.validateMailCliente().then((response) => {
-                    if (response.ok && item.idCliente === null){
+                    if (response.ok && this.state.mailCargado !== fields["mail"]){
                         this.setState({formIsValid: false});
                         errors["mail"] = "Este mail ya esta registrado";
                         this.setState({errors: errors});
@@ -165,7 +167,8 @@ class ClienteEdit extends Component {
             title: 'Operacion Exitosa',
             buttons: [
                 {
-                    label: 'Aceptar'
+                    label: 'Aceptar',
+                    onClick: () =>  this.props.history.push('/clientes')
                 }
             ]
         })
@@ -189,8 +192,6 @@ class ClienteEdit extends Component {
                     },
                     body: JSON.stringify(item),
                 });
-                setTimeout(this.redireccion, 15000);
-                this.props.history.push('/clientes');
                 this.dialogCreado();
             }
         })
