@@ -178,7 +178,7 @@ class TallerList extends Component {
                     <Table className="mt-4">
                         <thead>
                         <tr>
-                            <th width="10%">Id</th>
+                            <th width="10%">ID</th>
                             <th width="10%">Nombre</th>
                             <th width="10%">Barrio</th>
                             <th width="10%">Telefono</th>

@@ -22,8 +22,11 @@ class ClienteEdit extends Component {
         this.state = {
             item: this.emptyItem,
             errors: {},
-            flag: false
+            flag: false,
+            formIsValid: true
         };
+        this.validateMailTaller = this.validateMailTaller.bind(this);
+        this.validateMailCliente = this.validateMailCliente.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -44,79 +47,116 @@ class ClienteEdit extends Component {
         this.setState({item});
     }
 
+    validateMailTaller() {
+        let fields = this.state.item;
+        return fetch(`/api/tallerByMail?mail=${encodeURIComponent(fields["mail"])}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+
+    validateMailCliente(){
+        let fields = this.state.item;
+        return fetch(`/api/clienteByMail?mail=${encodeURIComponent(fields["mail"])}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+
     handleValidation(){
         let fields = this.state.item;
         let errors = {};
-        let formIsValid = true;
+        this.setState({formIsValid: true});
 
         //Name
         if(fields["nombre"].length === 0){
-            formIsValid = false;
+            this.setState({formIsValid: true});
             errors["nombre"] = "No puede estar vacio";
         }
         else if(typeof fields["nombre"] !== "undefined"){
             if(!fields["nombre"].match(/^[a-zA-Z]+$/)){
-                formIsValid = false;
+                this.setState({formIsValid: true});
                 errors["nombre"] = "Solo letras";
             }
         }
 
         //Apellido
         if(fields["apellido"].length === 0){
-            formIsValid = false;
+            this.setState({formIsValid: true});
             errors["apellido"] = "No puede estar vacio";
         }
         else if(typeof fields["apellido"] !== "undefined"){
             if(!fields["apellido"].match(/^[a-zA-Z]+$/)){
-                formIsValid = false;
+                this.setState({formIsValid: true});
                 errors["apellido"] = "Solo letras";
             }
         }
 
         //Telefono
         if(fields["telefono"].length === 0){
-            formIsValid = false;
+            this.setState({formIsValid: true});
             errors["telefono"] = "No puede estar vacio";
         }
         else if(typeof fields["telefono"] !== "undefined"){
             if(!fields["telefono"].match(/^[0-9]+$/)){
-                formIsValid = false;
+                this.setState({formIsValid: true});
                 errors["telefono"] = "Solo numeros";
-            }
-        }
-
-        //Email
-        if(!fields["mail"]){
-            formIsValid = false;
-            errors["mail"] = "No puede estar vacio";
-        }
-        else if(typeof fields["mail"] !== "undefined"){
-            let lastAtPos = fields["mail"].lastIndexOf('@');
-            let lastDotPos = fields["mail"].lastIndexOf('.');
-
-            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["mail"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["mail"].length - lastDotPos) > 2)) {
-                formIsValid = false;
-                errors["mail"] = "Mail invalido";
             }
         }
 
         //Contraseña
         if(!fields["password"]){
-            formIsValid = false;
+            this.setState({formIsValid: true});
             errors["password"] = "No puede estar vacio";
         }
 
         //RepetirContraseña
         if(!fields["repeatPassword"]){
-            formIsValid = false;
+            this.setState({formIsValid: true});
             errors["repeatPassword"] = "No puede estar vacio";
         }else if(fields["password"] !== fields["repeatPassword"]){
-            formIsValid = false;
+            this.setState({formIsValid: true});
             errors["repeatPassword"] = "Debe ser igual a la contraseña";
         }
 
         this.setState({errors: errors});
-        return formIsValid;
+
+        //Email
+        if (!fields["mail"]) {
+            this.setState({formIsValid: false});
+            errors["mail"] = "No puede estar vacio";
+            this.setState({errors: errors});
+        } else if (typeof fields["mail"] !== "undefined") {
+            let lastAtPos = fields["mail"].lastIndexOf('@');
+            let lastDotPos = fields["mail"].lastIndexOf('.');
+            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["mail"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["mail"].length - lastDotPos) > 2)) {
+                this.setState({formIsValid: false});
+                errors["mail"] = "Mail invalido";
+                this.setState({errors: errors});
+            }
+        }
+        return this.validateMailTaller().then((response) => {
+            if (response.ok){
+                console.log("aca");
+                this.setState({formIsValid: false});
+                errors["mail"] = "Este mail ya esta registrado";
+                this.setState({errors: errors});
+            }else{
+                return this.validateMailCliente().then((response) => {
+                    if (response.ok){
+                        this.setState({formIsValid: false});
+                        errors["mail"] = "Este mail ya esta registrado";
+                        this.setState({errors: errors});
+                    }
+                })
+            }
+        });
     }
 
     dialogCreado(){
@@ -130,23 +170,29 @@ class ClienteEdit extends Component {
         })
     }
 
+    redireccion() {
+    }
 
     async handleSubmit(event) {
         event.preventDefault();
-        if (this.handleValidation()){
-        const {item} = this.state;
 
-        await fetch('/api/cliente', {
-            method: (item.idCliente) ? 'PUT' : 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(item),
-        });
-        this.props.history.push('/clientes');
-        this.dialogCreado();
-        }
+        this.handleValidation().then((result) =>{
+            if (this.state.formIsValid){
+                const {item} = this.state;
+
+                fetch('/api/cliente', {
+                    method: (item.idCliente) ? 'PUT' : 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(item),
+                });
+                setTimeout(this.redireccion, 5000);
+                this.props.history.push('/clientes');
+                this.dialogCreado();
+            }
+        })
     }
 
     render() {

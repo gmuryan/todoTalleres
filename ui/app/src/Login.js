@@ -8,7 +8,8 @@ class Login extends Component {
         super(props);
         this.state = {
             email: "",
-            password: ""
+            password: "",
+            errors: {},
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,6 +23,7 @@ class Login extends Component {
 
     async handleSubmit(event) {
         event.preventDefault();
+        let errors = {};
         const {email, password} = this.state;
         if (email == 'admin' && password == 'admin') {
             this.props.history.push('/home');
@@ -61,6 +63,8 @@ class Login extends Component {
             });
 
         }
+        errors["password"] = "Datos invalidos";
+        this.setState({errors: errors});
 
 
     }
@@ -79,7 +83,7 @@ class Login extends Component {
                             <Label for="email">Email</Label>
                             <Input type="text" name="email" id="email"
                                    onChange={this.handleChange} autoComplete="email"/>
-                            {/*<span className="error">{this.state.errors["email"]}</span>*/}
+                            <span className="error">{this.state.errors["email"]}</span>
                         </FormGroup>
                     </div>
                     <div className="row">
@@ -87,7 +91,7 @@ class Login extends Component {
                             <Label for="password">Contraseña</Label>
                             <Input type="password" name="password" id="password"
                                    onChange={this.handleChange} autoComplete="password"/>
-                            {/*<span className="error">{this.state.errors["password"]}</span>*/}
+                            <span className="error-login">{this.state.errors["password"]}</span>
                         </FormGroup>
                     </div>
                     <FormGroup>

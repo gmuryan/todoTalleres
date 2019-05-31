@@ -38,6 +38,12 @@
     color: red;
 }
 
+.error-login{
+    margin-left: 42%;
+    font-size: 13px;
+    color: red;
+}
+
 #page-numbers {
     list-style: none;
     display: flex;

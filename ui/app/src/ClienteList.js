@@ -166,7 +166,7 @@ class ClienteList extends Component {
                     <Table className="mt-4">
                         <thead>
                         <tr>
-                            <th width="20%">Id</th>
+                            <th width="20%">ID</th>
                             <th width="20%">Nombre</th>
                             <th width="20%">Apellido</th>
                             <th width="20%">Telefono</th>
