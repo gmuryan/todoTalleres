@@ -85,9 +85,11 @@ class TallerEdit extends Component {
 
 
     handleValidation() {
+        const {item} = this.state;
         let fields = this.state.item;
         let errors = {};
         this.setState({formIsValid: true});
+        console.log(item);
 
         //Name
         if (fields["nombre"].length === 0) {
@@ -182,14 +184,14 @@ class TallerEdit extends Component {
             }
         }
         return this.validateMailTaller().then((response) => {
-            if (response.ok){
+            if (response.ok && item.idTaller === null){
                 console.log("aca");
                 this.setState({formIsValid: false});
                 errors["mail"] = "Este mail ya esta registrado";
                 this.setState({errors: errors});
             }else{
                 return this.validateMailCliente().then((response) => {
-                    if (response.ok){
+                    if (response.ok && item.idTaller === null){
                         this.setState({formIsValid: false});
                         errors["mail"] = "Este mail ya esta registrado";
                         this.setState({errors: errors});
@@ -230,7 +232,7 @@ class TallerEdit extends Component {
                     },
                     body: JSON.stringify(item),
                 });
-                setTimeout(this.redireccion, 5000);
+                setTimeout(this.redireccion, 15000);
                 this.props.history.push('/talleres');
                 this.dialogCreado();
             }
@@ -241,6 +243,7 @@ class TallerEdit extends Component {
         const {item, marcas, clasificaciones, flag} = this.state;
 
         if (flag == false && item.idTaller) {
+            console.log(item);
             item.repeatPassword = item.password;
             this.setState({flag: !this.state.flag});
         }

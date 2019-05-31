@@ -70,6 +70,7 @@ class ClienteEdit extends Component {
     }
 
     handleValidation(){
+        const {item} = this.state;
         let fields = this.state.item;
         let errors = {};
         this.setState({formIsValid: true});
@@ -142,14 +143,14 @@ class ClienteEdit extends Component {
             }
         }
         return this.validateMailTaller().then((response) => {
-            if (response.ok){
+            if (response.ok && item.idCliente === null){
                 console.log("aca");
                 this.setState({formIsValid: false});
                 errors["mail"] = "Este mail ya esta registrado";
                 this.setState({errors: errors});
             }else{
                 return this.validateMailCliente().then((response) => {
-                    if (response.ok){
+                    if (response.ok && item.idCliente === null){
                         this.setState({formIsValid: false});
                         errors["mail"] = "Este mail ya esta registrado";
                         this.setState({errors: errors});
@@ -188,7 +189,7 @@ class ClienteEdit extends Component {
                     },
                     body: JSON.stringify(item),
                 });
-                setTimeout(this.redireccion, 5000);
+                setTimeout(this.redireccion, 15000);
                 this.props.history.push('/clientes');
                 this.dialogCreado();
             }
