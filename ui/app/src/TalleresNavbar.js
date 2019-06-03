@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import {Button, Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 export default class TalleresNavbar extends Component {
@@ -16,22 +16,23 @@ export default class TalleresNavbar extends Component {
     }
 
     render() {
+        const taller = JSON.parse(localStorage.getItem("currentUser"));
         return <Navbar color="dark" dark expand="md">
             <NavbarBrand tag={Link} to="/homeTaller">Home</NavbarBrand>
+            <NavbarBrand tag={Link} to={"/miTaller/" + taller.idTaller}>Mi Taller</NavbarBrand>
             <NavbarBrand tag={Link} to="/mecanicos">Mecanicos</NavbarBrand>
             {/*<NavbarBrand tag={Link} to="/prendas">Prendas</NavbarBrand>*/}
             {/*<NavbarBrand tag={Link} to="/ordenesCompra">Ordenes de Compra</NavbarBrand>*/}
             <NavbarToggler onClick={this.toggle}/>
             <Collapse isOpen={this.state.isOpen} navbar>
-                {/*<Nav className="ml-auto" navbar>*/}
-                {/*  <NavItem>*/}
-                {/*    <NavLink*/}
-                {/*      href="https://twitter.com/oktadev">@oktadev</NavLink>*/}
-                {/*  </NavItem>*/}
+                <Nav className="ml-auto" navbar>
+                    <NavItem>
+                        <Button onClick={this.logout} tag={Link} to="/">Logout</Button>
+                    </NavItem>
                 {/*  <NavItem>*/}
                 {/*    <NavLink href="https://github.com/oktadeveloper/okta-spring-boot-react-crud-example">GitHub</NavLink>*/}
                 {/*  </NavItem>*/}
-                {/*</Nav>*/}
+                </Nav>
             </Collapse>
         </Navbar>;
     }

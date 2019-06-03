@@ -72,7 +72,6 @@ class ClienteEdit extends Component {
     }
 
     handleValidation(){
-        const {item} = this.state;
         let fields = this.state.item;
         let errors = {};
         this.setState({formIsValid: true});
@@ -172,9 +171,6 @@ class ClienteEdit extends Component {
                 }
             ]
         })
-    }
-
-    redireccion() {
     }
 
     async handleSubmit(event) {

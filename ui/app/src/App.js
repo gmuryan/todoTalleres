@@ -12,6 +12,7 @@ import HomeTaller from './HomeTaller'
 import HomeCliente from './HomeCliente'
 import MecanicoList from './MecanicoList'
 import MecanicoEdit from './MecanicoEdit'
+import MiTaller from './MiTaller'
 
 class App extends Component {
     componentDidMount(){
@@ -33,6 +34,7 @@ class App extends Component {
           <Route path='/registracion' exact={true} component={Registracion}/>
           <Route path='/mecanicos' exact={true} component={MecanicoList}/>
           <Route path='/mecanicos/:id' component={MecanicoEdit}/>
+          <Route path='/miTaller/:id' component={MiTaller}/>
         </Switch>
       </Router>
     )
