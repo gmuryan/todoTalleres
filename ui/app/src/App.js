@@ -13,6 +13,7 @@ import HomeCliente from './HomeCliente'
 import MecanicoList from './MecanicoList'
 import MecanicoEdit from './MecanicoEdit'
 import MiTaller from './MiTaller'
+import MisDatos from './MisDatos'
 
 class App extends Component {
     componentDidMount(){
@@ -35,6 +36,7 @@ class App extends Component {
           <Route path='/mecanicos' exact={true} component={MecanicoList}/>
           <Route path='/mecanicos/:id' component={MecanicoEdit}/>
           <Route path='/miTaller/:id' component={MiTaller}/>
+          <Route path='/misDatos/:id' component={MisDatos}/>
         </Switch>
       </Router>
     )

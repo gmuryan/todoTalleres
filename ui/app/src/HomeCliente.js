@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import AppNavbar from './AppNavbar';
+import ClientesNavbar from './ClientesNavbar';
 import {Link, withRouter} from 'react-router-dom';
 import { Button, Container } from 'reactstrap';
 import { confirmAlert } from 'react-confirm-alert'; // Import
@@ -20,7 +20,7 @@ class HomeCliente extends Component {
     render() {
         return (
             <div>
-                <AppNavbar/>
+                <ClientesNavbar/>
                 <Container fluid>
                     {/*    <Button color="link"><Link to="/proveedores">Manage Suppliers</Link></Button>*/}
                     {/*          <div className="container">*/}
