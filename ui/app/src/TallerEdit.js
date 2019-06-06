@@ -38,6 +38,11 @@ class TallerEdit extends Component {
         this.validateMailCliente = this.validateMailCliente.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        const admin = JSON.parse(localStorage.getItem("adminUser"));
+        if (admin === null){
+            localStorage.clear();
+            this.props.history.push('/');
+        }
     }
 
     async componentDidMount() {

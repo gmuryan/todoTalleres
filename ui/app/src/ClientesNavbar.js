@@ -15,8 +15,13 @@ export default class ClientesNavbar extends Component {
         });
     }
 
+    logout(){
+        localStorage.clear();
+    }
+
     render() {
-        const cliente = JSON.parse(localStorage.getItem("currentUser"));
+        const cliente = JSON.parse(localStorage.getItem("clienteUser"));
+        if (cliente !== null){
         return <Navbar color="dark" dark expand="md">
             <NavbarBrand tag={Link} to="/homeCliente">Home</NavbarBrand>
             <NavbarBrand tag={Link} to={"/misDatos/" + cliente.idCliente}>Mis Datos</NavbarBrand>
@@ -34,5 +39,8 @@ export default class ClientesNavbar extends Component {
                 </Nav>
             </Collapse>
         </Navbar>;
+        }else{
+            return  null;
+        }
     }
 }

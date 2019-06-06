@@ -21,6 +21,11 @@ class ClienteList extends Component {
         };
         this.handleClick = this.handleClick.bind(this);
         this.remove = this.remove.bind(this);
+        const admin = JSON.parse(localStorage.getItem("adminUser"));
+        if (admin === null){
+            localStorage.clear();
+            this.props.history.push('/');
+        }
     }
 
     handleClick(event) {

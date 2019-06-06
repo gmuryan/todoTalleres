@@ -18,6 +18,12 @@ class MecanicoEdit extends Component {
 
     constructor(props) {
         super(props);
+        const taller = JSON.parse(localStorage.getItem("tallerUser"));
+        console.log(taller);
+        if (taller===null) {
+            localStorage.clear();
+            this.props.history.push('/');
+        }
         this.state = {
             item: this.emptyItem,
             errors: {},
@@ -137,7 +143,7 @@ class MecanicoEdit extends Component {
     render() {
         const {item, flag} = this.state;
         const title = <h2>{item.idMecanico ? 'Editar Mecanico' : 'Crear Mecanico'}</h2>;
-        const tallerAux = JSON.parse(localStorage.getItem("currentUser"));
+        const tallerAux = JSON.parse(localStorage.getItem("tallerUser"));
         item.taller = JSON.stringify(tallerAux);
         return <div>
             <TalleresNavbar/>

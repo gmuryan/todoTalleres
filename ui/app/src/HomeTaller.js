@@ -11,9 +11,12 @@ class HomeTaller extends Component {
 
     constructor(props) {
         super(props);
-        console.log(this.props);
-        const taller = JSON.parse(localStorage.getItem("currentUser"));
+        const taller = JSON.parse(localStorage.getItem("tallerUser"));
         console.log(taller);
+        if (taller===null) {
+            localStorage.clear();
+            this.props.history.push('/');
+        }
     }
 
 

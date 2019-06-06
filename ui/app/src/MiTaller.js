@@ -25,6 +25,8 @@ class MiTaller extends Component {
 
     constructor(props) {
         super(props);
+
+
         this.state = {
             item: this.emptyItem,
             errors: {},
@@ -38,19 +40,32 @@ class MiTaller extends Component {
         this.validateMailCliente = this.validateMailCliente.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        const taller = JSON.parse(localStorage.getItem("tallerUser"));
+        console.log(taller);
+        if (taller === null) {
+            localStorage.clear();
+            this.props.history.push('/');
+        } else if (taller.idTaller !== parseFloat(this.props.match.params.id)) {
+            localStorage.clear();
+            this.props.history.push('/');
+        }
+
     }
 
     async componentDidMount() {
-        if (this.props.match.params.id !== 'new') {
-            const taller = await (await fetch(`/api/taller/${this.props.match.params.id}`)).json();
-            this.setState({mailCargado: taller.mail});
-            const mrcs = await (await fetch(`/api/marcas`)).json();
-            const clasifs = await (await fetch(`/api/clasificaciones`)).json();
-            this.setState({item: taller, marcas: mrcs, clasificaciones: clasifs});
-        } else {
-            const mrcs = await (await fetch(`/api/marcas`)).json();
-            const clasifs = await (await fetch(`/api/clasificaciones`)).json();
-            this.setState({marcas: mrcs, clasificaciones: clasifs});
+        const usuario = JSON.parse(localStorage.getItem("tallerUser"));
+        if (usuario !== null) {
+            if (this.props.match.params.id !== 'new' && usuario.idTaller === parseFloat(this.props.match.params.id)) {
+                const taller = await (await fetch(`/api/taller/${this.props.match.params.id}`)).json();
+                this.setState({mailCargado: taller.mail});
+                const mrcs = await (await fetch(`/api/marcas`)).json();
+                const clasifs = await (await fetch(`/api/clasificaciones`)).json();
+                this.setState({item: taller, marcas: mrcs, clasificaciones: clasifs});
+            } else {
+                const mrcs = await (await fetch(`/api/marcas`)).json();
+                const clasifs = await (await fetch(`/api/clasificaciones`)).json();
+                this.setState({marcas: mrcs, clasificaciones: clasifs});
+            }
         }
     }
 
@@ -74,7 +89,7 @@ class MiTaller extends Component {
         });
     }
 
-    validateMailCliente(){
+    validateMailCliente() {
         let fields = this.state.item;
         return fetch(`/api/clienteByMail?mail=${encodeURIComponent(fields["mail"])}`, {
             method: 'GET',
@@ -184,14 +199,14 @@ class MiTaller extends Component {
             }
         }
         return this.validateMailTaller().then((response) => {
-            if (response.ok && this.state.mailCargado !== fields["mail"]){
+            if (response.ok && this.state.mailCargado !== fields["mail"]) {
                 console.log("aca");
                 this.setState({formIsValid: false});
                 errors["mail"] = "Este mail ya esta registrado";
                 this.setState({errors: errors});
-            }else{
+            } else {
                 return this.validateMailCliente().then((response) => {
-                    if (response.ok && this.state.mailCargado !== fields["mail"]){
+                    if (response.ok && this.state.mailCargado !== fields["mail"]) {
                         this.setState({formIsValid: false});
                         errors["mail"] = "Este mail ya esta registrado";
                         this.setState({errors: errors});
@@ -208,7 +223,7 @@ class MiTaller extends Component {
             buttons: [
                 {
                     label: 'Aceptar',
-                    onClick: () =>  this.props.history.push('/homeTaller')
+                    onClick: () => this.props.history.push('/homeTaller')
                 }
             ]
         })

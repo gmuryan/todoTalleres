@@ -15,8 +15,13 @@ export default class TalleresNavbar extends Component {
         });
     }
 
+    logout(){
+        localStorage.clear();
+    }
+
     render() {
-        const taller = JSON.parse(localStorage.getItem("currentUser"));
+        const taller = JSON.parse(localStorage.getItem("tallerUser"));
+        if (taller !== null){
         return <Navbar color="dark" dark expand="md">
             <NavbarBrand tag={Link} to="/homeTaller">Home</NavbarBrand>
             <NavbarBrand tag={Link} to={"/miTaller/" + taller.idTaller}>Mi Taller</NavbarBrand>
@@ -35,5 +40,8 @@ export default class TalleresNavbar extends Component {
                 </Nav>
             </Collapse>
         </Navbar>;
+        }else{
+            return null;
+        }
     }
 }

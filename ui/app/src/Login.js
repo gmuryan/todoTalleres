@@ -10,6 +10,7 @@ class Login extends Component {
             email: "",
             password: "",
             errors: {},
+            formIsValid: true
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,6 +27,7 @@ class Login extends Component {
         let errors = {};
         const {email, password} = this.state;
         if (email == 'admin' && password == 'admin') {
+            localStorage.setItem("adminUser", JSON.stringify(this.state));
             this.props.history.push('/home');
         } else {
             await fetch(`/api/tallerByMail?mail=${encodeURIComponent(email)}`, {
@@ -38,7 +40,7 @@ class Login extends Component {
                 if (response.ok){
                     response.json().then(json => {
                         if (email == json.mail && password == json.password) {
-                            localStorage.setItem("currentUser", JSON.stringify(json));
+                            localStorage.setItem("tallerUser", JSON.stringify(json));
                             this.props.history.push('/homeTaller');
                         }
                     })
@@ -55,16 +57,20 @@ class Login extends Component {
                 if (response.ok){
                     response.json().then(json => {
                         if (email == json.mail && password == json.password) {
-                            localStorage.setItem("currentUser", JSON.stringify(json));
+                            localStorage.setItem("clienteUser", JSON.stringify(json));
                             this.props.history.push('/homeCliente');
                         }
                     })
+                }else{
+                    this.setState({formIsValid: false});
                 }
             });
 
         }
-        errors["password"] = "Datos invalidos";
-        this.setState({errors: errors});
+        if (!this.state.formIsValid){
+            errors["password"] = "Datos invalidos";
+            this.setState({errors: errors});
+        }
 
 
     }

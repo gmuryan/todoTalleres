@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import React, {Component} from 'react';
+import {Link, withRouter} from 'react-router-dom';
+import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import ClientesNavbar from './ClientesNavbar';
 import {confirmAlert} from "react-confirm-alert";
 
@@ -12,13 +12,21 @@ class MisDatos extends Component {
         apellido: '',
         telefono: '',
         mail: '',
-        password : '',
+        password: '',
         repeatPassword: ''
     };
 
 
     constructor(props) {
         super(props);
+        const cliente = JSON.parse(localStorage.getItem("clienteUser"));
+        if (cliente === null) {
+            localStorage.clear();
+            this.props.history.push('/')
+        } else if (cliente.idCliente !== parseFloat(this.props.match.params.id)) {
+            localStorage.clear();
+            this.props.history.push('/');
+        }
         this.state = {
             item: this.emptyItem,
             errors: {},
@@ -33,10 +41,13 @@ class MisDatos extends Component {
     }
 
     async componentDidMount() {
-        if (this.props.match.params.id !== 'new') {
-            const cliente = await (await fetch(`/api/cliente/${this.props.match.params.id}`)).json();
-            this.setState({mailCargado: cliente.mail});
-            this.setState({item: cliente});
+        const usuario = JSON.parse(localStorage.getItem("clienteUser"));
+        if (usuario !== null) {
+            if (this.props.match.params.id !== 'new' && usuario.idCliente === parseFloat(this.props.match.params.id)) {
+                const cliente = await (await fetch(`/api/cliente/${this.props.match.params.id}`)).json();
+                this.setState({mailCargado: cliente.mail});
+                this.setState({item: cliente});
+            }
         }
     }
 
@@ -60,7 +71,7 @@ class MisDatos extends Component {
         });
     }
 
-    validateMailCliente(){
+    validateMailCliente() {
         let fields = this.state.item;
         return fetch(`/api/clienteByMail?mail=${encodeURIComponent(fields["mail"])}`, {
             method: 'GET',
@@ -71,58 +82,55 @@ class MisDatos extends Component {
         });
     }
 
-    handleValidation(){
+    handleValidation() {
         let fields = this.state.item;
         let errors = {};
         this.setState({formIsValid: true});
 
         //Name
-        if(fields["nombre"].length === 0){
+        if (fields["nombre"].length === 0) {
             this.setState({formIsValid: true});
             errors["nombre"] = "No puede estar vacio";
-        }
-        else if(typeof fields["nombre"] !== "undefined"){
-            if(!fields["nombre"].match(/^[a-zA-Z]+$/)){
+        } else if (typeof fields["nombre"] !== "undefined") {
+            if (!fields["nombre"].match(/^[a-zA-Z]+$/)) {
                 this.setState({formIsValid: true});
                 errors["nombre"] = "Solo letras";
             }
         }
 
         //Apellido
-        if(fields["apellido"].length === 0){
+        if (fields["apellido"].length === 0) {
             this.setState({formIsValid: true});
             errors["apellido"] = "No puede estar vacio";
-        }
-        else if(typeof fields["apellido"] !== "undefined"){
-            if(!fields["apellido"].match(/^[a-zA-Z]+$/)){
+        } else if (typeof fields["apellido"] !== "undefined") {
+            if (!fields["apellido"].match(/^[a-zA-Z]+$/)) {
                 this.setState({formIsValid: true});
                 errors["apellido"] = "Solo letras";
             }
         }
 
         //Telefono
-        if(fields["telefono"].length === 0){
+        if (fields["telefono"].length === 0) {
             this.setState({formIsValid: true});
             errors["telefono"] = "No puede estar vacio";
-        }
-        else if(typeof fields["telefono"] !== "undefined"){
-            if(!fields["telefono"].match(/^[0-9]+$/)){
+        } else if (typeof fields["telefono"] !== "undefined") {
+            if (!fields["telefono"].match(/^[0-9]+$/)) {
                 this.setState({formIsValid: true});
                 errors["telefono"] = "Solo numeros";
             }
         }
 
         //Contraseña
-        if(!fields["password"]){
+        if (!fields["password"]) {
             this.setState({formIsValid: true});
             errors["password"] = "No puede estar vacio";
         }
 
         //RepetirContraseña
-        if(!fields["repeatPassword"]){
+        if (!fields["repeatPassword"]) {
             this.setState({formIsValid: true});
             errors["repeatPassword"] = "No puede estar vacio";
-        }else if(fields["password"] !== fields["repeatPassword"]){
+        } else if (fields["password"] !== fields["repeatPassword"]) {
             this.setState({formIsValid: true});
             errors["repeatPassword"] = "Debe ser igual a la contraseña";
         }
@@ -144,14 +152,14 @@ class MisDatos extends Component {
             }
         }
         return this.validateMailTaller().then((response) => {
-            if (response.ok && this.state.mailCargado !== fields["mail"]){
+            if (response.ok && this.state.mailCargado !== fields["mail"]) {
                 console.log("aca");
                 this.setState({formIsValid: false});
                 errors["mail"] = "Este mail ya esta registrado";
                 this.setState({errors: errors});
-            }else{
+            } else {
                 return this.validateMailCliente().then((response) => {
-                    if (response.ok && this.state.mailCargado !== fields["mail"]){
+                    if (response.ok && this.state.mailCargado !== fields["mail"]) {
                         this.setState({formIsValid: false});
                         errors["mail"] = "Este mail ya esta registrado";
                         this.setState({errors: errors});
@@ -161,13 +169,13 @@ class MisDatos extends Component {
         });
     }
 
-    dialogCreado(){
+    dialogCreado() {
         confirmAlert({
             title: 'Operacion Exitosa',
             buttons: [
                 {
                     label: 'Aceptar',
-                    onClick: () =>  this.props.history.push('/homeCliente')
+                    onClick: () => this.props.history.push('/homeCliente')
                 }
             ]
         })
@@ -176,8 +184,8 @@ class MisDatos extends Component {
     async handleSubmit(event) {
         event.preventDefault();
 
-        this.handleValidation().then((result) =>{
-            if (this.state.formIsValid){
+        this.handleValidation().then((result) => {
+            if (this.state.formIsValid) {
                 const {item} = this.state;
 
                 fetch('/api/cliente', {
@@ -197,7 +205,7 @@ class MisDatos extends Component {
         const {item, flag} = this.state;
         const title = <h2>{item.idCliente ? 'Editar Cliente' : 'Crear Cliente'}</h2>;
 
-        if (flag == false && item.idCliente){
+        if (flag == false && item.idCliente) {
             item.repeatPassword = item.password;
             this.setState({flag: !this.state.flag});
         }
@@ -245,7 +253,8 @@ class MisDatos extends Component {
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="repeatPassword">Repetir Contraseña</Label>
-                            <Input type="password" name="repeatPassword" id="repeatPassword" value={item.repeatPassword || ''}
+                            <Input type="password" name="repeatPassword" id="repeatPassword"
+                                   value={item.repeatPassword || ''}
                                    onChange={this.handleChange} autoComplete="repeatPassword"/>
                             <span className="error">{this.state.errors["repeatPassword"]}</span>
                         </FormGroup>

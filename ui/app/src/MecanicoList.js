@@ -10,6 +10,12 @@ class MecanicoList extends Component {
 
     constructor(props) {
         super(props);
+        const taller = JSON.parse(localStorage.getItem("tallerUser"));
+        console.log(taller);
+        if (taller===null) {
+            this.props.history.push('/');
+            localStorage.clear();
+        }
         this.state = {
             mecanicos: [],
             isLoading: true,
@@ -31,11 +37,12 @@ class MecanicoList extends Component {
 
     componentDidMount() {
         this.setState({isLoading: true});
-        const taller = JSON.parse(localStorage.getItem("currentUser"));
+        const taller = JSON.parse(localStorage.getItem("tallerUser"));
+        if (taller !== null){
         fetch(`/api/mecanicos/${taller.idTaller}`)
             .then(response => response.json())
             .then(data => this.setState({mecanicos: data, isLoading: false}))
-
+        }
     }
 
     async remove(id) {

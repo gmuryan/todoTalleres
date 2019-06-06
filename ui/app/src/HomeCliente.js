@@ -11,9 +11,11 @@ class HomeCliente extends Component {
 
     constructor(props) {
         super(props);
-        console.log(this.props);
-        const cliente = JSON.parse(localStorage.getItem("currentUser"));
-        console.log(cliente);
+        const cliente = JSON.parse(localStorage.getItem("clienteUser"));
+        if (cliente === null){
+            localStorage.clear();
+            this.props.history.push('/');
+        }
     }
 
 
