@@ -29,6 +29,14 @@ public class ReparacionService {
         return reparacionRepository.findAll();
     }
 
+    public List<Reparacion> findAllByTaller(Long id){
+        return reparacionRepository.findAllByTaller(id);
+    }
+
+    public List<Reparacion> findAllByCliente(Long id){
+        return reparacionRepository.findAllByCliente(id);
+    }
+
     public void delete (Reparacion reparacion){
         reparacionRepository.delete(reparacion);
     }

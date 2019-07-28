@@ -37,14 +37,12 @@ public class Taller {
     @JoinColumn(name = "idMarca")
     private Marca marca;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idTaller")
-    private List<Reserva> reservas;
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "idTaller")
     private List<Reparacion> reparaciones;
 
+    @JsonIgnore
     @OneToMany
     @JoinColumn(name = "idTaller")
     private List<Reseña> reseñas;
@@ -67,6 +65,9 @@ public class Taller {
     @Column
     private String password;
 
+    @Column
+    private String descripcionTaller;
+
     @Transient
     private String repeatPassword;
 
@@ -84,15 +85,13 @@ public class Taller {
         return taller;
     }
 
-    public Taller(Long idTaller, String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reserva> reservas, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados, String password) {
-        this.idTaller = idTaller;
+    public Taller(String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados, String password, String descripcionTaller) {
         this.nombre = nombre;
         this.telefono = telefono;
         this.barrio = barrio;
         this.mail = mail;
         this.ubicacion = ubicacion;
         this.marca = marca;
-        this.reservas = reservas;
         this.reparaciones = reparaciones;
         this.mecanicos = mecanicos;
         this.reseñas = reseñas;
@@ -100,6 +99,25 @@ public class Taller {
         this.maximosVehiculos = maximosVehiculos;
         this.retrasosContemplados = retrasosContemplados;
         this.password = password;
+        this.descripcionTaller = descripcionTaller;
+    }
+
+    public Taller(Long idTaller, String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados, String password, String descripcionTaller) {
+        this.idTaller = idTaller;
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.barrio = barrio;
+        this.mail = mail;
+        this.ubicacion = ubicacion;
+        this.marca = marca;
+        this.reparaciones = reparaciones;
+        this.mecanicos = mecanicos;
+        this.reseñas = reseñas;
+        this.clasificacion = clasificacion;
+        this.maximosVehiculos = maximosVehiculos;
+        this.retrasosContemplados = retrasosContemplados;
+        this.password = password;
+        this.descripcionTaller = descripcionTaller;
     }
 
     public Long getIdTaller() {
@@ -158,14 +176,6 @@ public class Taller {
         this.marca = marca;
     }
 
-    public List<Reserva> getReservas() {
-        return reservas;
-    }
-
-    public void setReservas(List<Reserva> reservas) {
-        this.reservas = reservas;
-    }
-
     public List<Reparacion> getReparaciones() {
         return reparaciones;
     }
@@ -220,5 +230,13 @@ public class Taller {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDescripcionTaller() {
+        return descripcionTaller;
+    }
+
+    public void setDescripcionTaller(String descripcionTaller) {
+        this.descripcionTaller = descripcionTaller;
     }
 }

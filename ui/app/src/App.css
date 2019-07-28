@@ -78,6 +78,11 @@ h2.headertekst {
 
 }
 
+.input-big{
+    height: calc(7rem + 2px);
+    width: 100%;
+}
+
 input[type=checkbox]{
     position: relative;
     left: 20px;

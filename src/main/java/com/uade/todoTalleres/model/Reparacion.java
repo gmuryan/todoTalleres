@@ -1,7 +1,10 @@
 package com.uade.todoTalleres.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -20,16 +23,20 @@ public class Reparacion {
     private List<Mecanico> mecanicos;
 
     @Column
+    @Temporal(TemporalType.DATE)
     private Date fechaDevolucion;
 
     @Column
-    private String horaDevolucion;
+    private LocalTime horaDevolucion;
 
     @Column
-    private Date fechaEntrada;
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="dd-MM-yyyy")
+    private Date fechaReserva;
 
     @Column
-    private String horaEntrada;
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime horaReserva;
 
     @Column(precision = 10, scale = 2)
     private BigDecimal importeTotal;
@@ -39,7 +46,10 @@ public class Reparacion {
     private Estado estadoReparacion;
 
     @Column
-    private String descripcionProblema;
+    private String descripcionProblemaCliente;
+
+    @Column
+    private String descripcionProblemaTaller;
 
     @Column
     private String descripcionReparacion;
@@ -48,26 +58,32 @@ public class Reparacion {
     private boolean nuevoPresupuesto;
 
     @OneToOne
-    @JoinColumn(name = "idReserva")
-    private Reserva reserva;
+    @JoinColumn(name = "idTaller")
+    private Taller taller;
+
+    @OneToOne
+    @JoinColumn(name = "idCliente")
+    private Cliente cliente;
 
     public Reparacion(){
 
     }
 
-    public Reparacion(Long idReparacion, Taller taller, Cliente cliente, List<Mecanico> mecanicos, Date fechaDevolucion, String horaDevolucion, Date fechaEntrada, String horaEntrada, BigDecimal importeTotal, Estado estadoReparacion, String descripcionProblema, String descripcionReparacion, boolean nuevoPresupuesto, Reserva reserva) {
+    public Reparacion(Long idReparacion, Taller taller, Cliente cliente, List<Mecanico> mecanicos, Date fechaDevolucion, LocalTime horaDevolucion, Date fechaReserva, LocalTime horaReserva, BigDecimal importeTotal, Estado estadoReparacion, String descripcionProblemaCliente, String descripcionProblemaTaller, String descripcionReparacion, boolean nuevoPresupuesto) {
         this.idReparacion = idReparacion;
         this.mecanicos = mecanicos;
         this.fechaDevolucion = fechaDevolucion;
         this.horaDevolucion = horaDevolucion;
-        this.fechaEntrada = fechaEntrada;
-        this.horaEntrada = horaEntrada;
+        this.fechaReserva = fechaReserva;
+        this.horaReserva = horaReserva;
         this.importeTotal = importeTotal;
         this.estadoReparacion = estadoReparacion;
-        this.descripcionProblema = descripcionProblema;
+        this.descripcionProblemaCliente = descripcionProblemaCliente;
+        this.descripcionProblemaTaller = descripcionProblemaTaller;
         this.descripcionReparacion = descripcionReparacion;
         this.nuevoPresupuesto = nuevoPresupuesto;
-        this.reserva = reserva;
+        this.taller = taller;
+        this.cliente = cliente;
     }
 
     public Long getIdReparacion() {
@@ -94,20 +110,20 @@ public class Reparacion {
         this.fechaDevolucion = fechaDevolucion;
     }
 
-    public String getHoraDevolucion() {
+    public LocalTime getHoraDevolucion() {
         return horaDevolucion;
     }
 
-    public void setHoraDevolucion(String horaDevolucion) {
+    public void setHoraDevolucion(LocalTime horaDevolucion) {
         this.horaDevolucion = horaDevolucion;
     }
 
-    public Date getFechaEntrada() {
-        return fechaEntrada;
+    public Date getFechaReserva() {
+        return fechaReserva;
     }
 
-    public void setFechaEntrada(Date fechaEntrada) {
-        this.fechaEntrada = fechaEntrada;
+    public void setFechaReserva(Date fechaReserva) {
+        this.fechaReserva = fechaReserva;
     }
 
     public BigDecimal getImporteTotal() {
@@ -126,12 +142,12 @@ public class Reparacion {
         this.estadoReparacion = estadoReparacion;
     }
 
-    public String getDescripcionProblema() {
-        return descripcionProblema;
+    public String getDescripcionProblemaCliente() {
+        return descripcionProblemaCliente;
     }
 
-    public void setDescripcionProblema(String descripcionProblema) {
-        this.descripcionProblema = descripcionProblema;
+    public void setDescripcionProblemaCliente(String descripcionProblemaCliente) {
+        this.descripcionProblemaCliente = descripcionProblemaCliente;
     }
 
     public String getDescripcionReparacion() {
@@ -150,19 +166,35 @@ public class Reparacion {
         this.nuevoPresupuesto = nuevoPresupuesto;
     }
 
-    public String getHoraEntrada() {
-        return horaEntrada;
+    public LocalTime getHoraReserva() {
+        return horaReserva;
     }
 
-    public void setHoraEntrada(String horaEntrada) {
-        this.horaEntrada = horaEntrada;
+    public void setHoraReserva(LocalTime horaReserva) {
+        this.horaReserva = horaReserva;
     }
 
-    public Reserva getReserva() {
-        return reserva;
+    public Taller getTaller() {
+        return taller;
     }
 
-    public void setReserva(Reserva reserva) {
-        this.reserva = reserva;
+    public void setTaller(Taller taller) {
+        this.taller = taller;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getDescripcionProblemaTaller() {
+        return descripcionProblemaTaller;
+    }
+
+    public void setDescripcionProblemaTaller(String descripcionProblemaTaller) {
+        this.descripcionProblemaTaller = descripcionProblemaTaller;
     }
 }

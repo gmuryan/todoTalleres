@@ -19,6 +19,7 @@ class TallerEdit extends Component {
         maximosVehiculos: '',
         retrasosContemplados: '',
         password: '',
+        descripcionTaller: '',
         repeatPassword: ''
     };
 
@@ -302,6 +303,15 @@ class TallerEdit extends Component {
                                    onChange={this.handleChange} autoComplete="ubicacion"/>
                             <span className="error">{this.state.errors["ubicacion"]}</span>
                         </FormGroup>
+                    </div>
+                    <div>
+                        <div className="row">
+                            <FormGroup className="col-md-12 mb-3">
+                                <Label for="descripcionTaller">Breve Descripcion del Taller</Label>
+                                <Input type="text" name="descripcionTaller" id="descripcionTaller" value={item.descripcionTaller || ''}
+                                       onChange={this.handleChange} autoComplete="descripcionTaller"/>
+                            </FormGroup>
+                        </div>
                     </div>
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">

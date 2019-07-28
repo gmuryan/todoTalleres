@@ -27,6 +27,9 @@ public class DataBaseLoader implements CommandLineRunner {
     private MarcaService marcaService;
 
     @Autowired
+    private ClienteService clienteService;
+
+    @Autowired
     private ClasificacionService clasificacionService;
 
     private final Logger log = LoggerFactory.getLogger(DataBaseLoader.class);
@@ -43,17 +46,17 @@ public class DataBaseLoader implements CommandLineRunner {
 //        clasificacionService.save(electricidad);
 //        Clasificacion escapes = new Clasificacion("Escapes");
 //        clasificacionService.save(escapes);
+//        Cliente cliente = new Cliente("Cliente", "Test", "44444444", "test@cliente.com", "pepe");
+//        clienteService.save(cliente);
+//        List<Marca> marcas = marcaService.findAll();
+//        List<Clasificacion> clasifs = clasificacionService.findAll();
+//        Taller taller = new Taller("Taller Test", "44444444", "Flores", "test@taller.com", "Rivadavia 6778", marcas.get(0), null, null, null, clasifs.get(0), 20, 1 ,"pepe", "Historico taller del barrio de flores");
+//        tallerService.save(taller);
 //        List<Taller> ts = tallerService.findAll();
 //        Taller t = ts.get(0);
 //        Mecanico m = new Mecanico("Pablo", "Perez", "4444", "pepe@tg.com", t);
 //        mecanicoService.save(m);
 //        Mecanico m2 = new Mecanico("Ruben", "Perez", "4444", "pepe@tg.com", t);
 //        mecanicoService.save(m2);
-//        Reparacion r = new Reparacion();
-//        List<Mecanico> ms = new ArrayList<>();
-//        ms.add(m);
-//        ms.add(m2);
-//        r.setMecanicos(ms);
-//        reparacionService.save(r);
     }
 }

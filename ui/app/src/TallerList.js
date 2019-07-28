@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import './App.css';
+import ClientesNavbar from "./ClientesNavbar";
 
 class TallerList extends Component {
 
@@ -23,7 +24,8 @@ class TallerList extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.remove = this.remove.bind(this);
         const admin = JSON.parse(localStorage.getItem("adminUser"));
-        if (admin === null){
+        const cliente = JSON.parse(localStorage.getItem("clienteUser"));
+        if (admin === null && cliente === null){
             localStorage.clear();
             this.props.history.push('/');
         }
@@ -104,6 +106,8 @@ class TallerList extends Component {
 
     render() {
         const {talleres, isLoading, nombre, barrio, clasificacion, marca, currentPage, todosPerPage} = this.state;
+        const adminUser = JSON.parse(localStorage.getItem("adminUser"));
+        const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         let filterTalleres = this.state.talleres.slice();
         if (this.state.nombre) {
             filterTalleres = filterTalleres.filter(taller => taller.nombre.toLowerCase().indexOf(nombre.toLowerCase()) !== -1);
@@ -155,23 +159,38 @@ class TallerList extends Component {
                 <td>{taller.marca.descripcion}</td>
                 <td>{taller.clasificacion.descripcion}</td>
                 <td>
+                    {adminUser !== null &&
                     <ButtonGroup>
                         <Button size="sm" color="primary" tag={Link}
                                 to={"/talleres/" + taller.idTaller}>Editar</Button>
                         &nbsp;&nbsp;
                         <Button size="sm" color="danger" onClick={() => this.dialog(taller)}>Eliminar</Button>
                     </ButtonGroup>
+                    }
+                    {clienteUser !== null &&
+                    <ButtonGroup>
+                        <Button size="sm" color="primary" tag={Link}
+                                to={"/reservacion/" + taller.idTaller}>Ver más</Button>
+                    </ButtonGroup>
+                    }
                 </td>
             </tr>
         });
 
         return (
             <div>
+                {adminUser !== null &&
                 <AppNavbar/>
+                }
+                {clienteUser !== null &&
+                <ClientesNavbar/>
+                }
                 <Container fluid>
+                    {adminUser !== null &&
                     <div className="float-right">
                         <Button color="success" tag={Link} to="/talleres/new">Crear Taller</Button>
                     </div>
+                    }
                     <h3>Talleres</h3>
                     <input type="text" onChange={this.filterNombre} placeholder="Nombre..."></input>
                     &nbsp;&nbsp;

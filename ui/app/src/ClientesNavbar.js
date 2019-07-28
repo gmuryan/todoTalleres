@@ -25,8 +25,8 @@ export default class ClientesNavbar extends Component {
         return <Navbar color="dark" dark expand="md">
             <NavbarBrand tag={Link} to="/homeCliente">Home</NavbarBrand>
             <NavbarBrand tag={Link} to={"/misDatos/" + cliente.idCliente}>Mis Datos</NavbarBrand>
-            {/*<NavbarBrand tag={Link} to="/prendas">Prendas</NavbarBrand>*/}
-            {/*<NavbarBrand tag={Link} to="/ordenesCompra">Ordenes de Compra</NavbarBrand>*/}
+            <NavbarBrand tag={Link} to="/talleres">Talleres</NavbarBrand>
+            <NavbarBrand tag={Link} to="/reparaciones">Reparaciones</NavbarBrand>
             <NavbarToggler onClick={this.toggle}/>
             <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>

@@ -14,6 +14,8 @@ import MecanicoList from './MecanicoList'
 import MecanicoEdit from './MecanicoEdit'
 import MiTaller from './MiTaller'
 import MisDatos from './MisDatos'
+import ReparacionList from "./ReparacionList";
+import ReservacionScreen from "./ReservacionScreen";
 
 class App extends Component {
     componentDidMount(){
@@ -21,7 +23,6 @@ class App extends Component {
     }
   render() {
     return (
-        <div><Home mssg = "I like cheese"/></div>,
       <Router>
         <Switch>
           <Route path='/home' exact={true} component={Home}/>
@@ -37,6 +38,8 @@ class App extends Component {
           <Route path='/mecanicos/:id' component={MecanicoEdit}/>
           <Route path='/miTaller/:id' component={MiTaller}/>
           <Route path='/misDatos/:id' component={MisDatos}/>
+          <Route path='/reparaciones' exact={true} component={ReparacionList}/>
+          <Route path='/reservacion/:id' component={ReservacionScreen}/>
         </Switch>
       </Router>
     )

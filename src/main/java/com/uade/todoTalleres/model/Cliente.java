@@ -1,6 +1,12 @@
 package com.uade.todoTalleres.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.persistence.*;
+import java.io.IOException;
 
 @Entity
 @Table(name = "cliente")
@@ -30,6 +36,22 @@ public class Cliente {
 
     public Cliente(){
 
+    }
+
+    @JsonCreator
+    public static Cliente Create(String jsonString) throws JsonParseException, JsonMappingException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Cliente cliente = null;
+        cliente = mapper.readValue(jsonString, Cliente.class);
+        return cliente;
+    }
+
+    public Cliente(String nombre, String apellido, String telefono, String mail, String password) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.telefono = telefono;
+        this.mail = mail;
+        this.password = password;
     }
 
     public Cliente(Long idCliente, String nombre, String apellido, String telefono, String mail, String password) {

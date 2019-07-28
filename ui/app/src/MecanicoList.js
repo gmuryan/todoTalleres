@@ -11,7 +11,6 @@ class MecanicoList extends Component {
     constructor(props) {
         super(props);
         const taller = JSON.parse(localStorage.getItem("tallerUser"));
-        console.log(taller);
         if (taller===null) {
             this.props.history.push('/');
             localStorage.clear();

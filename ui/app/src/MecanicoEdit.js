@@ -134,7 +134,6 @@ class MecanicoEdit extends Component {
                 },
                 body: JSON.stringify(item),
             });
-            console.log(item);
             this.props.history.push('/mecanicos');
             this.dialogCreado();
         }

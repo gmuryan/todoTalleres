@@ -26,6 +26,7 @@ export default class TalleresNavbar extends Component {
             <NavbarBrand tag={Link} to="/homeTaller">Home</NavbarBrand>
             <NavbarBrand tag={Link} to={"/miTaller/" + taller.idTaller}>Mi Taller</NavbarBrand>
             <NavbarBrand tag={Link} to="/mecanicos">Mecanicos</NavbarBrand>
+            <NavbarBrand tag={Link} to="/reparaciones">Reparaciones</NavbarBrand>
             {/*<NavbarBrand tag={Link} to="/prendas">Prendas</NavbarBrand>*/}
             {/*<NavbarBrand tag={Link} to="/ordenesCompra">Ordenes de Compra</NavbarBrand>*/}
             <NavbarToggler onClick={this.toggle}/>
