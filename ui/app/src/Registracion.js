@@ -4,7 +4,7 @@ import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {confirmAlert} from "react-confirm-alert";
 
-class ClienteEdit extends Component {
+class Registracion extends Component {
 
 
     emptyItem = {
@@ -78,52 +78,52 @@ class ClienteEdit extends Component {
 
         //Name
         if(!fields["nombre"]){
-            this.setState({formIsValid: true});
+            this.setState({formIsValid: false});
             errors["nombre"] = "No puede estar vacio";
         }
         else if(typeof fields["nombre"] !== "undefined"){
             if(!fields["nombre"].match(/^[a-zA-Z]+$/)){
-                this.setState({formIsValid: true});
+                this.setState({formIsValid: false});
                 errors["nombre"] = "Solo letras";
             }
         }
 
         //Apellido
         if(!fields["apellido"]){
-            this.setState({formIsValid: true});
+            this.setState({formIsValid: false});
             errors["apellido"] = "No puede estar vacio";
         }
         else if(typeof fields["apellido"] !== "undefined"){
             if(!fields["apellido"].match(/^[a-zA-Z]+$/)){
-                this.setState({formIsValid: true});
+                this.setState({formIsValid: false});
                 errors["apellido"] = "Solo letras";
             }
         }
 
         //Telefono
         if(!fields["telefono"]){
-            this.setState({formIsValid: true});
+            this.setState({formIsValid: false});
             errors["telefono"] = "No puede estar vacio";
         }
         else if(typeof fields["telefono"] !== "undefined"){
             if(!fields["telefono"].match(/^[0-9]+$/)){
-                this.setState({formIsValid: true});
+                this.setState({formIsValid: false});
                 errors["telefono"] = "Solo numeros";
             }
         }
 
         //Contraseña
         if(!fields["password"]){
-            this.setState({formIsValid: true});
+            this.setState({formIsValid: false});
             errors["password"] = "No puede estar vacio";
         }
 
         //RepetirContraseña
         if(!fields["repeatPassword"]){
-            this.setState({formIsValid: true});
+            this.setState({formIsValid: false});
             errors["repeatPassword"] = "No puede estar vacio";
         }else if(fields["password"] !== fields["repeatPassword"]){
-            this.setState({formIsValid: true});
+            this.setState({formIsValid: false});
             errors["repeatPassword"] = "Debe ser igual a la contraseña";
         }
 
@@ -262,4 +262,4 @@ class ClienteEdit extends Component {
     }
 }
 
-export default withRouter(ClienteEdit);
+export default withRouter(Registracion);

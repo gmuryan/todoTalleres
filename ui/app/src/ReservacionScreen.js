@@ -37,7 +37,7 @@ class ReservacionScreen extends Component {
             item: this.emptyItem,
             itemReparacion: this.emptyReparaciom,
             errors: {},
-            formIsValid: true,
+            // formIsValid: true,
             startDate: ''
         };
         this.handleChange = this.handleChange.bind(this);
@@ -54,12 +54,6 @@ class ReservacionScreen extends Component {
         if (this.props.match.params.id !== 'new') {
             const taller = await (await fetch(`/api/taller/${this.props.match.params.id}`)).json();
             this.setState({item: taller});
-        }
-    }
-
-    getInitialState() {
-        return {
-            date: null
         }
     }
 
@@ -82,7 +76,23 @@ class ReservacionScreen extends Component {
     handleValidation() {
         let fields = this.state.item;
         let errors = {};
-        this.setState({formIsValid: true});
+        let formIsValid = true;
+        let diaActual = new Date();
+        // this.setState({formIsValid: true});
+        //QUERY PARA VALIDACION DE AUTOS
+        //select count(*) from reparacion where (fecha_devolucion >= ?1 and hora_devolucion > ?2 and id_estado = EN_REPARACION and id_taller = ?3)
+        //or (fecha_reserva == ?1 and hora_reserva == ?2 and id_taller = ?3 and id_estado = DIAGNOSTICO)
+        //QUERY PARA VALIDACION DE MECANICOS DISPONIBLES
+        //select * from reparacion r
+        // inner join reparacion_mecanicos rm ON r.id_reparacion = rm.id_reparacion
+        // outer join mecanico m ON rm.id_mecanico = m.id_mecanico
+        // where id_estado = EN_REPARACON and id_taller = ?1 and fecha_devolucion >= ?2 and hora_devolucion > ?3
+        if (diaActual.getDate() === this.state.startDate.getDate() && diaActual.getMonth() === this.state.startDate.getMonth() && diaActual.getTime() > this.state.startDate.getTime()) {
+            formIsValid = false;
+            errors["hora"] = "Horario Invalido";
+        }
+        this.setState({errors: errors});
+        return formIsValid;
     }
 
     dialogCreado() {
@@ -100,7 +110,7 @@ class ReservacionScreen extends Component {
     async handleSubmit(event) {
         event.preventDefault();
 
-        if (this.state.formIsValid) {
+        if (this.handleValidation()) {
             const {itemReparacion} = this.state;
             itemReparacion.fechaReserva = this.state.startDate.getDate() + "-" + this.state.startDate.getMonth() + "-" + this.state.startDate.getFullYear();
             itemReparacion.horaReserva = this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
@@ -206,6 +216,7 @@ class ReservacionScreen extends Component {
                                 dateFormat="MMMM d, yyyy h:mm aa"
                                 timeCaption="Horario"
                             />
+                            <span className="error">{this.state.errors["hora"]}</span>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="descripcionProblemaCliente">Descripcion del Problema</Label>
