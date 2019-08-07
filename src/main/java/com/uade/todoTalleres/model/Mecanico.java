@@ -1,6 +1,15 @@
 package com.uade.todoTalleres.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.persistence.*;
+import java.io.IOException;
 import java.util.List;
 
 @Entity
@@ -27,11 +36,20 @@ public class Mecanico {
     @JoinColumn(name="idTaller")
     private Taller taller;
 
+    @JsonIgnore
     @ManyToMany(fetch =FetchType.LAZY, mappedBy = "mecanicos")
     private List<Reparacion> reparaciones;
 
     public Mecanico(){
 
+    }
+
+    @JsonCreator
+    public static Mecanico Create(String jsonString) throws JsonParseException, JsonMappingException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Mecanico mecanico = null;
+        mecanico = mapper.readValue(jsonString, Mecanico.class);
+        return mecanico;
     }
 
     public Mecanico(String nombre, String apellido, String telefono, String mail, Taller taller) {
@@ -49,6 +67,15 @@ public class Mecanico {
         this.telefono = telefono;
         this.mail = mail;
         this.taller = taller;
+    }
+
+    public Mecanico(String nombre, String apellido, String telefono, String mail, Taller taller, List<Reparacion> reparaciones) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.telefono = telefono;
+        this.mail = mail;
+        this.taller = taller;
+        this.reparaciones = reparaciones;
     }
 
     public Long getIdMecanico() {

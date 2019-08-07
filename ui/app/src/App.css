@@ -32,6 +32,12 @@
     border-radius: .25rem;
 }
 
+.multi-select{
+    width: 100%;
+    height: calc(5rem + 1px);
+    border-radius: .25rem;
+}
+
 .error{
     margin-left: 5px;
     font-size: 13px;

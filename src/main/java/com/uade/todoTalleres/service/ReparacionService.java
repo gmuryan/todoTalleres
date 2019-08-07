@@ -4,6 +4,8 @@ import com.uade.todoTalleres.model.Reparacion;
 import com.uade.todoTalleres.repository.ReparacionRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +37,14 @@ public class ReparacionService {
 
     public List<Reparacion> findAllByCliente(Long id){
         return reparacionRepository.findAllByCliente(id);
+    }
+
+    public Integer validateEspacio(Date fecha, LocalTime hora, Long id){
+        return reparacionRepository.validateEspacio(fecha, hora, id);
+    }
+
+    public Integer validateMecanicos(Date fecha, LocalTime hora, Long id){
+        return reparacionRepository.validateMecanicos(fecha, hora, id);
     }
 
     public void delete (Reparacion reparacion){

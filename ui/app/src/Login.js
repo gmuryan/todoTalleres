@@ -27,6 +27,7 @@ class Login extends Component {
         let errors = {};
         const {email, password} = this.state;
         if (email == 'admin' && password == 'admin') {
+            localStorage.clear();
             localStorage.setItem("adminUser", JSON.stringify(this.state));
             this.props.history.push('/home');
         } else {
@@ -40,6 +41,7 @@ class Login extends Component {
                 if (response.ok){
                     response.json().then(json => {
                         if (email == json.mail && password == json.password) {
+                            localStorage.clear();
                             localStorage.setItem("tallerUser", JSON.stringify(json));
                             this.props.history.push('/homeTaller');
                         }
@@ -57,6 +59,7 @@ class Login extends Component {
                 if (response.ok){
                     response.json().then(json => {
                         if (email == json.mail && password == json.password) {
+                            localStorage.clear();
                             localStorage.setItem("clienteUser", JSON.stringify(json));
                             this.props.history.push('/homeCliente');
                         }

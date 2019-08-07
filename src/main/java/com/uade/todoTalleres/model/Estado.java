@@ -1,6 +1,12 @@
 package com.uade.todoTalleres.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.persistence.*;
+import java.io.IOException;
 
 @Entity
 @Table(name = "estado")
@@ -15,6 +21,18 @@ public class Estado {
 
     public Estado(){
 
+    }
+
+    @JsonCreator
+    public static Estado Create(String jsonString) throws JsonParseException, JsonMappingException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Estado estado = null;
+        estado = mapper.readValue(jsonString, Estado.class);
+        return estado;
+    }
+
+    public Estado(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public Estado(Long idEstado, String descripcion) {

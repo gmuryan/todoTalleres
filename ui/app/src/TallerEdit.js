@@ -191,7 +191,6 @@ class TallerEdit extends Component {
         }
         return this.validateMailTaller().then((response) => {
             if (response.ok && this.state.mailCargado !== fields["mail"]){
-                console.log("aca");
                 this.setState({formIsValid: false});
                 errors["mail"] = "Este mail ya esta registrado";
                 this.setState({errors: errors});

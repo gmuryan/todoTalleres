@@ -30,12 +30,27 @@ public class DataBaseLoader implements CommandLineRunner {
     private ClienteService clienteService;
 
     @Autowired
+    private EstadoService estadoService;
+
+    @Autowired
     private ClasificacionService clasificacionService;
 
     private final Logger log = LoggerFactory.getLogger(DataBaseLoader.class);
 
     @Override
     public void run(String... args) throws Exception {
+//        Estado estado1 = new Estado("Pendiente Diagnostico");
+//        estadoService.save(estado1);
+//        Estado estado2 = new Estado("Pendiente Confirmacion");
+//        estadoService.save(estado2);
+//        Estado estado3 = new Estado("En reparacion");
+//        estadoService.save(estado3);
+//        Estado estado4 = new Estado("Listo para retirar");
+//        estadoService.save(estado4);
+//        Estado estado5 = new Estado("Finalizado");
+//        estadoService.save(estado5);
+//        Estado estado6 = new Estado("En diagnostico");
+//        estadoService.save(estado6);
 //        Marca todas = new Marca("Todas");
 //        marcaService.save(todas);
 //        Marca renault = new Marca("Renault");

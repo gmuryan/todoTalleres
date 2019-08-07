@@ -34,6 +34,10 @@ public class ClienteService {
         return cliente;
     }
 
+    public Cliente getClienteExterno(){
+        return clienteRepository.getClienteExterno();
+    }
+
     public void delete (Cliente cli){
         clienteRepository.delete(cli);
     }

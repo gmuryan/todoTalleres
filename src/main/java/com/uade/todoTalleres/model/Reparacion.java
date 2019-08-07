@@ -1,6 +1,8 @@
 package com.uade.todoTalleres.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -19,14 +21,17 @@ public class Reparacion {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "reparacion_mecanicos", joinColumns = {
             @JoinColumn(name = "idReparacion") },
-            inverseJoinColumns = { @JoinColumn(name = "idMecanico") })
+         inverseJoinColumns = { @JoinColumn(name = "idMecanico") })
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     private List<Mecanico> mecanicos;
 
     @Column
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date fechaDevolucion;
 
     @Column
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime horaDevolucion;
 
     @Column
@@ -55,6 +60,12 @@ public class Reparacion {
     private String descripcionReparacion;
 
     @Column
+    private String patenteAuto;
+
+    @Column
+    private String modeloAuto;
+
+    @Column
     private boolean nuevoPresupuesto;
 
     @OneToOne
@@ -69,7 +80,7 @@ public class Reparacion {
 
     }
 
-    public Reparacion(Long idReparacion, Taller taller, Cliente cliente, List<Mecanico> mecanicos, Date fechaDevolucion, LocalTime horaDevolucion, Date fechaReserva, LocalTime horaReserva, BigDecimal importeTotal, Estado estadoReparacion, String descripcionProblemaCliente, String descripcionProblemaTaller, String descripcionReparacion, boolean nuevoPresupuesto) {
+    public Reparacion(Long idReparacion, Taller taller, Cliente cliente, List<Mecanico> mecanicos, Date fechaDevolucion, LocalTime horaDevolucion, Date fechaReserva, LocalTime horaReserva, BigDecimal importeTotal, Estado estadoReparacion, String descripcionProblemaCliente, String descripcionProblemaTaller, String descripcionReparacion, boolean nuevoPresupuesto, String modeloAuto, String patenteAuto) {
         this.idReparacion = idReparacion;
         this.mecanicos = mecanicos;
         this.fechaDevolucion = fechaDevolucion;
@@ -84,6 +95,8 @@ public class Reparacion {
         this.nuevoPresupuesto = nuevoPresupuesto;
         this.taller = taller;
         this.cliente = cliente;
+        this.modeloAuto = modeloAuto;
+        this.patenteAuto = patenteAuto;
     }
 
     public Long getIdReparacion() {
@@ -196,5 +209,21 @@ public class Reparacion {
 
     public void setDescripcionProblemaTaller(String descripcionProblemaTaller) {
         this.descripcionProblemaTaller = descripcionProblemaTaller;
+    }
+
+    public String getPatenteAuto() {
+        return patenteAuto;
+    }
+
+    public void setPatenteAuto(String patenteAuto) {
+        this.patenteAuto = patenteAuto;
+    }
+
+    public String getModeloAuto() {
+        return modeloAuto;
+    }
+
+    public void setModeloAuto(String modeloAuto) {
+        this.modeloAuto = modeloAuto;
     }
 }

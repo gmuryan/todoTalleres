@@ -30,6 +30,7 @@ class ReparacionList extends Component {
             descripcionReparacion: '',
             taller: '',
             cliente: '',
+            estado: '',
             currentPage: 1,
             todosPerPage: 10
         };
@@ -53,7 +54,7 @@ class ReparacionList extends Component {
                     .then(response => response.json())
                     .then(data => this.setState({reparaciones: data, isLoading: false}))
             }
-            if (cliente !== null){
+            if (cliente !== null) {
                 fetch(`api/reparacionesCliente/${cliente.idCliente}`)
                     .then(response => response.json())
                     .then(data => this.setState({reparaciones: data, isLoading: false}))
@@ -103,32 +104,18 @@ class ReparacionList extends Component {
         })
     };
 
-    // filterMail = e => {
-    //     this.setState({mail: e.target.value});
-    // }
-    //
-    // filterNombre = e => {
-    //     this.setState({nombre: e.target.value});
-    // }
-    //
-    // filterApellido = e => {
-    //     this.setState({apellido: e.target.value});
-    // }
+    filterEstado = e => {
+        this.setState({estado: e.target.value});
+    }
 
     render() {
-        const {reparaciones, isLoading, fechaDevolucion, horaDevolucion, fechaReserva, horaReserva, importeTotal, estadoReparacion, descripcionProblema, descripcionReparacion, taller, cliente, currentPage, todosPerPage} = this.state;
+        const {reparaciones, isLoading, fechaDevolucion, horaDevolucion, fechaReserva, horaReserva, importeTotal, estadoReparacion, descripcionProblema, descripcionReparacion, taller, cliente, currentPage, todosPerPage, estado} = this.state;
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         let filterReparaciones = this.state.reparaciones.slice();
-        // if (this.state.nombre) {
-        //     filterReservas = filterReservas.filter(cliente => cliente.nombre.toLowerCase().indexOf(nombre.toLowerCase()) !== -1);
-        // }
-        // if (this.state.apellido) {
-        //     filterReservas = filterReservas.filter(cliente => cliente.apellido.toLowerCase().indexOf(apellido.toLowerCase()) !== -1);
-        // }
-        // if (this.state.mail) {
-        //     filterReservas = filterReservas.filter(cliente => cliente.mail.toLowerCase().indexOf(mail.toLowerCase()) !== -1);
-        // }
+        if (this.state.estado) {
+            filterReparaciones = filterReparaciones.filter(reparacion => reparacion.estadoReparacion.descripcion.toLowerCase().indexOf(estado.toLowerCase()) !== -1);
+        }
 
         if (isLoading) {
             return <p>Loading...</p>;
@@ -160,21 +147,36 @@ class ReparacionList extends Component {
         const reparacionesList = currentTodos.map(reparacion => {
             return <tr key={reparacion.idReparacion}>
                 <td>{reparacion.idReparacion}</td>
-                <td style={{whiteSpace: 'nowrap'}}>{reparacion.horaReserva.substring(0, 5)}</td>
                 <td>{reparacion.fechaReserva}</td>
+                <td style={{whiteSpace: 'nowrap'}}>{reparacion.horaReserva.substring(0, 5)}</td>
+                <td>{reparacion.fechaDevolucion}</td>
+                <td>{reparacion.horaDevolucion ? reparacion.horaDevolucion.substring(0, 5) : reparacion.horaDevolucion}</td>
+                <td>{reparacion.estadoReparacion.descripcion}</td>
+                {reparacion.importeTotal &&
+                <td> ${new Intl.NumberFormat('de-DE', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(reparacion.importeTotal)}</td>
+                }
+                {!reparacion.importeTotal &&
+                    <td>{reparacion.importeTotal}</td>
+                }
                 {tallerUser !== null &&
                 <td>{reparacion.cliente.nombre + " " + reparacion.cliente.apellido}</td>
                 }
                 {clienteUser !== null &&
                 <td>{reparacion.taller.nombre}</td>
                 }
-                {/*<td>{cliente.mail}</td>*/}
                 <td>
                     <ButtonGroup>
+                        {tallerUser !== null &&
                         <Button size="sm" color="primary" tag={Link}
                                 to={"/reparaciones/" + reparacion.idReparacion}>Editar</Button>
-                        &nbsp;&nbsp;
-                        <Button size="sm" color="danger" onClick={() => this.dialog(reparacion)}>Eliminar</Button>
+                        }
+                        {clienteUser !== null &&
+                        <Button size="sm" color="primary" tag={Link}
+                                to={"/reparaciones/" + reparacion.idReparacion}>Ver más</Button>
+                        }
                     </ButtonGroup>
                 </td>
             </tr>
@@ -189,28 +191,29 @@ class ReparacionList extends Component {
                 <TalleresNavbar/>
                 }
                 <Container fluid>
+                    {tallerUser !== null &&
                     <div className="float-right">
-                        <Button color="success" tag={Link} to="/reparaciones/new">Crear Reparacion</Button>
+                        <Button color="success" tag={Link} to="/reservacion/new">Crear Reparacion</Button>
                     </div>
+                    }
                     <h3>Reparaciones</h3>
-                    <input type="text" onChange={this.filterNombre} placeholder="Nombre..."></input>
-                    &nbsp;&nbsp;
-                    <input type="text" onChange={this.filterApellido} placeholder="Apellido..."></input>
-                    &nbsp;&nbsp;
-                    <input type="text" onChange={this.filterMail} placeholder="Mail..."></input>
+                    <input type="text" onChange={this.filterEstado} placeholder="Estado..."></input>
                     <Table className="mt-4">
                         <thead>
                         <tr>
-                            <th width="20%">ID</th>
-                            <th width="20%">Hora Reserva</th>
-                            <th width="20%">Dia Reserva</th>
+                            <th width="5%">ID</th>
+                            <th width="10%">Dia Reserva</th>
+                            <th width="10%">Hora Reserva</th>
+                            <th width="10%">Dia Devolucion</th>
+                            <th width="10%">Hora Devolucion</th>
+                            <th width="10%">Estado</th>
+                            <th width="10%">Importe</th>
                             {tallerUser !== null &&
-                            <th width="20%">Cliente</th>
+                            <th width="10%">Cliente</th>
                             }
                             {clienteUser !== null &&
-                            <th width="20%">Taller</th>
+                            <th width="10%">Taller</th>
                             }
-                            {/*<th width="20%">Mail</th>*/}
                             <th width="10%">Acciones</th>
                         </tr>
                         </thead>
