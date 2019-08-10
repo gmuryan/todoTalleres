@@ -172,6 +172,8 @@ class ReservacionScreen extends Component {
         let fields = this.state.itemReparacionTaller;
         let errors = {};
         let diaActual = new Date();
+        const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
+        const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         this.setState({formIsValid: true});
         if (this.state.startDate != null) {
             if (diaActual.getDate() === this.state.startDate.getDate() && diaActual.getMonth() === this.state.startDate.getMonth() && diaActual.getTime() > this.state.startDate.getTime()) {
@@ -194,9 +196,11 @@ class ReservacionScreen extends Component {
                 errors["hora"] = "La fecha de devolución debe ser menor a la fecha de reservación";
             }
         }
-        if (fields["estadoReparacion"] !== null){
-            let estado = JSON.parse(fields["estadoReparacion"]);
-            console.log(estado.descripcion==="Listo para retirar");
+        if (tallerUser !== null) {
+            if (fields["estadoReparacion"] !== null) {
+                let estado = JSON.parse(fields["estadoReparacion"]);
+                console.log(estado.descripcion === "Listo para retirar");
+            }
         }
         this.setState({errors: errors});
         return this.validateReservacion().then(response => response.json()).then((data) => {
