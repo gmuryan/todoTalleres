@@ -13,7 +13,8 @@ import java.io.IOException;
 public class Estado {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "ESTADO_SEQ")
+    @SequenceGenerator(name = "ESTADO_SEQ", sequenceName = "ESTADO_SEQ")
     private Long idEstado;
 
     @Column

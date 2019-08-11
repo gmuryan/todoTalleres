@@ -15,7 +15,8 @@ import java.util.List;
 public class Reparacion {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "REPARACION_SEQ")
+    @SequenceGenerator(name = "REPARACION_SEQ", sequenceName = "REPARACION_SEQ")
     private Long idReparacion;
 
     @ManyToMany(fetch = FetchType.LAZY)

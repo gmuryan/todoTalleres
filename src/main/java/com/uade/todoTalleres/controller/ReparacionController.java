@@ -75,8 +75,8 @@ public class ReparacionController {
             reparacion.setFechaDevolucion(fechaDevolucion);
         }
         if (reparacion.getEstadoReparacion() == null){
-            Optional<Estado> enDiagnostico =  estadoService.findById(36);
-            reparacion.setEstadoReparacion(enDiagnostico.get());
+            Optional<Estado> pendienteDiagnostico =  estadoService.findById(1);
+            reparacion.setEstadoReparacion(pendienteDiagnostico.get());
             Optional<Mecanico> m = tallerService.getMecanicoDiagnostico(reparacion.getFechaReserva(), reparacion.getHoraReserva(), reparacion.getTaller().getIdTaller());
             List<Mecanico> mecs = new ArrayList<>();
             mecs.add(m.get());

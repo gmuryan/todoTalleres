@@ -15,7 +15,8 @@ import java.util.List;
 public class Taller {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "TALLER_SEQ")
+    @SequenceGenerator(name = "TALLER_SEQ", sequenceName = "TALLER_SEQ")
     private Long idTaller;
 
     @Column
