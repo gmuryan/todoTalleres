@@ -63,15 +63,17 @@ public class DataBaseLoader implements CommandLineRunner {
 //        clasificacionService.save(escapes);
 //        Cliente cliente = new Cliente("Cliente", "Test", "44444444", "test@cliente.com", "pepe");
 //        clienteService.save(cliente);
+//          Cliente clienteExterno = new Cliente("Cliente", "Externo", "43448897", "cliente@externo.com", "pepe");
+//          clienteService.save(clienteExterno);
 //        List<Marca> marcas = marcaService.findAll();
 //        List<Clasificacion> clasifs = clasificacionService.findAll();
 //        Taller taller = new Taller("Taller Test", "44444444", "Flores", "test@taller.com", "Rivadavia 6778", marcas.get(0), null, null, null, clasifs.get(0), 20, 1 ,"pepe", "Historico taller del barrio de flores");
 //        tallerService.save(taller);
 //        List<Taller> ts = tallerService.findAll();
 //        Taller t = ts.get(0);
-//        Mecanico m = new Mecanico("Pablo", "Perez", "4444", "pepe@tg.com", t);
+//        Mecanico m = new Mecanico("Julian", "Perez", "4444", "julian@mecanico.com", t);
 //        mecanicoService.save(m);
-//        Mecanico m2 = new Mecanico("Ruben", "Perez", "4444", "pepe@tg.com", t);
+//        Mecanico m2 = new Mecanico("Ruben", "Perez", "4444", "ruben@perez.com", t);
 //        mecanicoService.save(m2);
     }
 }
