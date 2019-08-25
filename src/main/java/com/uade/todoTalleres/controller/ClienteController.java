@@ -55,8 +55,19 @@ public class ClienteController {
     @PutMapping("/cliente")
     ResponseEntity<Cliente> updateCliente(@Valid @RequestBody Cliente cliente){
         log.info("Request to update client: {}", cliente);
-        Cliente result = clienteService.save(cliente);
-        return ResponseEntity.ok().body(result);
+        Optional<Cliente> result = clienteService.findById(cliente.getIdCliente());
+        if (result.get() != null){
+            result.get().setNombre(cliente.getNombre());
+            result.get().setApellido(cliente.getApellido());
+            result.get().setTelefono(cliente.getTelefono());
+            result.get().setMail(cliente.getMail());
+            result.get().setPassword(cliente.getPassword());
+            clienteService.save(result.get());
+            return ResponseEntity.ok().body(result.get());
+        }else{
+            clienteService.save(cliente);
+            return ResponseEntity.ok().body(cliente);
+        }
     }
 
     @DeleteMapping("/cliente/{id}")

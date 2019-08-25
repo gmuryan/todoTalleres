@@ -55,8 +55,24 @@ public class TallerController {
     @PutMapping("/taller")
     ResponseEntity<Taller> updateTaller(@Valid @RequestBody Taller taller){
         log.info("Request to update taller: {}", taller);
-        Taller result = tallerService.save(taller);
-        return ResponseEntity.ok().body(result);
+        Optional<Taller> result = tallerService.findById(taller.getIdTaller());
+        if (result.get() != null){
+            result.get().setNombre(taller.getNombre());
+            result.get().setBarrio(taller.getBarrio());
+            result.get().setTelefono((taller.getTelefono()));
+            result.get().setMail(taller.getMail());
+            result.get().setUbicacion(taller.getUbicacion());
+            result.get().setPassword(taller.getPassword());
+            result.get().setMarca(taller.getMarca());
+            result.get().setClasificacion(taller.getClasificacion());
+            result.get().setRetrasosContemplados(taller.getRetrasosContemplados());
+            result.get().setMaximosVehiculos(taller.getMaximosVehiculos());
+            tallerService.save(result.get());
+            return ResponseEntity.ok().body(result.get());
+        }else{
+            tallerService.save(taller);
+            return ResponseEntity.ok().body(taller);
+        }
     }
 
     @DeleteMapping("/taller/{id}")

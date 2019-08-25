@@ -53,8 +53,18 @@ public class MecanicoController {
     @PutMapping("/mecanico")
     ResponseEntity<Mecanico> updateMecanico(@Valid @RequestBody Mecanico mecanico){
         log.info("Request to update mecanico: {}", mecanico);
-        Mecanico result = mecanicoService.save(mecanico);
-        return ResponseEntity.ok().body(result);
+        Optional<Mecanico> result = mecanicoService.findById(mecanico.getIdMecanico());
+        if (result.get() != null){
+            result.get().setNombre(mecanico.getNombre());
+            result.get().setApellido(mecanico.getApellido());
+            result.get().setTelefono(mecanico.getTelefono());
+            result.get().setMail(mecanico.getMail());
+            mecanicoService.save(result.get());
+            return ResponseEntity.ok().body(result.get());
+        }else{
+            mecanicoService.save(mecanico);
+            return ResponseEntity.ok().body(mecanico);
+        }
     }
 
     @DeleteMapping("/mecanico/{id}")
