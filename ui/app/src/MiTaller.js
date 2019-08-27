@@ -357,7 +357,7 @@ class MiTaller extends Component {
                     )}
                     {item.idTaller && (
                         <FormGroup>
-                            <Label for="clasificacion">Clasificacion</Label>
+                            <Label for="clasificacion">Especializacion</Label>
                             <br></br>
                             <div>
                                 <select required="required" className="select" name="clasificacion" id="clasificacion"

@@ -356,7 +356,7 @@ class TallerEdit extends Component {
                     )}
                     {item.idTaller && (
                         <FormGroup>
-                            <Label for="clasificacion">Clasificacion</Label>
+                            <Label for="clasificacion">Especializacion</Label>
                             <br></br>
                             <div>
                                 <select required="required" className="select" name="clasificacion" id="clasificacion"
@@ -369,12 +369,12 @@ class TallerEdit extends Component {
                     )}
                     {item.idTaller == null && (
                         <FormGroup>
-                            <Label for="clasificacion">Clasificacion</Label>
+                            <Label for="clasificacion">Especializacion</Label>
                             <br></br>
                             <div>
                                 <select required="required" className="select" name="clasificacion" id="clasificacion"
                                         onChange={this.handleChange} autoComplete="clasificacion">
-                                    <option value="" default>Seleccionar Clasificacion...</option>
+                                    <option value="" default>Seleccionar Especializacion...</option>
                                     {newOptionsClasifs}
                                 </select>
                             </div>

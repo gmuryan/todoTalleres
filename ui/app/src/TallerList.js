@@ -198,7 +198,7 @@ class TallerList extends Component {
                     &nbsp;&nbsp;
                     <input type="text" onChange={this.filterMarca} placeholder="Marca..."></input>
                     &nbsp;&nbsp;
-                    <input type="text" onChange={this.filterClasificacion} placeholder="Clasificacion..."></input>
+                    <input type="text" onChange={this.filterClasificacion} placeholder="Especializacion..."></input>
                     <Table className="mt-4">
                         <thead>
                         <tr>
@@ -208,7 +208,7 @@ class TallerList extends Component {
                             <th width="10%">Telefono</th>
                             <th width="10%">Mail</th>
                             <th width="10%">Marca</th>
-                            <th width="10%">Clasificacion</th>
+                            <th width="10%">Especializacion</th>
                             <th width="10%">Acciones</th>
                         </tr>
                         </thead>

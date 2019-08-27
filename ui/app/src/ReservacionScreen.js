@@ -369,7 +369,7 @@ class ReservacionScreen extends Component {
                                    onChange={this.handleChange} autoComplete="mail"/>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
-                            <Label for="clasificacion">Clasificacion</Label>
+                            <Label for="clasificacion">Especializacion</Label>
                             <Input readOnly type="text" name="clasificacion" id="clasificacion"
                                    value={item.clasificacion.descripcion || ''}
                                    onChange={this.handleChange} autoComplete="clasificacion"/>
