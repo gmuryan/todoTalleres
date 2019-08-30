@@ -125,6 +125,10 @@ public class ReparacionController {
         Optional<Taller> taller= tallerService.findById(id);
         Date fechaReserva = new SimpleDateFormat("dd-MM-yyyy").parse(fecha);
         fechaReserva.setMonth((fechaReserva.getMonth() - 1 + 1) % 12 + 1);
+        if (hora.equalsIgnoreCase("9:00")){
+            String aux = "0";
+            hora = aux + hora;
+        }
         LocalTime horaReserva = LocalTime.parse(hora);
         if (taller.get().getMaximosVehiculos()-reparacionService.validateEspacio(fechaReserva, horaReserva, id)-taller.get().getRetrasosContemplados()<=0){
             valido = false;

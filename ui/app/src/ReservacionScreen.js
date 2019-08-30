@@ -245,7 +245,12 @@ class ReservacionScreen extends Component {
                 if (clienteUser !== null) {
                     const {itemReparacion} = this.state;
                     itemReparacion.fechaReserva = this.state.startDate.getDate() + "-" + this.state.startDate.getMonth() + "-" + this.state.startDate.getFullYear();
-                    itemReparacion.horaReserva = this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
+                    if (this.state.startDate.getHours() === 9){
+                        console.log("hola");
+                        itemReparacion.horaReserva = "0" + this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
+                    }else{
+                        itemReparacion.horaReserva = this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
+                    }
                     fetch('/api/reparacion', {
                         method: 'POST',
                         headers: {
@@ -259,7 +264,11 @@ class ReservacionScreen extends Component {
                 if (tallerUser !== null) {
                     const {itemReparacionTaller} = this.state;
                     itemReparacionTaller.fechaReserva = this.state.startDate.getDate() + "-" + this.state.startDate.getMonth() + "-" + this.state.startDate.getFullYear();
-                    itemReparacionTaller.horaReserva = this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
+                    if (this.state.startDate.getHours() === 9){
+                        itemReparacionTaller.horaReserva = "0" + this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
+                    }else{
+                        itemReparacionTaller.horaReserva = this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
+                    }
                     if (this.state.endDate !== null) {
                         itemReparacionTaller.fechaDevolucion = this.state.endDate.getDate() + "-" + this.state.endDate.getMonth() + "-" + this.state.endDate.getFullYear();
                         itemReparacionTaller.horaDevolucion = this.state.endDate.getHours() + ":" + this.state.endDate.getMinutes() + "0";
