@@ -218,7 +218,7 @@ class ReservacionScreen extends Component {
             buttons: [
                 {
                     label: 'Aceptar',
-                    onClick: () => this.props.history.push('/talleres')
+                    onClick: () => this.props.history.push('/reparaciones')
                 }
             ]
         })
