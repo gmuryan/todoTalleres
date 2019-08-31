@@ -18,6 +18,9 @@ public interface ReparacionRepository extends JpaRepository<Reparacion, Long> {
     @Query(value = "SELECT * FROM REPARACION WHERE ID_CLIENTE = ?1", nativeQuery = true)
     List<Reparacion> findAllByCliente(Long id);
 
+    @Query(value = "select * from reparacion r inner join reparacion_mecanicos rm ON r.id_reparacion = rm.id_reparacion where rm.id_mecanico = ?1", nativeQuery = true)
+    List<Reparacion> findAllByMecanico(Long id);
+
     @Query(value= "select count(*) \n" +
             "from reparacion \n" +
             "where (fecha_devolucion > ?1\n" +

@@ -33,6 +33,10 @@ public class MecanicoService {
         return mecanicoRepository.findAllByTaller(id);
     }
 
+    public Integer conseguirCantidadDeReparacionesPorMecanico (Long id){
+        return mecanicoRepository.conseguirCantidadDeReparacionesPorMecanico(id);
+    }
+
     public void delete (Mecanico mecanico){
         mecanicoRepository.delete(mecanico);
     }

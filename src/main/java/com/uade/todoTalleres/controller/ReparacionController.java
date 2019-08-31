@@ -56,6 +56,11 @@ public class ReparacionController {
         return reparacionService.findAllByCliente(id);
     }
 
+    @GetMapping("/reparacionesMecanico/{id}")
+    Collection<Reparacion> reparacionesByMecanico(@PathVariable Long id){
+        return reparacionService.findAllByMecanico(id);
+    }
+
     @GetMapping("/reparacion/{id}")
     ResponseEntity<?> getReparacion(@PathVariable Long id) {
         Optional<Reparacion> reparacion= reparacionService.findById(id);
@@ -74,6 +79,7 @@ public class ReparacionController {
             fechaDevolucion.setMonth((fechaDevolucion.getMonth() - 1 + 1) % 12 + 1);
             reparacion.setFechaDevolucion(fechaDevolucion);
         }
+        //creado por cliente
         if (reparacion.getEstadoReparacion() == null){
             Optional<Estado> pendienteDiagnostico =  estadoService.findById(1);
             reparacion.setEstadoReparacion(pendienteDiagnostico.get());
@@ -82,7 +88,8 @@ public class ReparacionController {
             mecs.add(m.get());
             reparacion.setMecanicos(mecs);
         }else{
-            if (reparacion.getEstadoReparacion().getIdEstado() == 36 && reparacion.getMecanicos().isEmpty()){
+            //creado por taller
+            if (reparacion.getEstadoReparacion().getIdEstado() == 1 && reparacion.getMecanicos().isEmpty()){
                 Optional<Mecanico> m = tallerService.getMecanicoDiagnostico(reparacion.getFechaReserva(), reparacion.getHoraReserva(), reparacion.getTaller().getIdTaller());
                 List<Mecanico> mecs = new ArrayList<>();
                 mecs.add(m.get());

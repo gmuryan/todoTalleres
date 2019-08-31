@@ -44,8 +44,25 @@ public class TallerService {
     }
 
     public Optional<Mecanico> getMecanicoDiagnostico(Date fecha, LocalTime hora, Long id){
+        Long idMecanicoOptimo = null;
+        Long aux = null;
+        Integer cantidadReparaciones = null;
+        Integer cantidadReparacionesAux = null;
         List<Object[]> objs= tallerRepository.getMecanicosLibres(fecha, hora, id);
-        Optional<Mecanico> m = mecanicoService.findById(Long.parseLong(objs.get(0)[0].toString()));
+        idMecanicoOptimo = Long.parseLong(objs.get(0)[0].toString());
+        cantidadReparaciones = mecanicoService.conseguirCantidadDeReparacionesPorMecanico(idMecanicoOptimo);
+        if (objs.size() > 1){
+            for (Object obj : objs){
+                Object[] fields = (Object[]) obj;
+                aux = Long.parseLong(fields[0].toString());
+                cantidadReparacionesAux = mecanicoService.conseguirCantidadDeReparacionesPorMecanico(aux);
+                if (cantidadReparaciones>cantidadReparacionesAux){
+                    idMecanicoOptimo = aux;
+                    cantidadReparaciones = cantidadReparacionesAux;
+                }
+            }
+        }
+        Optional<Mecanico> m = mecanicoService.findById(idMecanicoOptimo);
         return m;
     }
 

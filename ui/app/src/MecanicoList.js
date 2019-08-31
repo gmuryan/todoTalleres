@@ -51,11 +51,29 @@ class MecanicoList extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
-        }).then(() => {
-            let updatedMecanicos = [...this.state.mecanicos].filter(i => i.idMecanico !== id);
-            this.setState({mecanicos: updatedMecanicos});
-            this.dialogEliminado();
+        }).then((response) => {
+            console.log(response);
+            if (response.ok){
+                let updatedMecanicos = [...this.state.mecanicos].filter(i => i.idMecanico !== id);
+                this.setState({mecanicos: updatedMecanicos});
+                this.dialogEliminado();
+            }else{
+                this.dialogFallaValidacion();
+            }
+
         });
+    }
+
+    dialogFallaValidacion(){
+        confirmAlert({
+            title: 'Operacion Fallida',
+            message: 'No se pudo eliminar el mecanico porque tiene reparaciones asignadas',
+            buttons: [
+                {
+                    label: 'Aceptar'
+                }
+            ]
+        })
     }
 
     dialogEliminado(){

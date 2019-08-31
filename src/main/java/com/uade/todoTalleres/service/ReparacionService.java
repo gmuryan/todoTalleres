@@ -39,6 +39,10 @@ public class ReparacionService {
         return reparacionRepository.findAllByCliente(id);
     }
 
+    public List<Reparacion> findAllByMecanico(Long id){
+        return reparacionRepository.findAllByMecanico(id);
+    }
+
     public Integer validateEspacio(Date fecha, LocalTime hora, Long id){
         return reparacionRepository.validateEspacio(fecha, hora, id);
     }
