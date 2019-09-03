@@ -25,7 +25,7 @@ class TallerList extends Component {
         this.remove = this.remove.bind(this);
         const admin = JSON.parse(localStorage.getItem("adminUser"));
         const cliente = JSON.parse(localStorage.getItem("clienteUser"));
-        if (admin === null && cliente === null){
+        if (admin === null && cliente === null) {
             localStorage.clear();
             this.props.history.push('/');
         }
@@ -60,7 +60,7 @@ class TallerList extends Component {
         });
     }
 
-    dialogEliminado(){
+    dialogEliminado() {
         confirmAlert({
             title: 'Operacion Exitosa',
             message: 'Taller Eliminado',
@@ -116,9 +116,9 @@ class TallerList extends Component {
             filterTalleres = filterTalleres.filter(taller => taller.barrio.toLowerCase().indexOf(barrio.toLowerCase()) !== -1);
         }
         if (this.state.clasificacion) {
-            filterTalleres = filterTalleres.filter(taller => taller.clasificacion.descripcion.toLowerCase().indexOf(clasificacion.toLowerCase()) !== -1);
+            filterTalleres = filterTalleres.filter(taller => taller.clasificacion.descripcion.toLowerCase().indexOf(clasificacion.toLowerCase()) !== -1 || taller.clasificacion.descripcion.match("Todas"));
         }
-        if (this.state.marca){
+        if (this.state.marca) {
             filterTalleres = filterTalleres.filter(taller => taller.marca.descripcion.toLowerCase().indexOf(marca.toLowerCase()) !== -1 || taller.marca.descripcion.match("Todas"));
         }
 

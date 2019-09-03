@@ -78,15 +78,17 @@ class ReservacionScreen extends Component {
     async componentDidMount() {
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
-        if (this.props.match.params.id !== 'new') {
-            if (clienteUser !== null) {
-                const taller = await (await fetch(`/api/taller/${this.props.match.params.id}`)).json();
-                this.setState({item: taller});
+        if (clienteUser !== null || tallerUser !== null) {
+            if (this.props.match.params.id !== 'new') {
+                if (clienteUser !== null) {
+                    const taller = await (await fetch(`/api/taller/${this.props.match.params.id}`)).json();
+                    this.setState({item: taller});
+                }
+            } else {
+                const mecs = await (await fetch(`/api/mecanicos`)).json();
+                const ests = await (await fetch(`/api/estados`)).json();
+                this.setState({mecanicos: mecs, estados: ests});
             }
-        } else {
-            const mecs = await (await fetch(`/api/mecanicos`)).json();
-            const ests = await (await fetch(`/api/estados`)).json();
-            this.setState({mecanicos: mecs, estados: ests});
         }
     }
 
@@ -245,10 +247,10 @@ class ReservacionScreen extends Component {
                 if (clienteUser !== null) {
                     const {itemReparacion} = this.state;
                     itemReparacion.fechaReserva = this.state.startDate.getDate() + "-" + this.state.startDate.getMonth() + "-" + this.state.startDate.getFullYear();
-                    if (this.state.startDate.getHours() === 9){
+                    if (this.state.startDate.getHours() === 9) {
                         console.log("hola");
                         itemReparacion.horaReserva = "0" + this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
-                    }else{
+                    } else {
                         itemReparacion.horaReserva = this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
                     }
                     fetch('/api/reparacion', {
@@ -264,9 +266,9 @@ class ReservacionScreen extends Component {
                 if (tallerUser !== null) {
                     const {itemReparacionTaller} = this.state;
                     itemReparacionTaller.fechaReserva = this.state.startDate.getDate() + "-" + this.state.startDate.getMonth() + "-" + this.state.startDate.getFullYear();
-                    if (this.state.startDate.getHours() === 9){
+                    if (this.state.startDate.getHours() === 9) {
                         itemReparacionTaller.horaReserva = "0" + this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
-                    }else{
+                    } else {
                         itemReparacionTaller.horaReserva = this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
                     }
                     if (this.state.endDate !== null) {

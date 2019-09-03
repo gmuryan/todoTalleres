@@ -385,14 +385,14 @@ class TallerEdit extends Component {
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="maximosVehiculos">Capacidad Maxima de Vehiculos</Label>
-                            <Input type="text" name="maximosVehiculos" id="maximosVehiculos"
+                            <Input type="number" name="maximosVehiculos" id="maximosVehiculos"
                                    value={item.maximosVehiculos || ''}
                                    onChange={this.handleChange} autoComplete="maximosVehiculos"/>
                             <span className="error">{this.state.errors["maximosVehiculos"]}</span>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="retrasosContemplados">Espacios Reservados por Precaucion</Label>
-                            <Input type="text" name="retrasosContemplados" id="retrasosContemplados"
+                            <Input type="number" name="retrasosContemplados" id="retrasosContemplados"
                                    value={item.retrasosContemplados || ''}
                                    onChange={this.handleChange} autoComplete="retrasosContemplados"/>
                             <span className="error">{this.state.errors["retrasosContemplados"]}</span>

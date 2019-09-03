@@ -16,6 +16,7 @@ import MiTaller from './MiTaller'
 import MisDatos from './MisDatos'
 import ReparacionList from "./ReparacionList";
 import ReservacionScreen from "./ReservacionScreen";
+import ReparacionEdit from "./ReparacionEdit";
 
 class App extends Component {
     componentDidMount(){
@@ -40,6 +41,7 @@ class App extends Component {
           <Route path='/misDatos/:id' component={MisDatos}/>
           <Route path='/reparaciones' exact={true} component={ReparacionList}/>
           <Route path='/reservacion/:id' component={ReservacionScreen}/>
+          <Route path='/reparaciones/:id' component={ReparacionEdit}/>
         </Switch>
       </Router>
     )
