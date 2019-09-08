@@ -13,8 +13,7 @@ import java.io.IOException;
 public class Cliente {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "CLIENTE_SEQ")
-    @SequenceGenerator(name = "CLIENTE_SEQ", sequenceName = "CLIENTE_SEQ")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCliente;
 
     @Column

@@ -4,6 +4,7 @@ import com.uade.todoTalleres.model.Reparacion;
 import com.uade.todoTalleres.repository.ReparacionRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +50,11 @@ public class ReparacionService {
 
     public Integer validateMecanicos(Date fecha, LocalTime hora, Long id){
         return reparacionRepository.validateMecanicos(fecha, hora, id);
+    }
+
+    @Transactional
+    public void cancelarTurno(Reparacion reparacion){
+        reparacionRepository.cancelarTurno(reparacion.getIdReparacion());
     }
 
     public void delete (Reparacion reparacion){

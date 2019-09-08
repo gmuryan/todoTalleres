@@ -7,8 +7,7 @@ import javax.persistence.*;
 public class Reseña {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "RESENIA_SEQ")
-    @SequenceGenerator(name = "RESENIA_SEQ", sequenceName = "RESENIA_SEQ")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idReseña;
 
     @OneToOne

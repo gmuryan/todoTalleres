@@ -231,6 +231,18 @@ class ReservacionScreen extends Component {
                         this.setState({formIsValid: false});
                         errors["importeTotal"] = "Debe ingresar un importe para el estado de reparacion seleccionado";
                     }
+                    if (this.state.endDate != null) {
+                        if (diaActual.getDate() === this.state.endDate.getDate() && diaActual.getMonth() === this.state.endDate.getMonth() && diaActual.getTime() > this.state.endDate.getTime()) {
+                            this.setState({formIsValid: false});
+                            errors["horaEnd"] = "Horario Invalido";
+                        } else if (this.state.endDate.getHours() === 0) {
+                            this.setState({formIsValid: false});
+                            errors["horaEnd"] = "Debe seleccionar una hora";
+                        }
+                    } else {
+                        this.setState({formIsValid: false});
+                        errors["horaEnd"] = "Debe seleccionar una fecha y hora";
+                    }
                 }else if (estado.descripcion === "En reparacion" || estado.descripcion === "Pendiente Confirmacion"){
                     if (fields["modeloAuto"].length === 0) {
                         this.setState({formIsValid: false});
@@ -247,6 +259,18 @@ class ReservacionScreen extends Component {
                     if (fields["importeTotal"].length === 0) {
                         this.setState({formIsValid: false});
                         errors["importeTotal"] = "Debe ingresar un importe para el estado de reparacion seleccionado";
+                    }
+                    if (this.state.endDate != null) {
+                        if (diaActual.getDate() === this.state.endDate.getDate() && diaActual.getMonth() === this.state.endDate.getMonth() && diaActual.getTime() > this.state.endDate.getTime()) {
+                            this.setState({formIsValid: false});
+                            errors["horaEnd"] = "Horario Invalido";
+                        } else if (this.state.endDate.getHours() === 0) {
+                            this.setState({formIsValid: false});
+                            errors["horaEnd"] = "Debe seleccionar una hora";
+                        }
+                    } else {
+                        this.setState({formIsValid: false});
+                        errors["horaEnd"] = "Debe seleccionar una fecha y hora";
                     }
                 }else if(estado.descripcion === "En diagnostico"){
                     if (fields["modeloAuto"].length === 0) {
@@ -491,6 +515,8 @@ class ReservacionScreen extends Component {
                                 dateFormat="MMMM d, yyyy h:mm aa"
                                 timeCaption="Horario"
                             />
+                            <br></br>
+                            <span className="error">{this.state.errors["horaEnd"]}</span>
                         </FormGroup>
                         }
                         {clienteAux !== null &&

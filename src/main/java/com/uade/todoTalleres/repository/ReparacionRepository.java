@@ -2,6 +2,7 @@ package com.uade.todoTalleres.repository;
 
 import com.uade.todoTalleres.model.Reparacion;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -30,4 +31,8 @@ public interface ReparacionRepository extends JpaRepository<Reparacion, Long> {
 
     @Query(value = "select count(*) from mecanico m where m.id_mecanico NOT IN (select m.id_mecanico from reparacion r  inner join reparacion_mecanicos rm ON r.id_reparacion = rm.id_reparacion  inner join mecanico m ON rm.id_mecanico = m.id_mecanico where (id_estado = 4 and fecha_devolucion > ?1 and r.id_taller = ?3) or (id_estado = 4 and fecha_devolucion = ?1 and hora_devolucion > ?2 and r.id_taller = ?3) or (fecha_reserva = DATE(?1) and hora_reserva = ?2 and r.id_taller = ?3 and id_estado = 1))", nativeQuery = true)
     Integer validateMecanicos (Date fecha, LocalTime hora, Long id);
+
+    @Modifying
+    @Query(value = "update reparacion set id_estado = 7 where id_reparacion = ?1", nativeQuery = true)
+    void cancelarTurno(Long id);
 }

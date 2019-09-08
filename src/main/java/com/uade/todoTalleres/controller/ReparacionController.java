@@ -119,6 +119,14 @@ public class ReparacionController {
         return ResponseEntity.ok().body(result);
     }
 
+    @PutMapping("/cancelarTurno/{id}")
+    ResponseEntity<Reparacion> cancelarReparacion(@PathVariable Long id){
+        log.info("Request to cancel reparacion: {}", id);
+        Optional<Reparacion> result = reparacionService.findById(id);
+        reparacionService.cancelarTurno(result.get());
+        return ResponseEntity.ok().body(result.get());
+    }
+
     @DeleteMapping("/reparacion/{id}")
     public ResponseEntity<?> deleteReparacion (@PathVariable Long id){
         log.info("Request to delete reparacion: {}", id);

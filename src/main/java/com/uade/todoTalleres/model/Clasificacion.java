@@ -13,8 +13,7 @@ import java.io.IOException;
 public class Clasificacion {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "CLASIFICACION_SEQ")
-    @SequenceGenerator(name = "CLASIFICACION_SEQ", sequenceName = "CLASIFICACION_SEQ")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idClasificacion;
 
     @Column

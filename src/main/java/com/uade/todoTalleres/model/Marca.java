@@ -13,8 +13,7 @@ import java.io.IOException;
 public class Marca {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "MARCA_SEQ")
-    @SequenceGenerator(name = "MARCA_SEQ", sequenceName = "MARCA_SEQ")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMarca;
 
     @Column

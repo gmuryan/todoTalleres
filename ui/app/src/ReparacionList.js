@@ -76,33 +76,45 @@ class ReparacionList extends Component {
         });
     }
 
-    dialogEliminado() {
+    async cancelarTurno(idReparacion) {
+        await fetch(`/api/cancelarTurno/${idReparacion}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(idReparacion),
+        });
+        this.dialogCancelacionCorrecta();
+    }
+
+    dialogCancelacionCorrecta() {
         confirmAlert({
             title: 'Operacion Exitosa',
-            message: 'Reparacion Eliminada',
             buttons: [
                 {
-                    label: 'Aceptar'
+                    label: 'Aceptar',
+                    onClick: () => window.location.reload()
                 }
             ]
         })
     }
 
-    dialog(reparacion) {
+    dialogCancelarTurno(idReparacion) {
         confirmAlert({
             title: 'Confirmar',
             message: 'Esta seguro de realizar esta accion?',
             buttons: [
                 {
                     label: 'Si',
-                    onClick: () => this.remove(reparacion.idReparacion)
+                    onClick: () => this.cancelarTurno(idReparacion)
                 },
                 {
                     label: 'No'
                 }
             ]
         })
-    };
+    }
 
     filterEstado = e => {
         this.setState({estado: e.target.value});
@@ -159,7 +171,7 @@ class ReparacionList extends Component {
                 }).format(reparacion.importeTotal)}</td>
                 }
                 {!reparacion.importeTotal &&
-                    <td>{reparacion.importeTotal}</td>
+                <td>{reparacion.importeTotal}</td>
                 }
                 {tallerUser !== null &&
                 <td>{reparacion.cliente.nombre + " " + reparacion.cliente.apellido}</td>
@@ -176,6 +188,10 @@ class ReparacionList extends Component {
                         {clienteUser !== null &&
                         <Button size="sm" color="primary" tag={Link}
                                 to={"/reparaciones/" + reparacion.idReparacion}>Ver más</Button>
+                        }
+                        &nbsp;&nbsp;
+                        {reparacion.estadoReparacion.descripcion !== "Cancelado" &&
+                        <Button size="sm" color="danger" onClick={() => this.dialogCancelarTurno(reparacion.idReparacion)}>Cancelar Turno</Button>
                         }
                     </ButtonGroup>
                 </td>

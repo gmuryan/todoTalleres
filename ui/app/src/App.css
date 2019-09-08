@@ -38,6 +38,12 @@
     border-radius: .25rem;
 }
 
+.input-big-readOnly{
+    height: calc(7rem + 2px);
+    width: 100%;
+    background-color: #e9ecef;
+}
+
 .error{
     margin-left: 5px;
     font-size: 13px;

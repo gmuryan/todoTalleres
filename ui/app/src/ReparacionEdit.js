@@ -67,6 +67,15 @@ class ReparacionEdit extends Component {
         });
     }
 
+    toCurrency(number) {
+        const formatter = new Intl.NumberFormat('de-DE', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        return formatter.format(number);
+    }
+
+
     handleValidation() {
         let fields = this.state.item;
         let errors = {};
@@ -196,7 +205,7 @@ class ReparacionEdit extends Component {
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         const title = <h2>Detalles de la Reparacion</h2>;
-
+        const descEstado = item.estadoReparacion.descripcion;
         return <div>
             {tallerUser !== null &&
             <TalleresNavbar/>
@@ -210,16 +219,22 @@ class ReparacionEdit extends Component {
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="modeloAuto">Modelo Auto</Label>
-                            <Input readOnly={clienteUser} type="text" name="modeloAuto" id="modeloAuto"
-                                   value={item.modeloAuto || ''}
-                                   onChange={this.handleChange} autoComplete="modeloAuto"/>
+                            <Input
+                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En diagnostico" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
+                                type="text" name="modeloAuto"
+                                id="modeloAuto"
+                                value={item.modeloAuto || ''}
+                                onChange={this.handleChange} autoComplete="modeloAuto"/>
                             <span className="error">{this.state.errors["modeloAuto"]}</span>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="patenteAuto">Patente Auto</Label>
-                            <Input readOnly={clienteUser} type="text" name="patenteAuto" id="patenteAuto"
-                                   value={item.patenteAuto || ''}
-                                   onChange={this.handleChange} autoComplete="patenteAuto"/>
+                            <Input
+                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En diagnostico" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
+                                type="text" name="patenteAuto"
+                                id="patenteAuto"
+                                value={item.patenteAuto || ''}
+                                onChange={this.handleChange} autoComplete="patenteAuto"/>
                             <span className="error">{this.state.errors["patenteAuto"]}</span>
                         </FormGroup>
                     </div>
@@ -243,16 +258,22 @@ class ReparacionEdit extends Component {
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="fechaDevolucion">Fecha Devolucion</Label>
-                            <Input readOnly={clienteUser} type="text" name="fechaDevolucion" id="fechaDevolucion"
-                                   value={item.fechaDevolucion || ''}
-                                   onChange={this.handleChange} autoComplete="fechaDevolucion"/>
+                            <Input
+                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
+                                type="text"
+                                name="fechaDevolucion" id="fechaDevolucion"
+                                value={item.fechaDevolucion || ''}
+                                onChange={this.handleChange} autoComplete="fechaDevolucion"/>
                             <span className="error">{this.state.errors["fechaDevolucion"]}</span>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="horaDevolucion">Hora Devolucion</Label>
-                            <Input readOnly={clienteUser} type="text" name="horaDevolucion" id="horaDevolucion"
-                                   value={item.horaDevolucion || ''}
-                                   onChange={this.handleChange} autoComplete="horaDevolucion"/>
+                            <Input
+                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
+                                type="text"
+                                name="horaDevolucion" id="horaDevolucion"
+                                value={item.horaDevolucion || ''}
+                                onChange={this.handleChange} autoComplete="horaDevolucion"/>
                             <span className="error">{this.state.errors["horaDevolucion"]}</span>
                         </FormGroup>
                     </div>
@@ -260,9 +281,11 @@ class ReparacionEdit extends Component {
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="importeTotal">Importe</Label>
-                            <Input readOnly={clienteUser} type="text" name="importeTotal" id="importeTotal"
-                                   value={item.importeTotal || ''}
-                                   onChange={this.handleChange} autoComplete="importeTotal"/>
+                            <Input
+                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
+                                type="text" name="importeTotal" id="importeTotal"
+                                value={item.importeTotal ? "$" + this.toCurrency(item.importeTotal) : ''}
+                                onChange={this.handleChange} autoComplete="importeTotal"/>
                             <span className="error">{this.state.errors["importeTotal"]}</span>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
@@ -276,55 +299,64 @@ class ReparacionEdit extends Component {
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="descripcionProblemaCliente">Descripcion del problema del cliente</Label>
-                            <textarea readOnly className="input-big" type="text" name="descripcionProblemaCliente"
+                            <textarea readOnly className="input-big-readOnly" type="text"
+                                      name="descripcionProblemaCliente"
                                       id="descripcionProblemaCliente"
                                       value={item.descripcionProblemaCliente || ''}
                                       onChange={this.handleChange} autoComplete="descripcionProblemaCliente"/>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="descripcionProblemaTaller">Diagnostico del Taller</Label>
-                            <textarea readOnly={clienteUser} className="input-big" type="text"
-                                      name="descripcionProblemaTaller"
-                                      id="descripcionProblemaTaller"
-                                      value={item.descripcionProblemaTaller || ''}
-                                      onChange={this.handleChange} autoComplete="descripcionProblemaTaller"/>
+                            <textarea
+                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
+                                className={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "input-big-readOnly" : "input-big"}
+                                type="text"
+                                name="descripcionProblemaTaller"
+                                id="descripcionProblemaTaller"
+                                value={item.descripcionProblemaTaller || ''}
+                                onChange={this.handleChange} autoComplete="descripcionProblemaTaller"/>
                         </FormGroup>
                     </div>
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="descripcionReparacion">Reparaciones Realizadas</Label>
-                            <textarea readOnly={clienteUser} className="input-big" type="text"
-                                      name="descripcionReparacion"
-                                      id="descripcionReparacion"
-                                      value={item.descripcionReparacion || ''}
-                                      onChange={this.handleChange} autoComplete="descripcionReparacion"/>
+                            <textarea
+                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "En diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
+                                className={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "En diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "input-big-readOnly" : "input-big"}
+                                type="text"
+                                name="descripcionReparacion"
+                                id="descripcionReparacion"
+                                value={item.descripcionReparacion || ''}
+                                onChange={this.handleChange} autoComplete="descripcionReparacion"/>
                         </FormGroup>
-                        {tallerUser !== null && item.fechaDevolucion === null && item.horaDevolucion === null &&
-                            <FormGroup className="col-md-6 mb-3">
-                                <div>
-                                    <Label for="fechaHoraDevolucion">Fecha y hora de devolucion</Label>
-                                </div>
-                                <DatePicker
-                                    inline
-                                    selected={this.state.endDate}
-                                    onChange={this.handleDate.bind(this)}
-                                    showTimeSelect
-                                    timeFormat="HH:mm"
-                                    timeIntervals={60}
-                                    minTime={new Date(new Date().setHours(9, 0, 0))}
-                                    maxTime={new Date(new Date().setHours(17, 0, 0))}
-                                    filterDate={this.isWeekday}
-                                    minDate={new Date()}
-                                    dateFormat="MMMM d, yyyy h:mm aa"
-                                    timeCaption="Horario"
-                                />
-                                <br></br>
-                                <span className="error">{this.state.errors["hora"]}</span>
-                            </FormGroup>
+                        {tallerUser !== null && item.fechaDevolucion === null && item.horaDevolucion === null && descEstado !== "Cancelado" && descEstado !== "Pendiente Diagnostico" &&
+                        <FormGroup className="col-md-6 mb-3">
+                            <div>
+                                <Label for="fechaHoraDevolucion">Fecha y hora de devolucion</Label>
+                            </div>
+                            <DatePicker
+                                inline
+                                selected={this.state.endDate}
+                                onChange={this.handleDate.bind(this)}
+                                showTimeSelect
+                                timeFormat="HH:mm"
+                                timeIntervals={60}
+                                minTime={new Date(new Date().setHours(9, 0, 0))}
+                                maxTime={new Date(new Date().setHours(17, 0, 0))}
+                                filterDate={this.isWeekday}
+                                minDate={new Date()}
+                                dateFormat="MMMM d, yyyy h:mm aa"
+                                timeCaption="Horario"
+                            />
+                            <br></br>
+                            <span className="error">{this.state.errors["hora"]}</span>
+                        </FormGroup>
                         }
                     </div>
                     <FormGroup>
-                        <Button color="primary" type="submit">Guardar</Button>{' '}
+                        {tallerUser !== null && descEstado !== "Pendiente Confirmacion" &&
+                        <Button color="primary" type="submit">Guardar</Button>
+                        }{' '}
                         <Button color="secondary" tag={Link} to="/reparaciones">Cancelar</Button>
                     </FormGroup>
                 </Form>
