@@ -127,6 +127,25 @@ public class ReparacionController {
         return ResponseEntity.ok().body(result.get());
     }
 
+    @PutMapping("/avanzarReparacion")
+    ResponseEntity<Reparacion> avanzarReparacion(@Valid @RequestBody Reparacion reparacion){
+        log.info("Request to avanzar reparacion: {}", reparacion);
+        Optional<Reparacion> reparacionEntity = reparacionService.findById(reparacion.getIdReparacion());
+        Reparacion result = new Reparacion();
+        if (reparacion.getEstadoReparacion().getIdEstado() == 1){
+            result = reparacionService.avanzarPendienteRegistracion(reparacionEntity.get(), reparacion);
+        }else if(reparacion.getEstadoReparacion().getIdEstado() == 2){
+            result = reparacionService.avanzarEnDiagnostico(reparacionEntity.get(), reparacion);
+        }else if(reparacion.getEstadoReparacion().getIdEstado() == 3){
+            result = reparacionService.avanzarPendienteConfirmacion(reparacionEntity.get());
+        }else if(reparacion.getEstadoReparacion().getIdEstado() == 4){
+            result = reparacionService.avanzarEnReparacion(reparacionEntity.get(), reparacion);
+        }else if(reparacion.getEstadoReparacion().getIdEstado() == 5){
+            result = reparacionService.avanzarListoParaRetirar(reparacionEntity.get());
+        }
+        return ResponseEntity.ok().body(result);
+    }
+
     @DeleteMapping("/reparacion/{id}")
     public ResponseEntity<?> deleteReparacion (@PathVariable Long id){
         log.info("Request to delete reparacion: {}", id);

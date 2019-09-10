@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Button, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {confirmAlert} from "react-confirm-alert";
 import DatePicker from "react-datepicker";
@@ -34,7 +34,7 @@ class ReparacionEdit extends Component {
         this.state = {
             item: this.emptyItem,
             errors: {},
-            formIsValid: true,
+            flagImporte: false,
             endDate: null
         };
         this.handleChange = this.handleChange.bind(this);
@@ -50,6 +50,8 @@ class ReparacionEdit extends Component {
     async componentDidMount() {
         const reparacion = await (await fetch(`/api/reparacion/${this.props.match.params.id}`)).json();
         this.setState({item: reparacion});
+        if (this.state.item.importeTotal !== null)
+            this.setState({flagImporte: true});
     }
 
     handleChange(event) {
@@ -79,89 +81,59 @@ class ReparacionEdit extends Component {
     handleValidation() {
         let fields = this.state.item;
         let errors = {};
-        this.setState({formIsValid: true});
+        let formIsValid = true;
+        let diaActual = new Date();
 
-        //Name
-        if (fields["nombre"].length === 0) {
-            this.setState({formIsValid: false});
-            errors["nombre"] = "No puede estar vacio";
-        } else if (typeof fields["nombre"] !== "undefined") {
-            if (!fields["nombre"].match(/^[a-zA-Z]+$/)) {
-                this.setState({formIsValid: false});
-                errors["nombre"] = "Solo letras";
+        if (fields["estadoReparacion"].descripcion === "Pendiente Diagnostico"){
+            if (fields["modeloAuto"].length === 0){
+                formIsValid = false;
+                errors["modeloAuto"] = "No puede estar vacio";
+            }
+            if (fields["patenteAuto"].length === 0){
+                formIsValid = false;
+                errors["patenteAuto"] = "No puede estar vacio";
             }
         }
 
-        //Apellido
-        if (fields["apellido"].length === 0) {
-            this.setState({formIsValid: false});
-            errors["apellido"] = "No puede estar vacio";
-        } else if (typeof fields["apellido"] !== "undefined") {
-            if (!fields["apellido"].match(/^[a-zA-Z]+$/)) {
-                this.setState({formIsValid: false});
-                errors["apellido"] = "Solo letras";
+        if (fields["estadoReparacion"].descripcion === "En diagnostico"){
+            if (fields["importeTotal"] === null || fields["importeTotal"] === ''){
+                formIsValid = false;
+                errors["importeTotal"] = "No puede estar vacio";
+            }
+            if (fields["descripcionProblemaTaller"] === null || fields["descripcionProblemaTaller"] === ''){
+                formIsValid = false;
+                errors["descripcionProblemaTaller"] = "No puede estar vacio";
+            }
+            if (this.state.endDate != null) {
+                if (diaActual.getDate() === this.state.endDate.getDate() && diaActual.getMonth() === this.state.endDate.getMonth() && diaActual.getTime() > this.state.endDate.getTime()) {
+                    formIsValid = false;
+                    errors["hora"] = "Horario Invalido";
+                } else if (this.state.endDate.getHours() === 0) {
+                    formIsValid = false;
+                    errors["hora"] = "Debe seleccionar una hora";
+                }
+            } else {
+                formIsValid = false;
+                errors["hora"] = "Debe seleccionar una fecha y hora";
             }
         }
 
-        //Telefono
-        if (fields["telefono"].length === 0) {
-            this.setState({formIsValid: false});
-            errors["telefono"] = "No puede estar vacio";
-        } else if (typeof fields["telefono"] !== "undefined") {
-            if (!fields["telefono"].match(/^[0-9]+$/)) {
-                this.setState({formIsValid: false});
-                errors["telefono"] = "Solo numeros";
+        if (fields["estadoReparacion"].descripcion === "En reparacion"){
+            if (fields["descripcionProblemaTaller"] === null || fields["descripcionProblemaTaller"] === ''){
+                formIsValid = false;
+                errors["descripcionProblemaTaller"] = "No puede estar vacio";
+            }
+            if (fields["descripcionReparacion"] === null || fields["descripcionReparacion"] === ''){
+                formIsValid = false;
+                errors["descripcionReparacion"] = "No puede estar vacio";
             }
         }
 
-        //Contraseña
-        if (!fields["password"]) {
-            this.setState({formIsValid: false});
-            errors["password"] = "No puede estar vacio";
-        }
-
-        //RepetirContraseña
-        if (!fields["repeatPassword"]) {
-            this.setState({formIsValid: false});
-            errors["repeatPassword"] = "No puede estar vacio";
-        } else if (fields["password"] !== fields["repeatPassword"]) {
-            this.setState({formIsValid: false});
-            errors["repeatPassword"] = "Debe ser igual a la contraseña";
-        }
 
         this.setState({errors: errors});
-
-        //Email
-        if (!fields["mail"]) {
-            this.setState({formIsValid: false});
-            errors["mail"] = "No puede estar vacio";
-            this.setState({errors: errors});
-        } else if (typeof fields["mail"] !== "undefined") {
-            let lastAtPos = fields["mail"].lastIndexOf('@');
-            let lastDotPos = fields["mail"].lastIndexOf('.');
-            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["mail"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["mail"].length - lastDotPos) > 2)) {
-                this.setState({formIsValid: false});
-                errors["mail"] = "Mail invalido";
-                this.setState({errors: errors});
-            }
-        }
-        return this.validateMailTaller().then((response) => {
-            if (response.ok && this.state.mailCargado !== fields["mail"]) {
-                console.log("aca");
-                this.setState({formIsValid: false});
-                errors["mail"] = "Este mail ya esta registrado";
-                this.setState({errors: errors});
-            } else {
-                return this.validateMailCliente().then((response) => {
-                    if (response.ok && this.state.mailCargado !== fields["mail"]) {
-                        this.setState({formIsValid: false});
-                        errors["mail"] = "Este mail ya esta registrado";
-                        this.setState({errors: errors});
-                    }
-                })
-            }
-        });
+        return formIsValid;
     }
+
 
     isWeekday(date) {
         const day = date.getDay();
@@ -174,7 +146,7 @@ class ReparacionEdit extends Component {
             buttons: [
                 {
                     label: 'Aceptar',
-                    onClick: () => this.props.history.push('/clientes')
+                    onClick: () => this.props.history.push('/reparaciones')
                 }
             ]
         })
@@ -182,30 +154,43 @@ class ReparacionEdit extends Component {
 
     async handleSubmit(event) {
         event.preventDefault();
-
-        this.handleValidation().then((result) => {
-            if (this.state.formIsValid) {
-                const {item} = this.state;
-
-                fetch('/api/cliente', {
-                    method: (item.idCliente) ? 'PUT' : 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(item),
-                });
-                this.dialogCreado();
+        if (this.handleValidation()) {
+            const {item} = this.state;
+            if (this.state.endDate !== null) {
+                item.fechaDevolucion = this.state.endDate.getDate() + "-" + this.state.endDate.getMonth() + "-" + this.state.endDate.getFullYear();
+                if (this.state.endDate.getHours() === 9){
+                    item.horaDevolucion = "0" + this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
+                }else{
+                    item.horaDevolucion = this.state.endDate.getHours() + ":" + this.state.endDate.getMinutes() + "0";
+                }
             }
-        })
+            await fetch('/api/avanzarReparacion', {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item),
+            });
+            this.dialogCreado();
+        }
     }
 
     render() {
-        const {item} = this.state;
+        const {item, flagImporte} = this.state;
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         const title = <h2>Detalles de la Reparacion</h2>;
         const descEstado = item.estadoReparacion.descripcion;
+        const mecanicoList = item.mecanicos.map(mecanico =>{
+            return <tr key={mecanico.idMecanico}>
+                <td>{mecanico.idMecanico}</td>
+                <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
+                <td>{mecanico.apellido}</td>
+                <td>{mecanico.telefono}</td>
+                <td>{mecanico.mail}</td>
+            </tr>
+        });
         return <div>
             {tallerUser !== null &&
             <TalleresNavbar/>
@@ -279,6 +264,7 @@ class ReparacionEdit extends Component {
                     </div>
                     }
                     <div className="row">
+                        {this.state.flagImporte &&
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="importeTotal">Importe</Label>
                             <Input
@@ -288,6 +274,18 @@ class ReparacionEdit extends Component {
                                 onChange={this.handleChange} autoComplete="importeTotal"/>
                             <span className="error">{this.state.errors["importeTotal"]}</span>
                         </FormGroup>
+                        }
+                        {!this.state.flagImporte &&
+                        <FormGroup className="col-md-6 mb-3">
+                            <Label for="importeTotal">Importe</Label>
+                            <Input
+                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
+                                type="text" name="importeTotal" id="importeTotal"
+                                value={item.importeTotal || ''}
+                                onChange={this.handleChange} autoComplete="importeTotal"/>
+                            <span className="error">{this.state.errors["importeTotal"]}</span>
+                        </FormGroup>
+                        }
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="estadoReparacion">Estado</Label>
                             <Input readOnly type="text" name="estadoReparacion" id="estadoReparacion"
@@ -304,6 +302,7 @@ class ReparacionEdit extends Component {
                                       id="descripcionProblemaCliente"
                                       value={item.descripcionProblemaCliente || ''}
                                       onChange={this.handleChange} autoComplete="descripcionProblemaCliente"/>
+                            <span className="error">{this.state.errors["descripcionProblemaCliente"]}</span>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="descripcionProblemaTaller">Diagnostico del Taller</Label>
@@ -315,6 +314,7 @@ class ReparacionEdit extends Component {
                                 id="descripcionProblemaTaller"
                                 value={item.descripcionProblemaTaller || ''}
                                 onChange={this.handleChange} autoComplete="descripcionProblemaTaller"/>
+                            <span className="error">{this.state.errors["descripcionProblemaTaller"]}</span>
                         </FormGroup>
                     </div>
                     <div className="row">
@@ -328,6 +328,7 @@ class ReparacionEdit extends Component {
                                 id="descripcionReparacion"
                                 value={item.descripcionReparacion || ''}
                                 onChange={this.handleChange} autoComplete="descripcionReparacion"/>
+                            <span className="error">{this.state.errors["descripcionReparacion"]}</span>
                         </FormGroup>
                         {tallerUser !== null && item.fechaDevolucion === null && item.horaDevolucion === null && descEstado !== "Cancelado" && descEstado !== "Pendiente Diagnostico" &&
                         <FormGroup className="col-md-6 mb-3">
@@ -353,8 +354,34 @@ class ReparacionEdit extends Component {
                         </FormGroup>
                         }
                     </div>
+                    {tallerUser !== null &&
+                    <h3> Mecanicos asignados</h3>
+                    }
+                    {tallerUser !== null &&
+                    <Table className="mt-4">
+                        <thead>
+                        <tr>
+                            <th width="20%">ID</th>
+                            <th width="20%">Nombre</th>
+                            <th width="20%">Apellido</th>
+                            <th width="20%">Telefono</th>
+                            <th width="20%">Mail</th>
+                            <th width="10%">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {mecanicoList}
+                        </tbody>
+                    </Table>
+                    }
+                    {tallerUser !== null &&
+                    <br></br>
+                    }
+                    {tallerUser !== null &&
+                    <br></br>
+                    }
                     <FormGroup>
-                        {tallerUser !== null && descEstado !== "Pendiente Confirmacion" &&
+                        {tallerUser !== null && descEstado !== "Pendiente Confirmacion" && descEstado !== "Finalizado" && descEstado !== "Cancelado" &&
                         <Button color="primary" type="submit">Guardar</Button>
                         }{' '}
                         <Button color="secondary" tag={Link} to="/reparaciones">Cancelar</Button>

@@ -328,7 +328,6 @@ class ReservacionScreen extends Component {
                     const {itemReparacion} = this.state;
                     itemReparacion.fechaReserva = this.state.startDate.getDate() + "-" + this.state.startDate.getMonth() + "-" + this.state.startDate.getFullYear();
                     if (this.state.startDate.getHours() === 9) {
-                        console.log("hola");
                         itemReparacion.horaReserva = "0" + this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
                     } else {
                         itemReparacion.horaReserva = this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
@@ -353,7 +352,11 @@ class ReservacionScreen extends Component {
                     }
                     if (this.state.endDate !== null) {
                         itemReparacionTaller.fechaDevolucion = this.state.endDate.getDate() + "-" + this.state.endDate.getMonth() + "-" + this.state.endDate.getFullYear();
-                        itemReparacionTaller.horaDevolucion = this.state.endDate.getHours() + ":" + this.state.endDate.getMinutes() + "0";
+                        if (this.state.endDate.getHours() === 9){
+                            itemReparacionTaller.horaDevolucion = "0" + this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
+                        }else{
+                            itemReparacionTaller.horaDevolucion = this.state.endDate.getHours() + ":" + this.state.endDate.getMinutes() + "0";
+                        }
                     }
                     fetch('/api/reparacion', {
                         method: 'POST',

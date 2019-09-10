@@ -1,7 +1,10 @@
 package com.uade.todoTalleres.service;
 
+import com.uade.todoTalleres.model.Estado;
 import com.uade.todoTalleres.model.Reparacion;
+import com.uade.todoTalleres.repository.EstadoRepository;
 import com.uade.todoTalleres.repository.ReparacionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,6 +17,9 @@ import java.util.Optional;
 public class ReparacionService {
 
     private ReparacionRepository reparacionRepository;
+
+    @Autowired
+    private EstadoService estadoService;
 
     public ReparacionService(ReparacionRepository reparacionRepository){
         this.reparacionRepository = reparacionRepository;
@@ -63,5 +69,45 @@ public class ReparacionService {
 
     public void deleteById (long id){
         reparacionRepository.deleteById(id);
+    }
+
+    public Reparacion avanzarPendienteRegistracion(Reparacion reparacionEntity, Reparacion reparacionView){
+        reparacionEntity.setModeloAuto(reparacionView.getModeloAuto());
+        reparacionEntity.setPatenteAuto(reparacionView.getPatenteAuto());
+        Optional<Estado> estado = estadoService.findById(reparacionEntity.getEstadoReparacion().getIdEstado()+1);
+        reparacionEntity.setEstadoReparacion(estado.get());
+        return reparacionRepository.save(reparacionEntity);
+    }
+
+    public Reparacion avanzarEnDiagnostico(Reparacion reparacionEntity, Reparacion reparacionView){
+        reparacionEntity.setImporteTotal(reparacionView.getImporteTotal());
+        reparacionEntity.setDescripcionProblemaTaller(reparacionView.getDescripcionProblemaTaller());
+        Date fechaDevolucion = reparacionView.getFechaDevolucion();
+        fechaDevolucion.setMonth((fechaDevolucion.getMonth() - 1 + 1) % 12 + 1);
+        reparacionEntity.setFechaDevolucion(fechaDevolucion);
+        Optional<Estado> estado = estadoService.findById(reparacionEntity.getEstadoReparacion().getIdEstado()+1);
+        reparacionEntity.setEstadoReparacion(estado.get());
+        reparacionEntity.setHoraDevolucion(reparacionView.getHoraDevolucion());
+        return reparacionRepository.save(reparacionEntity);
+    }
+
+    public Reparacion avanzarPendienteConfirmacion(Reparacion reparacionEntity){
+        Optional<Estado> estado = estadoService.findById(reparacionEntity.getEstadoReparacion().getIdEstado()+1);
+        reparacionEntity.setEstadoReparacion(estado.get());
+        return reparacionRepository.save(reparacionEntity);
+    }
+
+    public Reparacion avanzarEnReparacion(Reparacion reparacionEntity, Reparacion reparacionView){
+        reparacionEntity.setDescripcionProblemaTaller(reparacionView.getDescripcionProblemaTaller());
+        reparacionEntity.setDescripcionReparacion(reparacionView.getDescripcionReparacion());
+        Optional<Estado> estado = estadoService.findById(reparacionEntity.getEstadoReparacion().getIdEstado()+1);
+        reparacionEntity.setEstadoReparacion(estado.get());
+        return reparacionRepository.save(reparacionEntity);
+    }
+
+    public Reparacion avanzarListoParaRetirar(Reparacion reparacionEntity){
+        Optional<Estado> estado = estadoService.findById(reparacionEntity.getEstadoReparacion().getIdEstado()+1);
+        reparacionEntity.setEstadoReparacion(estado.get());
+        return reparacionRepository.save(reparacionEntity);
     }
 }
