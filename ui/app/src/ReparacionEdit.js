@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Button, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
+import {Button, ButtonGroup, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {confirmAlert} from "react-confirm-alert";
 import DatePicker from "react-datepicker";
@@ -34,6 +34,7 @@ class ReparacionEdit extends Component {
         this.state = {
             item: this.emptyItem,
             errors: {},
+            mecanicosTaller: [],
             flagImporte: false,
             endDate: null
         };
@@ -48,10 +49,15 @@ class ReparacionEdit extends Component {
     }
 
     async componentDidMount() {
+        const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const reparacion = await (await fetch(`/api/reparacion/${this.props.match.params.id}`)).json();
         this.setState({item: reparacion});
         if (this.state.item.importeTotal !== null)
             this.setState({flagImporte: true});
+        if (tallerUser !== null) {
+            const mecs = await (await fetch(`/api/mecanicos/${tallerUser.idTaller}`)).json();
+            this.setState({mecanicosTaller: mecs});
+        }
     }
 
     handleChange(event) {
@@ -84,23 +90,23 @@ class ReparacionEdit extends Component {
         let formIsValid = true;
         let diaActual = new Date();
 
-        if (fields["estadoReparacion"].descripcion === "Pendiente Diagnostico"){
-            if (fields["modeloAuto"].length === 0){
+        if (fields["estadoReparacion"].descripcion === "Pendiente Diagnostico") {
+            if (fields["modeloAuto"].length === 0) {
                 formIsValid = false;
                 errors["modeloAuto"] = "No puede estar vacio";
             }
-            if (fields["patenteAuto"].length === 0){
+            if (fields["patenteAuto"].length === 0) {
                 formIsValid = false;
                 errors["patenteAuto"] = "No puede estar vacio";
             }
         }
 
-        if (fields["estadoReparacion"].descripcion === "En diagnostico"){
-            if (fields["importeTotal"] === null || fields["importeTotal"] === ''){
+        if (fields["estadoReparacion"].descripcion === "En diagnostico") {
+            if (fields["importeTotal"] === null || fields["importeTotal"] === '') {
                 formIsValid = false;
                 errors["importeTotal"] = "No puede estar vacio";
             }
-            if (fields["descripcionProblemaTaller"] === null || fields["descripcionProblemaTaller"] === ''){
+            if (fields["descripcionProblemaTaller"] === null || fields["descripcionProblemaTaller"] === '') {
                 formIsValid = false;
                 errors["descripcionProblemaTaller"] = "No puede estar vacio";
             }
@@ -118,12 +124,12 @@ class ReparacionEdit extends Component {
             }
         }
 
-        if (fields["estadoReparacion"].descripcion === "En reparacion"){
-            if (fields["descripcionProblemaTaller"] === null || fields["descripcionProblemaTaller"] === ''){
+        if (fields["estadoReparacion"].descripcion === "En reparacion") {
+            if (fields["descripcionProblemaTaller"] === null || fields["descripcionProblemaTaller"] === '') {
                 formIsValid = false;
                 errors["descripcionProblemaTaller"] = "No puede estar vacio";
             }
-            if (fields["descripcionReparacion"] === null || fields["descripcionReparacion"] === ''){
+            if (fields["descripcionReparacion"] === null || fields["descripcionReparacion"] === '') {
                 formIsValid = false;
                 errors["descripcionReparacion"] = "No puede estar vacio";
             }
@@ -158,9 +164,9 @@ class ReparacionEdit extends Component {
             const {item} = this.state;
             if (this.state.endDate !== null) {
                 item.fechaDevolucion = this.state.endDate.getDate() + "-" + this.state.endDate.getMonth() + "-" + this.state.endDate.getFullYear();
-                if (this.state.endDate.getHours() === 9){
+                if (this.state.endDate.getHours() === 9) {
                     item.horaDevolucion = "0" + this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
-                }else{
+                } else {
                     item.horaDevolucion = this.state.endDate.getHours() + ":" + this.state.endDate.getMinutes() + "0";
                 }
             }
@@ -177,20 +183,56 @@ class ReparacionEdit extends Component {
     }
 
     render() {
-        const {item, flagImporte} = this.state;
+        const {item, flagImporte, mecanicosTaller} = this.state;
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         const title = <h2>Detalles de la Reparacion</h2>;
         const descEstado = item.estadoReparacion.descripcion;
-        const mecanicoList = item.mecanicos.map(mecanico =>{
-            return <tr key={mecanico.idMecanico}>
-                <td>{mecanico.idMecanico}</td>
-                <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
-                <td>{mecanico.apellido}</td>
-                <td>{mecanico.telefono}</td>
-                <td>{mecanico.mail}</td>
-            </tr>
-        });
+        var mecanicoList;
+        if (tallerUser !== null && descEstado !== "En diagnostico") {
+             mecanicoList = item.mecanicos.map(mecanico => {
+                return <tr key={mecanico.idMecanico}>
+                    <td>{mecanico.idMecanico}</td>
+                    <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
+                    <td>{mecanico.apellido}</td>
+                    <td>{mecanico.telefono}</td>
+                    <td>{mecanico.mail}</td>
+                    {tallerUser !== null && descEstado === "En diagnostico" &&
+                    <td>
+                        <ButtonGroup>
+                            <Button size="sm" color="primary" tag={Link}
+                                    to={"/mecanicos/" + mecanico.idMecanico}>Asignar</Button>
+                            &nbsp;&nbsp;
+                            <Button size="sm" color="danger" onClick={() => this.dialog(mecanico)}>Desasignar</Button>
+                        </ButtonGroup>
+                    </td>
+                    }
+                </tr>
+            });
+        }else{
+            mecanicoList = mecanicosTaller.map(mecanico => {
+                return <tr key={mecanico.idMecanico}>
+                    <td>{mecanico.idMecanico}</td>
+                    <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
+                    <td>{mecanico.apellido}</td>
+                    <td>{mecanico.telefono}</td>
+                    <td>{mecanico.mail}</td>
+                    {tallerUser !== null && descEstado === "En diagnostico" &&
+                    <td>
+                        <ButtonGroup>
+                            {!item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico))  &&
+                            <Button size="sm" color="primary" tag={Link}
+                                    to={"/mecanicos/" + mecanico.idMecanico}>Asignar</Button>
+                            }
+                            {item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
+                            <Button size="sm" color="danger" onClick={() => this.dialog(mecanico)}>Desasignar</Button>
+                            }
+                        </ButtonGroup>
+                    </td>
+                    }
+                </tr>
+            });
+        }
         return <div>
             {tallerUser !== null &&
             <TalleresNavbar/>
@@ -354,8 +396,11 @@ class ReparacionEdit extends Component {
                         </FormGroup>
                         }
                     </div>
-                    {tallerUser !== null &&
+                    {tallerUser !== null && descEstado !== "En diagnostico" &&
                     <h3> Mecanicos asignados</h3>
+                    }
+                    {tallerUser !== null && descEstado === "En diagnostico" &&
+                    <h3> Asignacion de mecanicos</h3>
                     }
                     {tallerUser !== null &&
                     <Table className="mt-4">
@@ -366,7 +411,9 @@ class ReparacionEdit extends Component {
                             <th width="20%">Apellido</th>
                             <th width="20%">Telefono</th>
                             <th width="20%">Mail</th>
+                            {descEstado === "En diagnostico" &&
                             <th width="10%">Acciones</th>
+                            }
                         </tr>
                         </thead>
                         <tbody>
