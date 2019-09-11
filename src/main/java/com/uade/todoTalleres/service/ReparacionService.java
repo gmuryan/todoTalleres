@@ -80,6 +80,8 @@ public class ReparacionService {
     }
 
     public Reparacion avanzarEnDiagnostico(Reparacion reparacionEntity, Reparacion reparacionView){
+        reparacionEntity.getMecanicos().clear();
+        reparacionEntity.setMecanicos(reparacionView.getMecanicos());
         reparacionEntity.setImporteTotal(reparacionView.getImporteTotal());
         reparacionEntity.setDescripcionProblemaTaller(reparacionView.getDescripcionProblemaTaller());
         Date fechaDevolucion = reparacionView.getFechaDevolucion();

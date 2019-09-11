@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Button, ButtonGroup, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import DatePicker from "react-datepicker";
@@ -108,6 +108,18 @@ class ReservacionScreen extends Component {
         console.log(this.state.itemReparacionTaller);
     }
 
+    asignarMecanico(mecanico){
+        let itemReparacionTaller = {...this.state.itemReparacionTaller};
+        itemReparacionTaller.mecanicos.push(mecanico);
+        this.setState({itemReparacionTaller : itemReparacionTaller});
+    }
+
+    desasignarMecanico(mecanico){
+        let itemReparacionTaller = {...this.state.itemReparacionTaller};
+        itemReparacionTaller.mecanicos = itemReparacionTaller.mecanicos.filter(mec => mec.idMecanico !== mecanico.idMecanico);
+        this.setState({itemReparacionTaller : itemReparacionTaller});
+    }
+
     handleChange(event) {
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
@@ -127,11 +139,11 @@ class ReservacionScreen extends Component {
             itemReparacionTaller[name] = value;
             this.setState({itemReparacionTaller});
         }
-        if(event.target.name === "estadoReparacion"){
+        if (event.target.name === "estadoReparacion") {
             let estado = JSON.parse(event.target.value);
-            if (estado.descripcion !== "Pendiente Diagnostico"){
+            if (estado.descripcion !== "Pendiente Diagnostico") {
                 this.setState({flagMecanicos: true});
-            }else{
+            } else {
                 this.setState({flagMecanicos: false});
             }
         }
@@ -243,7 +255,11 @@ class ReservacionScreen extends Component {
                         this.setState({formIsValid: false});
                         errors["horaEnd"] = "Debe seleccionar una fecha y hora";
                     }
-                }else if (estado.descripcion === "En reparacion" || estado.descripcion === "Pendiente Confirmacion"){
+                    if(fields["mecanicos"].length === 0){
+                        this.setState({formIsValid: false});
+                        errors["mecanicos"] = "Debe asignarse al menos un mecanico";
+                    }
+                } else if (estado.descripcion === "En reparacion" || estado.descripcion === "Pendiente Confirmacion") {
                     if (fields["modeloAuto"].length === 0) {
                         this.setState({formIsValid: false});
                         errors["modeloAuto"] = "Debe ingresar un modelo de auto para el estado de reparacion seleccionado";
@@ -272,7 +288,11 @@ class ReservacionScreen extends Component {
                         this.setState({formIsValid: false});
                         errors["horaEnd"] = "Debe seleccionar una fecha y hora";
                     }
-                }else if(estado.descripcion === "En diagnostico"){
+                    if(fields["mecanicos"].length === 0){
+                        this.setState({formIsValid: false});
+                        errors["mecanicos"] = "Debe asignarse al menos un mecanico";
+                    }
+                } else if (estado.descripcion === "En diagnostico") {
                     if (fields["modeloAuto"].length === 0) {
                         this.setState({formIsValid: false});
                         errors["modeloAuto"] = "Debe ingresar un modelo de auto para el estado de reparacion seleccionado";
@@ -280,6 +300,10 @@ class ReservacionScreen extends Component {
                     if (fields["patenteAuto"].length === 0) {
                         this.setState({formIsValid: false});
                         errors["patenteAuto"] = "Debe ingresar una patente de auto para el estado de reparacion seleccionado";
+                    }
+                    if(fields["mecanicos"].length === 0){
+                        this.setState({formIsValid: false});
+                        errors["mecanicos"] = "Debe asignarse al menos un mecanico";
                     }
                 }
             }
@@ -352,9 +376,9 @@ class ReservacionScreen extends Component {
                     }
                     if (this.state.endDate !== null) {
                         itemReparacionTaller.fechaDevolucion = this.state.endDate.getDate() + "-" + this.state.endDate.getMonth() + "-" + this.state.endDate.getFullYear();
-                        if (this.state.endDate.getHours() === 9){
+                        if (this.state.endDate.getHours() === 9) {
                             itemReparacionTaller.horaDevolucion = "0" + this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
-                        }else{
+                        } else {
                             itemReparacionTaller.horaDevolucion = this.state.endDate.getHours() + ":" + this.state.endDate.getMinutes() + "0";
                         }
                     }
@@ -382,15 +406,34 @@ class ReservacionScreen extends Component {
         const {item, itemReparacion, itemReparacionTaller, estados, mecanicos} = this.state;
         const clienteAux = JSON.parse(localStorage.getItem("clienteUser"));
         const tallerAux = JSON.parse(localStorage.getItem("tallerUser"));
+        var mecanicoList;
+        if (tallerAux !== null) {
+            mecanicoList = mecanicos.map(mecanico => {
+                return <tr key={mecanico.idMecanico}>
+                    <td>{mecanico.idMecanico}</td>
+                    <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
+                    <td>{mecanico.apellido}</td>
+                    <td>{mecanico.telefono}</td>
+                    <td>{mecanico.mail}</td>
+                    <td>
+                        <ButtonGroup>
+                            {!itemReparacionTaller.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
+                            <Button size="sm" color="primary"
+                                    onClick={() => this.asignarMecanico(mecanico)}>Asignar</Button>
+                            }
+                            &nbsp;&nbsp;
+                            {itemReparacionTaller.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
+                            <Button size="sm" color="danger" onClick={() => this.desasignarMecanico(mecanico)}>Desasignar</Button>
+                            }
+                        </ButtonGroup>
+                    </td>
+                </tr>
+            });
+        }
         let newOptionsEstados;
-        let newOptionsMecanicos;
         if (tallerAux !== null) {
             newOptionsEstados = estados.map((estado) =>
                 <option key={estado.idEstado} value={JSON.stringify(estado)}>{estado.descripcion}</option>
-            );
-            newOptionsMecanicos = mecanicos.map((mecanico) =>
-                <option key={mecanico.idMecanico}
-                        value={JSON.stringify(mecanico)}>{mecanico.nombre} {mecanico.apellido}</option>
             );
             itemReparacionTaller.taller = JSON.stringify(tallerAux);
         }
@@ -607,19 +650,44 @@ class ReservacionScreen extends Component {
                             <Input readOnly type="text" name="cliente" id="cliente" value='Cliente Externo'
                                    onChange={this.handleChange} autoComplete="cliente"/>
                         </FormGroup>
-                        {this.state.flagMecanicos &&
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="mecanico">Mecanico/s Asignados</Label>
-                            <select required="required" multiple={true} /*disabled={true}*/ className="multi-select"
-                                    name="mecanico" id="mecanico"
-                                    onChange={this.handleMecanicos} autoComplete="mecanico">
-                                {newOptionsMecanicos}
-                            </select>
-                        </FormGroup>
-                        }
                         <br></br>
                         <br></br>
                     </div>
+                    }
+                    {tallerAux !== null && this.state.flagMecanicos &&
+                    <br></br>
+                    }
+                    {tallerAux !== null && this.state.flagMecanicos &&
+                    <br></br>
+                    }
+                    {tallerAux !== null && this.state.flagMecanicos &&
+                    <h3> Asignacion de mecanicos</h3>
+                    }
+                    {tallerAux !== null && this.state.flagMecanicos &&
+                    <Table className="mt-4">
+                        <thead>
+                        <tr>
+                            <th width="20%">ID</th>
+                            <th width="20%">Nombre</th>
+                            <th width="20%">Apellido</th>
+                            <th width="20%">Telefono</th>
+                            <th width="20%">Mail</th>
+                            <th width="10%">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {mecanicoList}
+                        </tbody>
+                    </Table>
+                    }
+                    {tallerAux !== null && this.state.flagMecanicos &&
+                    <span className="error">{this.state.errors["mecanicos"]}</span>
+                    }
+                    {tallerAux !== null && this.state.flagMecanicos &&
+                    <br></br>
+                    }
+                    {tallerAux !== null && this.state.flagMecanicos &&
+                    <br></br>
                     }
                     <FormGroup>
                         <Button color="primary" type="submit">Reservar</Button>{' '}

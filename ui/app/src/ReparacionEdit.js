@@ -110,6 +110,10 @@ class ReparacionEdit extends Component {
                 formIsValid = false;
                 errors["descripcionProblemaTaller"] = "No puede estar vacio";
             }
+            if(fields["mecanicos"].length === 0){
+                formIsValid = false;
+                errors["mecanicos"] = "Debe asignarse al menos un mecanico";
+            }
             if (this.state.endDate != null) {
                 if (diaActual.getDate() === this.state.endDate.getDate() && diaActual.getMonth() === this.state.endDate.getMonth() && diaActual.getTime() > this.state.endDate.getTime()) {
                     formIsValid = false;
@@ -144,6 +148,18 @@ class ReparacionEdit extends Component {
     isWeekday(date) {
         const day = date.getDay();
         return day !== 0 && day !== 6
+    }
+
+    asignarMecanico(mecanico){
+        let itemReparacion = {...this.state.item};
+        itemReparacion.mecanicos.push(mecanico);
+        this.setState({item : itemReparacion});
+    }
+
+    desasignarMecanico(mecanico){
+        let itemReparacion = {...this.state.item};
+        itemReparacion.mecanicos = itemReparacion.mecanicos.filter(mec => mec.idMecanico !== mecanico.idMecanico);
+        this.setState({item : itemReparacion});
     }
 
     dialogCreado() {
@@ -221,11 +237,10 @@ class ReparacionEdit extends Component {
                     <td>
                         <ButtonGroup>
                             {!item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico))  &&
-                            <Button size="sm" color="primary" tag={Link}
-                                    to={"/mecanicos/" + mecanico.idMecanico}>Asignar</Button>
+                            <Button size="sm" color="primary" onClick={() => this.asignarMecanico(mecanico)}>Asignar</Button>
                             }
                             {item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
-                            <Button size="sm" color="danger" onClick={() => this.dialog(mecanico)}>Desasignar</Button>
+                            <Button size="sm" color="danger" onClick={() => this.desasignarMecanico(mecanico)}>Desasignar</Button>
                             }
                         </ButtonGroup>
                     </td>
@@ -422,6 +437,9 @@ class ReparacionEdit extends Component {
                     </Table>
                     }
                     {tallerUser !== null &&
+                    <span className="error">{this.state.errors["mecanicos"]}</span>
+                    }
+                    {tallerUser !== null &&
                     <br></br>
                     }
                     {tallerUser !== null &&
@@ -429,7 +447,7 @@ class ReparacionEdit extends Component {
                     }
                     <FormGroup>
                         {tallerUser !== null && descEstado !== "Pendiente Confirmacion" && descEstado !== "Finalizado" && descEstado !== "Cancelado" &&
-                        <Button color="primary" type="submit">Guardar</Button>
+                        <Button color="primary" type="submit">Confirmar</Button>
                         }{' '}
                         <Button color="secondary" tag={Link} to="/reparaciones">Cancelar</Button>
                     </FormGroup>
