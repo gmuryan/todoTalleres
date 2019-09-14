@@ -95,7 +95,6 @@ class ReservacionScreen extends Component {
 
     handleMecanicos = (e) => {
         let options = e.target.options;
-        console.log(options[0].value);
         let itemReparacionTaller = {...this.state.itemReparacionTaller};
 
         for (let i = 0; i < options.length; i++) {

@@ -17,6 +17,7 @@ import MisDatos from './MisDatos'
 import ReparacionList from "./ReparacionList";
 import ReservacionScreen from "./ReservacionScreen";
 import ReparacionEdit from "./ReparacionEdit";
+import ReseñaScreen from "./ReseñaScreen";
 
 class App extends Component {
     componentDidMount(){
@@ -42,6 +43,7 @@ class App extends Component {
           <Route path='/reparaciones' exact={true} component={ReparacionList}/>
           <Route path='/reservacion/:id' component={ReservacionScreen}/>
           <Route path='/reparaciones/:id' component={ReparacionEdit}/>
+          <Route path='/reseñas/:id' component={ReseñaScreen}/>
         </Switch>
       </Router>
     )

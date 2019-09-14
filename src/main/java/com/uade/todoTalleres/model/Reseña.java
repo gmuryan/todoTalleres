@@ -1,6 +1,9 @@
 package com.uade.todoTalleres.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "reseña")
@@ -17,6 +20,10 @@ public class Reseña {
     @OneToOne
     @JoinColumn(name = "idTaller")
     private Taller taller;
+
+    @Column
+    @Temporal(TemporalType.DATE)
+    private Date fechaReserva;
 
     @Column
     private String comentario;
@@ -62,5 +69,13 @@ public class Reseña {
 
     public void setComentario(String comentario) {
         this.comentario = comentario;
+    }
+
+    public Date getFechaReserva() {
+        return fechaReserva;
+    }
+
+    public void setFechaReserva(Date fechaReserva) {
+        this.fechaReserva = fechaReserva;
     }
 }

@@ -164,13 +164,19 @@ class TallerList extends Component {
                         <Button size="sm" color="primary" tag={Link}
                                 to={"/talleres/" + taller.idTaller}>Editar</Button>
                         &nbsp;&nbsp;
+                        <Button size="sm" color="secondary" tag={Link}
+                                to={"/reseñas/" + taller.idTaller}>Reseñas</Button>
+                        &nbsp;&nbsp;
                         <Button size="sm" color="danger" onClick={() => this.dialog(taller)}>Eliminar</Button>
                     </ButtonGroup>
                     }
                     {clienteUser !== null &&
                     <ButtonGroup>
                         <Button size="sm" color="primary" tag={Link}
-                                to={"/reservacion/" + taller.idTaller}>Ver más</Button>
+                                to={"/reservacion/" + taller.idTaller}>Reservar</Button>
+                        &nbsp;&nbsp;
+                        <Button size="sm" color="secondary" tag={Link}
+                                to={"/reseñas/" + taller.idTaller}>Ver más</Button>
                     </ButtonGroup>
                     }
                 </td>

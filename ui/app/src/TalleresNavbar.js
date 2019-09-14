@@ -25,6 +25,7 @@ export default class TalleresNavbar extends Component {
         return <Navbar color="dark" dark expand="md">
             <NavbarBrand tag={Link} to="/homeTaller">Home</NavbarBrand>
             <NavbarBrand tag={Link} to={"/miTaller/" + taller.idTaller}>Mi Taller</NavbarBrand>
+            <NavbarBrand tag={Link} to={"/reseñas/" + taller.idTaller}>Mis Reseñas</NavbarBrand>
             <NavbarBrand tag={Link} to="/mecanicos">Mecanicos</NavbarBrand>
             <NavbarBrand tag={Link} to="/reparaciones">Reparaciones</NavbarBrand>
             {/*<NavbarBrand tag={Link} to="/prendas">Prendas</NavbarBrand>*/}
