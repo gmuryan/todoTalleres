@@ -40,12 +40,14 @@ class Login extends Component {
             }).then(response => {
                 if (response.ok){
                     response.json().then(json => {
-                        if (email == json.mail && password == json.password) {
+                        if (email == json.mail && password == json.password && json.activo) {
                             localStorage.clear();
                             localStorage.setItem("tallerUser", JSON.stringify(json));
                             this.props.history.push('/homeTaller');
                         }
                     })
+                }else{
+                    this.setState({formIsValid: false});
                 }
             });
 
@@ -58,7 +60,7 @@ class Login extends Component {
             }).then(response => {
                 if (response.ok){
                     response.json().then(json => {
-                        if (email == json.mail && password == json.password) {
+                        if (email == json.mail && password == json.password && json.activo) {
                             localStorage.clear();
                             localStorage.setItem("clienteUser", JSON.stringify(json));
                             this.props.history.push('/homeCliente');
