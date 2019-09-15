@@ -210,7 +210,7 @@ class ReservacionScreen extends Component {
             errors["hora"] = "Debe seleccionar una fecha y hora";
         }
         if (this.state.startDate != null && this.state.endDate != null) {
-            if ((this.state.endDate.getFullYear() > this.state.startDate.getFullYear())
+            if ((this.state.endDate.getFullYear() < this.state.startDate.getFullYear())
                 || (this.state.endDate.getFullYear() == this.state.startDate.getFullYear() && this.state.endDate.getMonth() < this.state.startDate.getMonth())
                 || (this.state.endDate.getFullYear() == this.state.startDate.getFullYear() && this.state.endDate.getMonth() == this.state.startDate.getMonth() && this.state.endDate.getDate() < this.state.startDate.getDate())
                 || (this.state.endDate.getFullYear() == this.state.startDate.getFullYear() && this.state.endDate.getMonth() == this.state.startDate.getMonth() && this.state.endDate.getDate() == this.state.startDate.getDate() && this.state.endDate.getTime() <= this.state.startDate.getTime())) {
