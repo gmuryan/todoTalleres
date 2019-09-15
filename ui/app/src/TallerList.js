@@ -47,23 +47,40 @@ class TallerList extends Component {
     }
 
     async remove(id) {
-        await fetch(`/api/taller/${id}`, {
-            method: 'DELETE',
+        await fetch(`/api/borrarTaller/${id}`, {
+            method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
         }).then(() => {
-            let updatedTalleres = [...this.state.talleres].filter(i => i.idTaller !== id);
-            this.setState({talleres: updatedTalleres});
+            fetch('api/talleres')
+                .then(response => response.json())
+                .then(data => this.setState({talleres: data}))
             this.dialogEliminado();
         });
     }
 
-    dialogEliminado() {
+    async habilitar(id) {
+        await fetch(`/api/habilitarTaller/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(() => {
+            fetch('api/talleres')
+                .then(response => response.json())
+                .then(data => this.setState({talleres: data}))
+            this.dialogHabilitado();
+        });
+    }
+
+
+    dialogHabilitado() {
         confirmAlert({
             title: 'Operacion Exitosa',
-            message: 'Taller Eliminado',
+            message: 'Taller Habilitado',
             buttons: [
                 {
                     label: 'Aceptar'
@@ -72,7 +89,19 @@ class TallerList extends Component {
         })
     }
 
-    dialog(taller) {
+    dialogEliminado() {
+        confirmAlert({
+            title: 'Operacion Exitosa',
+            message: 'Taller Deshabilitado',
+            buttons: [
+                {
+                    label: 'Aceptar'
+                }
+            ]
+        })
+    }
+
+    dialogDeshabilitar(taller) {
         confirmAlert({
             title: 'Confirmar',
             message: 'Esta seguro de realizar esta accion?',
@@ -80,6 +109,22 @@ class TallerList extends Component {
                 {
                     label: 'Si',
                     onClick: () => this.remove(taller.idTaller)
+                },
+                {
+                    label: 'No'
+                }
+            ]
+        })
+    };
+
+    dialogHabilitar(taller) {
+        confirmAlert({
+            title: 'Confirmar',
+            message: 'Esta seguro de realizar esta accion?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => this.habilitar(taller.idTaller)
                 },
                 {
                     label: 'No'
@@ -150,37 +195,83 @@ class TallerList extends Component {
         });
 
         const tallerList = currentTodos.map(taller => {
-            return <tr key={taller.idTaller}>
-                <td>{taller.idTaller}</td>
-                <td style={{whiteSpace: 'nowrap'}}>{taller.nombre}</td>
-                <td>{taller.barrio}</td>
-                <td>{taller.telefono}</td>
-                <td>{taller.mail}</td>
-                <td>{taller.marca.descripcion}</td>
-                <td>{taller.clasificacion.descripcion}</td>
-                <td>
-                    {adminUser !== null &&
-                    <ButtonGroup>
-                        <Button size="sm" color="primary" tag={Link}
-                                to={"/talleres/" + taller.idTaller}>Editar</Button>
-                        &nbsp;&nbsp;
-                        <Button size="sm" color="secondary" tag={Link}
-                                to={"/reseñas/" + taller.idTaller}>Reseñas</Button>
-                        &nbsp;&nbsp;
-                        <Button size="sm" color="danger" onClick={() => this.dialog(taller)}>Eliminar</Button>
-                    </ButtonGroup>
+            if (adminUser) {
+                return <tr key={taller.idTaller}>
+                    <td>{taller.idTaller}</td>
+                    <td style={{whiteSpace: 'nowrap'}}>{taller.nombre}</td>
+                    <td>{taller.barrio}</td>
+                    <td>{taller.telefono}</td>
+                    <td>{taller.mail}</td>
+                    <td>{taller.marca.descripcion}</td>
+                    <td>{taller.clasificacion.descripcion}</td>
+                    {adminUser &&
+                    <td>{taller.activo ? "Si" : "No"}</td>
                     }
-                    {clienteUser !== null &&
-                    <ButtonGroup>
-                        <Button size="sm" color="primary" tag={Link}
-                                to={"/reservacion/" + taller.idTaller}>Reservar</Button>
-                        &nbsp;&nbsp;
-                        <Button size="sm" color="secondary" tag={Link}
-                                to={"/reseñas/" + taller.idTaller}>Ver más</Button>
-                    </ButtonGroup>
+                    <td>
+                        {adminUser !== null &&
+                        <ButtonGroup>
+                            <Button size="sm" color="primary" tag={Link}
+                                    to={"/talleres/" + taller.idTaller}>Editar</Button>
+                            &nbsp;&nbsp;
+                            <Button size="sm" color="secondary" tag={Link}
+                                    to={"/reseñas/" + taller.idTaller}>Reseñas</Button>
+                            &nbsp;&nbsp;
+                            {taller.activo &&
+                            <Button size="sm" color="danger" onClick={() => this.dialogDeshabilitar(taller)}>Deshabilitar</Button>
+                            }
+                            {!taller.activo &&
+                            <Button size="sm" color="primary" onClick={() => this.dialogHabilitar(taller)}>Habilitar</Button>
+                            }
+                        </ButtonGroup>
+                        }
+                        {clienteUser !== null &&
+                        <ButtonGroup>
+                            <Button size="sm" color="primary" tag={Link}
+                                    to={"/reservacion/" + taller.idTaller}>Reservar</Button>
+                            &nbsp;&nbsp;
+                            <Button size="sm" color="secondary" tag={Link}
+                                    to={"/reseñas/" + taller.idTaller}>Ver más</Button>
+                        </ButtonGroup>
+                        }
+                    </td>
+                </tr>
+            }
+            if (clienteUser && taller.activo) {
+                return <tr key={taller.idTaller}>
+                    <td>{taller.idTaller}</td>
+                    <td style={{whiteSpace: 'nowrap'}}>{taller.nombre}</td>
+                    <td>{taller.barrio}</td>
+                    <td>{taller.telefono}</td>
+                    <td>{taller.mail}</td>
+                    <td>{taller.marca.descripcion}</td>
+                    <td>{taller.clasificacion.descripcion}</td>
+                    {adminUser &&
+                    <td>{taller.activo ? "Si" : "No"}</td>
                     }
-                </td>
-            </tr>
+                    <td>
+                        {adminUser !== null &&
+                        <ButtonGroup>
+                            <Button size="sm" color="primary" tag={Link}
+                                    to={"/talleres/" + taller.idTaller}>Editar</Button>
+                            &nbsp;&nbsp;
+                            <Button size="sm" color="secondary" tag={Link}
+                                    to={"/reseñas/" + taller.idTaller}>Reseñas</Button>
+                            &nbsp;&nbsp;
+                            <Button size="sm" color="danger" onClick={() => this.dialog(taller)}>Eliminar</Button>
+                        </ButtonGroup>
+                        }
+                        {clienteUser !== null &&
+                        <ButtonGroup>
+                            <Button size="sm" color="primary" tag={Link}
+                                    to={"/reservacion/" + taller.idTaller}>Reservar</Button>
+                            &nbsp;&nbsp;
+                            <Button size="sm" color="secondary" tag={Link}
+                                    to={"/reseñas/" + taller.idTaller}>Ver más</Button>
+                        </ButtonGroup>
+                        }
+                    </td>
+                </tr>
+            }
         });
 
         return (
@@ -215,6 +306,9 @@ class TallerList extends Component {
                             <th width="10%">Mail</th>
                             <th width="10%">Marca</th>
                             <th width="10%">Especializacion</th>
+                            {adminUser &&
+                            <th width="10%">Habilitado</th>
+                            }
                             <th width="10%">Acciones</th>
                         </tr>
                         </thead>

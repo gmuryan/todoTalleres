@@ -48,6 +48,7 @@ public class ClienteController {
     @PostMapping("/cliente")
     ResponseEntity<Cliente> createCliente(@Valid @RequestBody Cliente cliente) throws URISyntaxException {
         log.info("Request to create a client: {}", cliente);
+        cliente.setActivo(true);
         Cliente result = clienteService.save(cliente);
         return ResponseEntity.created(new URI("/api/cliente" + result.getIdCliente())).body(result);
     }
@@ -68,6 +69,20 @@ public class ClienteController {
             clienteService.save(cliente);
             return ResponseEntity.ok().body(cliente);
         }
+    }
+
+    @PutMapping("/borrarCliente/{id}")
+    public ResponseEntity<?> borrarCliente (@PathVariable Long id){
+        log.info("Request to delete cliente: {}", id);
+        clienteService.borradoLogicoById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/habilitarCliente/{id}")
+    public ResponseEntity<?> habilitarCliente (@PathVariable Long id){
+        log.info("Request to habilitar cliente: {}", id);
+        clienteService.habilitarById(id);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/cliente/{id}")

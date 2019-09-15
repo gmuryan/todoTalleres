@@ -73,6 +73,18 @@ public class MecanicoService {
         return result;
     }
 
+    public void borradoLogicoById(Long id){
+        Optional<Mecanico> mecanico = this.findById(id);
+        mecanico.get().setActivo(false);
+        mecanicoRepository.save(mecanico.get());
+    }
+
+    public void habilitarById (Long id){
+        Optional<Mecanico> mecanico = this.findById(id);
+        mecanico.get().setActivo(true);
+        mecanicoRepository.save(mecanico.get());
+    }
+
     public void deleteById (long id){
         mecanicoRepository.deleteById(id);
     }

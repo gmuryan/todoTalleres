@@ -46,6 +46,7 @@ public class MecanicoController {
     @PostMapping("/mecanico")
     ResponseEntity<Mecanico> createMecanico(@Valid @RequestBody Mecanico mecanico) throws URISyntaxException {
         log.info("Request to create a mecanico: {}", mecanico);
+        mecanico.setActivo(true);
         Mecanico result = mecanicoService.save(mecanico);
         return ResponseEntity.created(new URI("/api/mecanico" + result.getIdMecanico())).body(result);
     }
@@ -65,6 +66,20 @@ public class MecanicoController {
             mecanicoService.save(mecanico);
             return ResponseEntity.ok().body(mecanico);
         }
+    }
+
+    @PutMapping("/borrarMecanico/{id}")
+    public ResponseEntity<?> borrarMecanico (@PathVariable Long id){
+        log.info("Request to delete mecanico: {}", id);
+        mecanicoService.borradoLogicoById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/habilitarMecanico/{id}")
+    public ResponseEntity<?> habilitarMecanico (@PathVariable Long id){
+        log.info("Request to habilitar mecanico: {}", id);
+        mecanicoService.habilitarById(id);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/mecanico/{id}")

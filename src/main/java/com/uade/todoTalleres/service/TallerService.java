@@ -204,6 +204,18 @@ public class TallerService {
         return nombresMecanicos;
     }
 
+    public void borradoLogicoById(Long id){
+        Optional<Taller> taller = this.findById(id);
+        taller.get().setActivo(false);
+        tallerRepository.save(taller.get());
+    }
+
+    public void habilitarById(Long id){
+        Optional<Taller> taller = this.findById(id);
+        taller.get().setActivo(true);
+        tallerRepository.save(taller.get());
+    }
+
     public void delete(Taller taller) {
         tallerRepository.delete(taller);
     }

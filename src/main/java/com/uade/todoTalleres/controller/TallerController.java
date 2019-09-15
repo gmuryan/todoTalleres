@@ -113,6 +113,7 @@ public class TallerController {
     @PostMapping("/taller")
     ResponseEntity<Taller> createTaller(@Valid @RequestBody Taller taller) throws URISyntaxException {
         log.info("Request to create a taller: {}", taller);
+        taller.setActivo(true);
         Taller result = tallerService.save(taller);
         return ResponseEntity.created(new URI("/api/taller" + result.getIdTaller())).body(result);
     }
@@ -139,6 +140,21 @@ public class TallerController {
             return ResponseEntity.ok().body(taller);
         }
     }
+
+    @PutMapping("/borrarTaller/{id}")
+    public ResponseEntity<?> borrarTaller (@PathVariable Long id){
+        log.info("Request to delete taller: {}", id);
+        tallerService.borradoLogicoById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/habilitarTaller/{id}")
+    public ResponseEntity<?> habilitarTaller (@PathVariable Long id){
+        log.info("Request to habilitar taller: {}", id);
+        tallerService.habilitarById(id);
+        return ResponseEntity.ok().build();
+    }
+
 
     @DeleteMapping("/taller/{id}")
     public ResponseEntity<?> deleteTaller (@PathVariable Long id){

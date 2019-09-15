@@ -29,7 +29,7 @@ public interface ReparacionRepository extends JpaRepository<Reparacion, Long> {
             "and id_taller = ?3) or (fecha_devolucion = ?1 and hora_devolucion > ?2 and id_taller = ?3 and id_estado = 4) or (fecha_reserva = DATE(?1) and id_taller = ?3 and id_estado = 1)", nativeQuery = true)
     Integer validateEspacio (Date fecha, LocalTime hora, Long id);
 
-    @Query(value = "select count(*) from mecanico m where m.id_mecanico NOT IN (select m.id_mecanico from reparacion r  inner join reparacion_mecanicos rm ON r.id_reparacion = rm.id_reparacion  inner join mecanico m ON rm.id_mecanico = m.id_mecanico where (id_estado = 4 and fecha_devolucion > ?1 and r.id_taller = ?3) or (id_estado = 4 and fecha_devolucion = ?1 and hora_devolucion > ?2 and r.id_taller = ?3) or (fecha_reserva = DATE(?1) and hora_reserva = ?2 and r.id_taller = ?3 and id_estado = 1))", nativeQuery = true)
+    @Query(value = "select count(*) from mecanico m where m.activo = 1 and m.id_mecanico NOT IN (select m.id_mecanico from reparacion r  inner join reparacion_mecanicos rm ON r.id_reparacion = rm.id_reparacion  inner join mecanico m ON rm.id_mecanico = m.id_mecanico where (id_estado = 4 and fecha_devolucion > ?1 and r.id_taller = ?3) or (id_estado = 4 and fecha_devolucion = ?1 and hora_devolucion > ?2 and r.id_taller = ?3) or (fecha_reserva = DATE(?1) and hora_reserva = ?2 and r.id_taller = ?3 and id_estado = 1))", nativeQuery = true)
     Integer validateMecanicos (Date fecha, LocalTime hora, Long id);
 
     @Modifying

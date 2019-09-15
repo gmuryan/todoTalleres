@@ -45,4 +45,16 @@ public class ClienteService {
     public void deleteById (long id){
         clienteRepository.deleteById(id);
     }
+
+    public void borradoLogicoById(Long id){
+        Optional<Cliente> cliente = this.findById(id);
+        cliente.get().setActivo(false);
+        clienteRepository.save(cliente.get());
+    }
+
+    public void habilitarById (Long id){
+        Optional<Cliente> cliente = this.findById(id);
+        cliente.get().setActivo(true);
+        clienteRepository.save(cliente.get());
+    }
 }

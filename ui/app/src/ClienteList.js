@@ -44,23 +44,39 @@ class ClienteList extends Component {
     }
 
     async remove(id) {
-        await fetch(`/api/cliente/${id}`, {
-            method: 'DELETE',
+        await fetch(`/api/borrarCliente/${id}`, {
+            method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
         }).then(() => {
-            let updatedClientes = [...this.state.clientes].filter(i => i.idCliente !== id);
-            this.setState({clientes: updatedClientes});
+            fetch('api/clientes')
+                .then(response => response.json())
+                .then(data => this.setState({clientes: data}))
             this.dialogEliminado();
         });
     }
 
-    dialogEliminado(){
+    async habilitar(id) {
+        await fetch(`/api/habilitarCliente/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(() => {
+            fetch('api/clientes')
+                .then(response => response.json())
+                .then(data => this.setState({clientes: data}))
+            this.dialogHabilitado();
+        });
+    }
+
+    dialogHabilitado(){
         confirmAlert({
             title: 'Operacion Exitosa',
-            message: 'Cliente Eliminado',
+            message: 'Cliente Habilitado',
             buttons: [
                 {
                     label: 'Aceptar'
@@ -69,7 +85,20 @@ class ClienteList extends Component {
         })
     }
 
-    dialog(cliente) {
+
+    dialogEliminado(){
+        confirmAlert({
+            title: 'Operacion Exitosa',
+            message: 'Cliente Deshabilitado',
+            buttons: [
+                {
+                    label: 'Aceptar'
+                }
+            ]
+        })
+    }
+
+    dialogDeshabilitar(cliente) {
         confirmAlert({
             title: 'Confirmar',
             message: 'Esta seguro de realizar esta accion?',
@@ -77,6 +106,22 @@ class ClienteList extends Component {
                 {
                     label: 'Si',
                     onClick: () => this.remove(cliente.idCliente)
+                },
+                {
+                    label: 'No'
+                }
+            ]
+        })
+    };
+
+    dialogHabilitar(cliente) {
+        confirmAlert({
+            title: 'Confirmar',
+            message: 'Esta seguro de realizar esta accion?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => this.habilitar(cliente.idCliente)
                 },
                 {
                     label: 'No'
@@ -144,12 +189,18 @@ class ClienteList extends Component {
                 <td>{cliente.apellido}</td>
                 <td>{cliente.telefono}</td>
                 <td>{cliente.mail}</td>
+                <td>{cliente.activo ? "Si" : "No"}</td>
                 <td>
                     <ButtonGroup>
                         <Button size="sm" color="primary" tag={Link}
                                 to={"/clientes/" + cliente.idCliente}>Editar</Button>
                         &nbsp;&nbsp;
-                        <Button size="sm" color="danger" onClick={() => this.dialog(cliente)}>Eliminar</Button>
+                        {cliente.activo &&
+                        <Button size="sm" color="danger" onClick={() => this.dialogDeshabilitar(cliente)}>Deshabilitar</Button>
+                        }
+                        {!cliente.activo &&
+                        <Button size="sm" color="primary" onClick={() => this.dialogHabilitar(cliente)}>Habilitar</Button>
+                        }
                     </ButtonGroup>
                 </td>
             </tr>
@@ -176,6 +227,7 @@ class ClienteList extends Component {
                             <th width="20%">Apellido</th>
                             <th width="20%">Telefono</th>
                             <th width="20%">Mail</th>
+                            <th width="10%">Habilitado</th>
                             <th width="10%">Acciones</th>
                         </tr>
                         </thead>

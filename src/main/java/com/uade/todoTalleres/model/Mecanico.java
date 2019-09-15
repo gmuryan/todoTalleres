@@ -40,6 +40,9 @@ public class Mecanico {
     @ManyToMany(fetch =FetchType.LAZY, mappedBy = "mecanicos")
     private List<Reparacion> reparaciones;
 
+    @Column
+    private boolean activo;
+
     public Mecanico(){
 
     }
@@ -52,12 +55,13 @@ public class Mecanico {
         return mecanico;
     }
 
-    public Mecanico(String nombre, String apellido, String telefono, String mail, Taller taller) {
+    public Mecanico(String nombre, String apellido, String telefono, String mail, Taller taller, boolean activo) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.mail = mail;
         this.taller = taller;
+        this.activo = activo;
     }
 
     public Mecanico(Long idMecanico, String nombre, String apellido, String telefono, String mail, Taller taller) {
@@ -132,5 +136,13 @@ public class Mecanico {
 
     public void setReparaciones(List<Reparacion> reparaciones) {
         this.reparaciones = reparaciones;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 }

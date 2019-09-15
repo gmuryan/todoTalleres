@@ -34,6 +34,9 @@ public class Cliente {
     @Transient
     private String repeatPassword;
 
+    @Column
+    private boolean activo;
+
     public Cliente(){
 
     }
@@ -46,12 +49,13 @@ public class Cliente {
         return cliente;
     }
 
-    public Cliente(String nombre, String apellido, String telefono, String mail, String password) {
+    public Cliente(String nombre, String apellido, String telefono, String mail, String password, boolean activo) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.mail = mail;
         this.password = password;
+        this.activo = activo;
     }
 
     public Cliente(Long idCliente, String nombre, String apellido, String telefono, String mail, String password) {
@@ -109,5 +113,13 @@ public class Cliente {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 }

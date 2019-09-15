@@ -71,7 +71,8 @@ public class Taller {
     @Transient
     private String repeatPassword;
 
-
+    @Column
+    private boolean activo;
 
     public Taller(){
 
@@ -85,7 +86,7 @@ public class Taller {
         return taller;
     }
 
-    public Taller(String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados, String password, String descripcionTaller) {
+    public Taller(String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados, String password, String descripcionTaller, boolean activo) {
         this.nombre = nombre;
         this.telefono = telefono;
         this.barrio = barrio;
@@ -100,6 +101,7 @@ public class Taller {
         this.retrasosContemplados = retrasosContemplados;
         this.password = password;
         this.descripcionTaller = descripcionTaller;
+        this.activo = activo;
     }
 
     public Taller(Long idTaller, String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados, String password, String descripcionTaller) {
@@ -238,5 +240,13 @@ public class Taller {
 
     public void setDescripcionTaller(String descripcionTaller) {
         this.descripcionTaller = descripcionTaller;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 }

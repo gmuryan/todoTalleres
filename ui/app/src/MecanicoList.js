@@ -45,29 +45,39 @@ class MecanicoList extends Component {
     }
 
     async remove(id) {
-        await fetch(`/api/mecanico/${id}`, {
-            method: 'DELETE',
+        await fetch(`/api/borrarMecanico/${id}`, {
+            method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
-        }).then((response) => {
-            console.log(response);
-            if (response.ok){
-                let updatedMecanicos = [...this.state.mecanicos].filter(i => i.idMecanico !== id);
-                this.setState({mecanicos: updatedMecanicos});
-                this.dialogEliminado();
-            }else{
-                this.dialogFallaValidacion();
-            }
-
+        }).then(() => {
+            fetch('api/mecanicos')
+                .then(response => response.json())
+                .then(data => this.setState({mecanicos: data}))
+            this.dialogEliminado();
         });
     }
 
-    dialogFallaValidacion(){
+    async habilitar(id) {
+        await fetch(`/api/habilitarMecanico/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(() => {
+            fetch('api/mecanicos')
+                .then(response => response.json())
+                .then(data => this.setState({mecanicos: data}))
+            this.dialogHabilitado();
+        });
+    }
+
+    dialogHabilitado(){
         confirmAlert({
-            title: 'Operacion Fallida',
-            message: 'No se pudo eliminar el mecanico porque tiene reparaciones asignadas',
+            title: 'Operacion Exitosa',
+            message: 'Mecanico Habilitado',
             buttons: [
                 {
                     label: 'Aceptar'
@@ -79,7 +89,7 @@ class MecanicoList extends Component {
     dialogEliminado(){
         confirmAlert({
             title: 'Operacion Exitosa',
-            message: 'Mecanico Eliminado',
+            message: 'Mecanico Deshabilitado',
             buttons: [
                 {
                     label: 'Aceptar'
@@ -88,7 +98,7 @@ class MecanicoList extends Component {
         })
     }
 
-    dialog(mecanico) {
+    dialogDeshabilitar(mecanico) {
         confirmAlert({
             title: 'Confirmar',
             message: 'Esta seguro de realizar esta accion?',
@@ -96,6 +106,22 @@ class MecanicoList extends Component {
                 {
                     label: 'Si',
                     onClick: () => this.remove(mecanico.idMecanico)
+                },
+                {
+                    label: 'No'
+                }
+            ]
+        })
+    };
+
+    dialogHabilitar(mecanico) {
+        confirmAlert({
+            title: 'Confirmar',
+            message: 'Esta seguro de realizar esta accion?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => this.habilitar(mecanico.idMecanico)
                 },
                 {
                     label: 'No'
@@ -163,12 +189,18 @@ class MecanicoList extends Component {
                 <td>{mecanico.apellido}</td>
                 <td>{mecanico.telefono}</td>
                 <td>{mecanico.mail}</td>
+                <td>{mecanico.activo ? "Si" : "No"}</td>
                 <td>
                     <ButtonGroup>
                         <Button size="sm" color="primary" tag={Link}
                                 to={"/mecanicos/" + mecanico.idMecanico}>Editar</Button>
                         &nbsp;&nbsp;
-                        <Button size="sm" color="danger" onClick={() => this.dialog(mecanico)}>Eliminar</Button>
+                        {mecanico.activo &&
+                        <Button size="sm" color="danger" onClick={() => this.dialogDeshabilitar(mecanico)}>Deshabilitar</Button>
+                        }
+                        {!mecanico.activo &&
+                        <Button size="sm" color="primary" onClick={() => this.dialogHabilitar(mecanico)}>Habilitar</Button>
+                        }
                     </ButtonGroup>
                 </td>
             </tr>
@@ -195,6 +227,7 @@ class MecanicoList extends Component {
                             <th width="20%">Apellido</th>
                             <th width="20%">Telefono</th>
                             <th width="20%">Mail</th>
+                            <th width="10%">Habilitado</th>
                             <th width="10%">Acciones</th>
                         </tr>
                         </thead>
