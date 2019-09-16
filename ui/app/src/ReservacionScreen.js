@@ -408,6 +408,7 @@ class ReservacionScreen extends Component {
         var mecanicoList;
         if (tallerAux !== null) {
             mecanicoList = mecanicos.map(mecanico => {
+                if (mecanico.activo){
                 return <tr key={mecanico.idMecanico}>
                     <td>{mecanico.idMecanico}</td>
                     <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
@@ -427,6 +428,7 @@ class ReservacionScreen extends Component {
                         </ButtonGroup>
                     </td>
                 </tr>
+                }
             });
         }
         let newOptionsEstados;

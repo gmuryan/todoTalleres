@@ -26,7 +26,8 @@ class ReparacionEdit extends Component {
         descripcionReparacion: '',
         patenteAuto: '',
         modeloAuto: '',
-        nuevoPresupuesto: ''
+        nuevoPresupuesto: '',
+        cliente: ''
     };
 
 
@@ -256,6 +257,7 @@ class ReparacionEdit extends Component {
                     <td>{mecanico.apellido}</td>
                     <td>{mecanico.telefono}</td>
                     <td>{mecanico.mail}</td>
+                    <td>{mecanico.activo ? "Si" : "No"}</td>
                     {tallerUser !== null && (descEstado === "En diagnostico" || descEstado === "En reparacion") &&
                     <td>
                         <ButtonGroup>
@@ -281,10 +283,11 @@ class ReparacionEdit extends Component {
                     <td>{mecanico.apellido}</td>
                     <td>{mecanico.telefono}</td>
                     <td>{mecanico.mail}</td>
+                    <td>{mecanico.activo ? "Si" : "No"}</td>
                     {tallerUser !== null && (descEstado === "En diagnostico" || descEstado === "En reparacion") &&
                     <td>
                         <ButtonGroup>
-                            {!item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
+                            {!item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) && mecanico.activo &&
                             <Button size="sm" color="success"
                                     onClick={() => this.asignarMecanico(mecanico)}>Asignar</Button>
                             }
@@ -485,6 +488,7 @@ class ReparacionEdit extends Component {
                             <th width="20%">Apellido</th>
                             <th width="20%">Telefono</th>
                             <th width="20%">Mail</th>
+                            <th width="20%">Habilitado</th>
                             {(descEstado === "En diagnostico" || descEstado === "En reparacion") &&
                             <th width="10%">Acciones</th>
                             }
@@ -505,7 +509,7 @@ class ReparacionEdit extends Component {
                     <br></br>
                     }
                     <FormGroup>
-                        {(tallerUser !== null && descEstado !== "Pendiente Confirmacion" && descEstado !== "Finalizado" && descEstado !== "Cancelado") || (clienteUser !== null && descEstado === "Pendiente Confirmacion") || (item.cliente.apellido === "Externo" && descEstado === "Pendiente Confirmacion") &&
+                        {(tallerUser !== null && descEstado !== "Pendiente Confirmacion" && descEstado !== "Finalizado" && descEstado !== "Cancelado") || (clienteUser !== null && descEstado === "Pendiente Confirmacion") &&
                         <Button color="primary" type="submit">Confirmar</Button>
                         }{' '}
                         {tallerUser !== null && descEstado === "En reparacion" &&

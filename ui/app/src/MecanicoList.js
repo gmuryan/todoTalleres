@@ -199,7 +199,7 @@ class MecanicoList extends Component {
                         <Button size="sm" color="danger" onClick={() => this.dialogDeshabilitar(mecanico)}>Deshabilitar</Button>
                         }
                         {!mecanico.activo &&
-                        <Button size="sm" color="primary" onClick={() => this.dialogHabilitar(mecanico)}>Habilitar</Button>
+                        <Button size="sm" color="success" onClick={() => this.dialogHabilitar(mecanico)}>Habilitar</Button>
                         }
                     </ButtonGroup>
                 </td>
