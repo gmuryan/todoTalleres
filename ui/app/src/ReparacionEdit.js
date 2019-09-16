@@ -277,28 +277,30 @@ class ReparacionEdit extends Component {
             });
         } else {
             mecanicoList = mecanicosTaller.map(mecanico => {
-                return <tr key={mecanico.idMecanico}>
-                    <td>{mecanico.idMecanico}</td>
-                    <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
-                    <td>{mecanico.apellido}</td>
-                    <td>{mecanico.telefono}</td>
-                    <td>{mecanico.mail}</td>
-                    <td>{mecanico.activo ? "Si" : "No"}</td>
-                    {tallerUser !== null && (descEstado === "En diagnostico" || descEstado === "En reparacion") &&
-                    <td>
-                        <ButtonGroup>
-                            {!item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) && mecanico.activo &&
-                            <Button size="sm" color="success"
-                                    onClick={() => this.asignarMecanico(mecanico)}>Asignar</Button>
-                            }
-                            {item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
-                            <Button size="sm" color="danger"
-                                    onClick={() => this.desasignarMecanico(mecanico)}>Desasignar</Button>
-                            }
-                        </ButtonGroup>
-                    </td>
-                    }
-                </tr>
+                if (mecanico.activo || item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico))) {
+                    return <tr key={mecanico.idMecanico}>
+                        <td>{mecanico.idMecanico}</td>
+                        <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
+                        <td>{mecanico.apellido}</td>
+                        <td>{mecanico.telefono}</td>
+                        <td>{mecanico.mail}</td>
+                        <td>{mecanico.activo ? "Si" : "No"}</td>
+                        {tallerUser !== null && (descEstado === "En diagnostico" || descEstado === "En reparacion") &&
+                        <td>
+                            <ButtonGroup>
+                                {!item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) && mecanico.activo &&
+                                <Button size="sm" color="success"
+                                        onClick={() => this.asignarMecanico(mecanico)}>Asignar</Button>
+                                }
+                                {item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
+                                <Button size="sm" color="danger"
+                                        onClick={() => this.desasignarMecanico(mecanico)}>Desasignar</Button>
+                                }
+                            </ButtonGroup>
+                        </td>
+                        }
+                    </tr>
+                }
             });
         }
         return <div>
@@ -509,7 +511,7 @@ class ReparacionEdit extends Component {
                     <br></br>
                     }
                     <FormGroup>
-                        {(tallerUser !== null && descEstado !== "Pendiente Confirmacion" && descEstado !== "Finalizado" && descEstado !== "Cancelado") || (clienteUser !== null && descEstado === "Pendiente Confirmacion") &&
+                        {((tallerUser !== null && descEstado !== "Pendiente Confirmacion" && descEstado !== "Finalizado" && descEstado !== "Cancelado") || (clienteUser !== null && descEstado === "Pendiente Confirmacion")) &&
                         <Button color="primary" type="submit">Confirmar</Button>
                         }{' '}
                         {tallerUser !== null && descEstado === "En reparacion" &&
