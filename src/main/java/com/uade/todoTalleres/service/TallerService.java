@@ -138,7 +138,7 @@ public class TallerService {
         HashMap<Integer, Integer> totalesPorMes = new HashMap<>();
         List<Reparacion> reparaciones = reparacionService.findAllByTaller(id);
         for (Reparacion reparacion : reparaciones){
-            Date aux = reparacion.getFechaDevolucion();
+            Date aux = reparacion.getFechaReserva();
             Calendar calendar = Calendar.getInstance();
             Calendar calendarAux = Calendar.getInstance();
             calendar.setTime(aux);

@@ -1,9 +1,11 @@
 package com.uade.todoTalleres.service;
 
 import com.uade.todoTalleres.model.Cliente;
+import com.uade.todoTalleres.model.Reparacion;
 import com.uade.todoTalleres.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,5 +58,17 @@ public class ClienteService {
         Optional<Cliente> cliente = this.findById(id);
         cliente.get().setActivo(true);
         clienteRepository.save(cliente.get());
+    }
+
+    public List<Long>  getReparacionesNuevoPresupuesto (Long idCliente){
+        List<Object[]> objs = clienteRepository.getReparacionesNuevoPresupuesto(idCliente);
+        Long idReparacion = null;
+        List<Long> idsReparaciones = new ArrayList<>();
+        for (Object obj : objs){
+            Object[] fields = (Object[]) obj;
+            idReparacion = Long.parseLong(fields[0].toString());
+            idsReparaciones.add(idReparacion);
+        }
+        return idsReparaciones;
     }
 }

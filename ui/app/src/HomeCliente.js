@@ -11,6 +11,9 @@ class HomeCliente extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            nuevosPresupuestos: []
+        };
         const cliente = JSON.parse(localStorage.getItem("clienteUser"));
         if (cliente === null){
             localStorage.clear();
@@ -18,17 +21,47 @@ class HomeCliente extends Component {
         }
     }
 
+    async componentDidMount() {
+        const cliente = JSON.parse(localStorage.getItem("clienteUser"));
+        if (cliente !== null) {
+            const nuevosPresups = await (await fetch(`/api/nuevoPresupuesto/${cliente.idCliente}`)).json();
+            this.setState({nuevosPresupuestos: nuevosPresups});
+            if (this.state.nuevosPresupuestos.length > 0){
+                for (const [index, value] of this.state.nuevosPresupuestos.entries()) {
+                    this.dialogNuevoPresupuesto(value);
+                }
+            }
+        }
+    }
+
+    async updateNuevoPresupuesto(value){
+        await fetch(`/api/updateNuevoPresupuesto/${value}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+    }
+
+    dialogNuevoPresupuesto(value){
+        confirmAlert({
+            title: 'Nuevo Presupuesto',
+            message: 'Hay un nuevo presupuesto en la reparacion con ID ' + value,
+            buttons: [
+                {
+                    label: 'Aceptar',
+                    onClick: () => this.updateNuevoPresupuesto(value)
+                }
+            ]
+        })
+    }
 
     render() {
         return (
             <div>
                 <ClientesNavbar/>
                 <Container fluid>
-                    {/*    <Button color="link"><Link to="/proveedores">Manage Suppliers</Link></Button>*/}
-                    {/*          <div className="container">*/}
-                    {/*  <button onClick={this.submit}>Confirm dialog</button>*/}
-                    {/*  <p>My name is: {this.props.mssg}</p>*/}
-                    {/*</div>*/}
                 </Container>
             </div>
         );

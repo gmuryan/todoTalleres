@@ -112,4 +112,27 @@ public class ReparacionService {
         reparacionEntity.setEstadoReparacion(estado.get());
         return reparacionRepository.save(reparacionEntity);
     }
+
+    public Reparacion guardarCambios(Reparacion reparacion){
+        Optional<Reparacion> r = this.findById(reparacion.getIdReparacion());
+        if (r.get().getEstadoReparacion().getDescripcion().equalsIgnoreCase("En reparacion")){
+            r.get().setMecanicos(reparacion.getMecanicos());
+            r.get().setDescripcionReparacion(reparacion.getDescripcionReparacion());
+            r.get().setDescripcionProblemaTaller(reparacion.getDescripcionProblemaTaller());
+            if (reparacion.isNuevoPresupuesto()){
+                r.get().setNuevoPresupuesto(reparacion.isNuevoPresupuesto());
+                r.get().setImporteTotal(reparacion.getImporteTotal());
+                Optional<Estado> PendienteConfirmacion = estadoService.findById(3);
+                r.get().setEstadoReparacion(PendienteConfirmacion.get());
+            }
+        }
+        return reparacionRepository.save(r.get());
+    }
+
+    public Optional<Reparacion> updateNuevoPresupuesto(Long id){
+        Optional<Reparacion> r = this.findById(id);
+        r.get().setNuevoPresupuesto(false);
+        this.save(r.get());
+        return r;
+    }
 }

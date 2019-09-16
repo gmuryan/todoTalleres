@@ -17,7 +17,7 @@ class ClienteList extends Component {
             apellido: '',
             mail: '',
             currentPage: 1,
-            todosPerPage: 10
+            todosPerPage: 5
         };
         this.handleClick = this.handleClick.bind(this);
         this.remove = this.remove.bind(this);
@@ -199,7 +199,7 @@ class ClienteList extends Component {
                         <Button size="sm" color="danger" onClick={() => this.dialogDeshabilitar(cliente)}>Deshabilitar</Button>
                         }
                         {!cliente.activo &&
-                        <Button size="sm" color="primary" onClick={() => this.dialogHabilitar(cliente)}>Habilitar</Button>
+                        <Button size="sm" color="success" onClick={() => this.dialogHabilitar(cliente)}>Habilitar</Button>
                         }
                     </ButtonGroup>
                 </td>

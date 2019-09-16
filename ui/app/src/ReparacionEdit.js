@@ -25,7 +25,8 @@ class ReparacionEdit extends Component {
         descripcionProblemaTaller: '',
         descripcionReparacion: '',
         patenteAuto: '',
-        modeloAuto: ''
+        modeloAuto: '',
+        nuevoPresupuesto: ''
     };
 
 
@@ -36,10 +37,13 @@ class ReparacionEdit extends Component {
             errors: {},
             mecanicosTaller: [],
             flagImporte: false,
-            endDate: null
+            endDate: null,
+            flagMostrarPresupuesto: false,
+            flagNuevoPresupuesto: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.guardarReparacion = this.guardarReparacion.bind(this);
         const taller = JSON.parse(localStorage.getItem("tallerUser"));
         const cliente = JSON.parse(localStorage.getItem("clienteUser"));
         if (taller === null && cliente === null) {
@@ -52,6 +56,9 @@ class ReparacionEdit extends Component {
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const reparacion = await (await fetch(`/api/reparacion/${this.props.match.params.id}`)).json();
         this.setState({item: reparacion});
+        if (this.state.item.estadoReparacion.descripcion === "En diagnostico") {
+            this.setState({flagMostrarPresupuesto: true});
+        }
         if (this.state.item.importeTotal !== null)
             this.setState({flagImporte: true});
         if (tallerUser !== null) {
@@ -62,17 +69,49 @@ class ReparacionEdit extends Component {
 
     handleChange(event) {
         const target = event.target;
-        const value = target.value;
         const name = target.name;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
         let item = {...this.state.item};
         item[name] = value;
-        this.setState({item});
+        if (name !== "nuevoPresupuesto") {
+            this.setState({item});
+        } else {
+            this.setState(
+                prevState => ({
+                    item: {
+                        ...prevState.item,
+                        nuevoPresupuesto: value
+                    }
+                })
+            );
+        }
+        if (name === 'nuevoPresupuesto') {
+            this.setState({
+                flagMostrarPresupuesto: !this.state.flagMostrarPresupuesto,
+                flagNuevoPresupuesto: !this.state.flagNuevoPresupuesto
+            });
+        }
     }
 
     handleDate(date) {
         this.setState({
             endDate: date
         });
+    }
+
+    async guardarReparacion() {
+        if (this.handleValidation()) {
+            const {item} = this.state;
+            await fetch('/api/reparacion', {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item),
+            });
+            this.dialogCreado();
+        }
     }
 
     toCurrency(number) {
@@ -110,7 +149,7 @@ class ReparacionEdit extends Component {
                 formIsValid = false;
                 errors["descripcionProblemaTaller"] = "No puede estar vacio";
             }
-            if(fields["mecanicos"].length === 0){
+            if (fields["mecanicos"].length === 0) {
                 formIsValid = false;
                 errors["mecanicos"] = "Debe asignarse al menos un mecanico";
             }
@@ -137,6 +176,10 @@ class ReparacionEdit extends Component {
                 formIsValid = false;
                 errors["descripcionReparacion"] = "No puede estar vacio";
             }
+            if (fields["mecanicos"].length === 0) {
+                formIsValid = false;
+                errors["mecanicos"] = "Debe asignarse al menos un mecanico";
+            }
         }
 
 
@@ -150,16 +193,16 @@ class ReparacionEdit extends Component {
         return day !== 0 && day !== 6
     }
 
-    asignarMecanico(mecanico){
+    asignarMecanico(mecanico) {
         let itemReparacion = {...this.state.item};
         itemReparacion.mecanicos.push(mecanico);
-        this.setState({item : itemReparacion});
+        this.setState({item: itemReparacion});
     }
 
-    desasignarMecanico(mecanico){
+    desasignarMecanico(mecanico) {
         let itemReparacion = {...this.state.item};
         itemReparacion.mecanicos = itemReparacion.mecanicos.filter(mec => mec.idMecanico !== mecanico.idMecanico);
-        this.setState({item : itemReparacion});
+        this.setState({item: itemReparacion});
     }
 
     dialogCreado() {
@@ -205,27 +248,32 @@ class ReparacionEdit extends Component {
         const title = <h2>Detalles de la Reparacion</h2>;
         const descEstado = item.estadoReparacion.descripcion;
         var mecanicoList;
-        if (tallerUser !== null && descEstado !== "En diagnostico") {
-             mecanicoList = item.mecanicos.map(mecanico => {
+        if (tallerUser !== null && descEstado !== "En diagnostico" && descEstado !== "En reparacion") {
+            mecanicoList = item.mecanicos.map(mecanico => {
                 return <tr key={mecanico.idMecanico}>
                     <td>{mecanico.idMecanico}</td>
                     <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
                     <td>{mecanico.apellido}</td>
                     <td>{mecanico.telefono}</td>
                     <td>{mecanico.mail}</td>
-                    {tallerUser !== null && descEstado === "En diagnostico" &&
+                    {tallerUser !== null && (descEstado === "En diagnostico" || descEstado === "En reparacion") &&
                     <td>
                         <ButtonGroup>
-                            <Button size="sm" color="primary" tag={Link}
-                                    to={"/mecanicos/" + mecanico.idMecanico}>Asignar</Button>
+                            {!item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
+                            <Button size="sm" color="success"
+                                    onClick={() => this.asignarMecanico(mecanico)}>Asignar</Button>
+                            }
                             &nbsp;&nbsp;
-                            <Button size="sm" color="danger" onClick={() => this.dialog(mecanico)}>Desasignar</Button>
+                            {item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
+                            <Button size="sm" color="danger"
+                                    onClick={() => this.desasignarMecanico(mecanico)}>Desasignar</Button>
+                            }
                         </ButtonGroup>
                     </td>
                     }
                 </tr>
             });
-        }else{
+        } else {
             mecanicoList = mecanicosTaller.map(mecanico => {
                 return <tr key={mecanico.idMecanico}>
                     <td>{mecanico.idMecanico}</td>
@@ -233,14 +281,16 @@ class ReparacionEdit extends Component {
                     <td>{mecanico.apellido}</td>
                     <td>{mecanico.telefono}</td>
                     <td>{mecanico.mail}</td>
-                    {tallerUser !== null && descEstado === "En diagnostico" &&
+                    {tallerUser !== null && (descEstado === "En diagnostico" || descEstado === "En reparacion") &&
                     <td>
                         <ButtonGroup>
-                            {!item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico))  &&
-                            <Button size="sm" color="primary" onClick={() => this.asignarMecanico(mecanico)}>Asignar</Button>
+                            {!item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
+                            <Button size="sm" color="success"
+                                    onClick={() => this.asignarMecanico(mecanico)}>Asignar</Button>
                             }
                             {item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
-                            <Button size="sm" color="danger" onClick={() => this.desasignarMecanico(mecanico)}>Desasignar</Button>
+                            <Button size="sm" color="danger"
+                                    onClick={() => this.desasignarMecanico(mecanico)}>Desasignar</Button>
                             }
                         </ButtonGroup>
                     </td>
@@ -321,29 +371,38 @@ class ReparacionEdit extends Component {
                     </div>
                     }
                     <div className="row">
-                        {this.state.flagImporte &&
-                        <FormGroup className="col-md-6 mb-3">
+                        {this.state.flagImporte && !this.state.flagMostrarPresupuesto &&
+                        <FormGroup className={descEstado === "En reparacion" ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
                             <Label for="importeTotal">Importe</Label>
                             <Input
-                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
+                                readOnly={!this.state.flagMostrarPresupuesto}
                                 type="text" name="importeTotal" id="importeTotal"
                                 value={item.importeTotal ? "$" + this.toCurrency(item.importeTotal) : ''}
                                 onChange={this.handleChange} autoComplete="importeTotal"/>
                             <span className="error">{this.state.errors["importeTotal"]}</span>
                         </FormGroup>
                         }
-                        {!this.state.flagImporte &&
-                        <FormGroup className="col-md-6 mb-3">
+                        {(!this.state.flagImporte || this.state.flagMostrarPresupuesto) &&
+                        <FormGroup className={descEstado === "En reparacion" ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
                             <Label for="importeTotal">Importe</Label>
                             <Input
-                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
+                                readOnly={!this.state.flagMostrarPresupuesto}
                                 type="text" name="importeTotal" id="importeTotal"
                                 value={item.importeTotal || ''}
                                 onChange={this.handleChange} autoComplete="importeTotal"/>
                             <span className="error">{this.state.errors["importeTotal"]}</span>
                         </FormGroup>
                         }
-                        <FormGroup className="col-md-6 mb-3">
+                        {descEstado === "En reparacion" &&
+                        <FormGroup className="col-md-4 mb-3">
+                            <Label for="nuevoPresupuesto">Nuevo Presupuesto</Label>
+                            <br></br>
+                            <Input type="checkbox" className="input-big" name="nuevoPresupuesto" id="nuevoPresupuesto"
+                                   checked={this.state.flagNuevoPresupuesto} value={this.state.flagNuevoPresupuesto}
+                                   onChange={this.handleChange}/>
+                        </FormGroup>
+                        }
+                        <FormGroup className={descEstado === "En reparacion" ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
                             <Label for="estadoReparacion">Estado</Label>
                             <Input readOnly type="text" name="estadoReparacion" id="estadoReparacion"
                                    value={item.estadoReparacion.descripcion || ''}
@@ -426,7 +485,7 @@ class ReparacionEdit extends Component {
                             <th width="20%">Apellido</th>
                             <th width="20%">Telefono</th>
                             <th width="20%">Mail</th>
-                            {descEstado === "En diagnostico" &&
+                            {(descEstado === "En diagnostico" || descEstado === "En reparacion") &&
                             <th width="10%">Acciones</th>
                             }
                         </tr>
@@ -446,8 +505,11 @@ class ReparacionEdit extends Component {
                     <br></br>
                     }
                     <FormGroup>
-                        {tallerUser !== null && descEstado !== "Pendiente Confirmacion" && descEstado !== "Finalizado" && descEstado !== "Cancelado" &&
+                        {(tallerUser !== null && descEstado !== "Pendiente Confirmacion" && descEstado !== "Finalizado" && descEstado !== "Cancelado") || (clienteUser !== null && descEstado === "Pendiente Confirmacion") &&
                         <Button color="primary" type="submit">Confirmar</Button>
+                        }{' '}
+                        {tallerUser !== null && descEstado === "En reparacion" &&
+                        <Button color="info" onClick={this.guardarReparacion}>Guardar</Button>
                         }{' '}
                         <Button color="secondary" tag={Link} to="/reparaciones">Cancelar</Button>
                     </FormGroup>

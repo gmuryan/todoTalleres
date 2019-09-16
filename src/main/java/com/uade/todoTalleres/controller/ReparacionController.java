@@ -115,7 +115,7 @@ public class ReparacionController {
     @PutMapping("/reparacion")
     ResponseEntity<Reparacion> updateReparacion(@Valid @RequestBody Reparacion reparacion){
         log.info("Request to update reparacion: {}", reparacion);
-        Reparacion result = reparacionService.save(reparacion);
+        Reparacion result = reparacionService.guardarCambios(reparacion);
         return ResponseEntity.ok().body(result);
     }
 
@@ -124,6 +124,13 @@ public class ReparacionController {
         log.info("Request to cancel reparacion: {}", id);
         Optional<Reparacion> result = reparacionService.findById(id);
         reparacionService.cancelarTurno(result.get());
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PutMapping("/updateNuevoPresupuesto/{id}")
+    ResponseEntity<Reparacion> updateNuevoPresupuesto(@PathVariable Long id){
+        log.info("Request to update reparacion: {}", id);
+        Optional<Reparacion> result = reparacionService.updateNuevoPresupuesto(id);
         return ResponseEntity.ok().body(result.get());
     }
 

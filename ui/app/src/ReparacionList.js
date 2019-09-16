@@ -32,7 +32,7 @@ class ReparacionList extends Component {
             cliente: '',
             estado: '',
             currentPage: 1,
-            todosPerPage: 10
+            todosPerPage: 5
         };
         this.handleClick = this.handleClick.bind(this);
         this.remove = this.remove.bind(this);
@@ -186,7 +186,7 @@ class ReparacionList extends Component {
                                 to={"/reparaciones/" + reparacion.idReparacion}>Editar</Button>
                         }
                         {clienteUser !== null &&
-                        <Button size="sm" color="primary" tag={Link}
+                        <Button size="sm" color="info" tag={Link}
                                 to={"/reparaciones/" + reparacion.idReparacion}>Ver más</Button>
                         }
                         &nbsp;&nbsp;

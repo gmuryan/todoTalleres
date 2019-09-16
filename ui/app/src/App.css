@@ -44,6 +44,13 @@
     background-color: #e9ecef;
 }
 
+input[type=checkbox]{
+    position: relative;
+    left: 20px;
+    width: 20px;
+    height: 15px;
+}
+
 .error{
     margin-left: 5px;
     font-size: 13px;

@@ -22,7 +22,7 @@ class MecanicoList extends Component {
             apellido: '',
             mail: '',
             currentPage: 1,
-            todosPerPage: 10
+            todosPerPage: 5
         };
         this.handleClick = this.handleClick.bind(this);
         this.remove = this.remove.bind(this);

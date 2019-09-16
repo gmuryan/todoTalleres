@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -43,6 +44,11 @@ public class ClienteController {
         Optional<Cliente> cliente = clienteService.findClienteByMail(mail);
         return cliente.map(response -> ResponseEntity.ok().body(response))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/nuevoPresupuesto/{id}")
+    List<Long> getReparacionesNuevoPresupuesto(@PathVariable Long id){
+        return clienteService.getReparacionesNuevoPresupuesto(id);
     }
 
     @PostMapping("/cliente")

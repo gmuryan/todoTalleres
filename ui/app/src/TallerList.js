@@ -19,7 +19,7 @@ class TallerList extends Component {
             clasificacion: '',
             marca: '',
             currentPage: 1,
-            todosPerPage: 10
+            todosPerPage: 5
         };
         this.handleClick = this.handleClick.bind(this);
         this.remove = this.remove.bind(this);
@@ -220,17 +220,8 @@ class TallerList extends Component {
                             <Button size="sm" color="danger" onClick={() => this.dialogDeshabilitar(taller)}>Deshabilitar</Button>
                             }
                             {!taller.activo &&
-                            <Button size="sm" color="primary" onClick={() => this.dialogHabilitar(taller)}>Habilitar</Button>
+                            <Button size="sm" color="success" onClick={() => this.dialogHabilitar(taller)}>Habilitar</Button>
                             }
-                        </ButtonGroup>
-                        }
-                        {clienteUser !== null &&
-                        <ButtonGroup>
-                            <Button size="sm" color="primary" tag={Link}
-                                    to={"/reservacion/" + taller.idTaller}>Reservar</Button>
-                            &nbsp;&nbsp;
-                            <Button size="sm" color="secondary" tag={Link}
-                                    to={"/reseñas/" + taller.idTaller}>Ver más</Button>
                         </ButtonGroup>
                         }
                     </td>
@@ -265,7 +256,7 @@ class TallerList extends Component {
                             <Button size="sm" color="primary" tag={Link}
                                     to={"/reservacion/" + taller.idTaller}>Reservar</Button>
                             &nbsp;&nbsp;
-                            <Button size="sm" color="secondary" tag={Link}
+                            <Button size="sm" color="info" tag={Link}
                                     to={"/reseñas/" + taller.idTaller}>Ver más</Button>
                         </ButtonGroup>
                         }
