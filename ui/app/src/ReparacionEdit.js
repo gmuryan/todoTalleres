@@ -505,7 +505,7 @@ class ReparacionEdit extends Component {
                     <br></br>
                     }
                     <FormGroup>
-                        {(tallerUser !== null && descEstado !== "Pendiente Confirmacion" && descEstado !== "Finalizado" && descEstado !== "Cancelado") || (clienteUser !== null && descEstado === "Pendiente Confirmacion") &&
+                        {(tallerUser !== null && descEstado !== "Pendiente Confirmacion" && descEstado !== "Finalizado" && descEstado !== "Cancelado") || (clienteUser !== null && descEstado === "Pendiente Confirmacion") || (item.cliente.apellido === "Externo" && descEstado === "Pendiente Confirmacion") &&
                         <Button color="primary" type="submit">Confirmar</Button>
                         }{' '}
                         {tallerUser !== null && descEstado === "En reparacion" &&
