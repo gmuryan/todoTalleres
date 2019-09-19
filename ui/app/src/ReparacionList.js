@@ -6,6 +6,8 @@ import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import './App.css';
 import ClientesNavbar from "./ClientesNavbar";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 class ReparacionList extends Component {
 
@@ -18,6 +20,10 @@ class ReparacionList extends Component {
             localStorage.clear();
         }
         this.state = {
+            filtroFechaReservaDesde: '',
+            filtroFechaReservaHasta: '',
+            filtroFechaDevolucionDesde: '',
+            filtroFechaDevolucionHasta: '',
             reparaciones: [],
             isLoading: true,
             fechaDevolucion: '',
@@ -120,6 +126,55 @@ class ReparacionList extends Component {
         this.setState({estado: e.target.value});
     }
 
+    filterFechaReservaDesde(date) {
+        this.setState({filtroFechaReservaDesde: date});
+    }
+
+    filterFechaReservaHasta(date) {
+        this.setState({filtroFechaReservaHasta: date})
+    }
+
+    filterFechaDevolucionDesde(date) {
+        this.setState({filtroFechaDevolucionDesde: date})
+    }
+
+    filterFechaDevolucionHasta(date) {
+        this.setState({filtroFechaDevolucionHasta: date})
+    }
+
+    esFechaReservaMenor(value) {
+        let fechaSeparada = value.split("-");
+        let fechaReOrdenada = fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0];
+        return this.state.filtroFechaReservaDesde - Date.parse(fechaReOrdenada) < 0;
+    }
+
+    esFechaReservaMayor(value) {
+        let fechaSeparada = value.split("-");
+        let fechaReOrdenada = fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0];
+        return this.state.filtroFechaReservaHasta - Date.parse(fechaReOrdenada) > 0;
+    }
+
+    esFechaDevolucionMenor(value) {
+        if (value !== "0") {
+            let fechaSeparada = value.split("-");
+            let fechaReOrdenada = fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0];
+            return this.state.filtroFechaDevolucionDesde - Date.parse(fechaReOrdenada) < 0;
+        } else {
+            return false;
+        }
+    }
+
+
+    esFechaDevolucionMayor(value) {
+        if (value !== "0") {
+            let fechaSeparada = value.split("-");
+            let fechaReOrdenada = fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0];
+            return this.state.filtroFechaDevolucionHasta - Date.parse(fechaReOrdenada) > 0;
+        }else{
+            return false;
+        }
+    }
+
     render() {
         const {reparaciones, isLoading, fechaDevolucion, horaDevolucion, fechaReserva, horaReserva, importeTotal, estadoReparacion, descripcionProblema, descripcionReparacion, taller, cliente, currentPage, todosPerPage, estado} = this.state;
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
@@ -127,6 +182,18 @@ class ReparacionList extends Component {
         let filterReparaciones = this.state.reparaciones.slice();
         if (this.state.estado) {
             filterReparaciones = filterReparaciones.filter(reparacion => reparacion.estadoReparacion.descripcion.toLowerCase().indexOf(estado.toLowerCase()) !== -1);
+        }
+        if (this.state.filtroFechaReservaDesde) {
+            filterReparaciones = filterReparaciones.filter(reparacion => this.esFechaReservaMenor(reparacion.fechaReserva));
+        }
+        if (this.state.filtroFechaReservaHasta) {
+            filterReparaciones = filterReparaciones.filter(reparacion => this.esFechaReservaMayor(reparacion.fechaReserva));
+        }
+        if (this.state.filtroFechaDevolucionDesde) {
+            filterReparaciones = filterReparaciones.filter(reparacion => this.esFechaDevolucionMenor(reparacion.fechaDevolucion ? reparacion.fechaDevolucion : "0"));
+        }
+        if (this.state.filtroFechaDevolucionHasta) {
+            filterReparaciones = filterReparaciones.filter(reparacion => this.esFechaDevolucionMayor(reparacion.fechaDevolucion ? reparacion.fechaDevolucion : "0"));
         }
 
         if (isLoading) {
@@ -191,7 +258,9 @@ class ReparacionList extends Component {
                         }
                         &nbsp;&nbsp;
                         {reparacion.estadoReparacion.descripcion !== "Cancelado" &&
-                        <Button size="sm" color="danger" onClick={() => this.dialogCancelarTurno(reparacion.idReparacion)}>Cancelar Turno</Button>
+                        <Button size="sm" color="danger"
+                                onClick={() => this.dialogCancelarTurno(reparacion.idReparacion)}>Cancelar
+                            Turno</Button>
                         }
                     </ButtonGroup>
                 </td>
@@ -214,6 +283,22 @@ class ReparacionList extends Component {
                     }
                     <h3>Reparaciones</h3>
                     <input type="text" onChange={this.filterEstado} placeholder="Estado..."></input>
+                    &nbsp;&nbsp;
+                    <DatePicker placeholderText="Fecha Reserva Desde" dateFormat="dd/MM/yyyy"
+                                selected={this.state.filtroFechaReservaDesde}
+                                onChange={(date) => this.filterFechaReservaDesde(date)}/>
+                    &nbsp;&nbsp;
+                    <DatePicker placeholderText="Fecha Reserva Hasta" dateFormat="dd/MM/yyyy"
+                                selected={this.state.filtroFechaReservaHasta}
+                                onChange={(date) => this.filterFechaReservaHasta(date)}/>
+                    &nbsp;&nbsp;
+                    <DatePicker placeholderText="Fecha Devolucion Desde" dateFormat="dd/MM/yyyy"
+                                selected={this.state.filtroFechaDevolucionDesde}
+                                onChange={(date) => this.filterFechaDevolucionDesde(date)}/>
+                    &nbsp;&nbsp;
+                    <DatePicker placeholderText="Fecha Devolucion Hasta" dateFormat="dd/MM/yyyy"
+                                selected={this.state.filtroFechaDevolucionHasta}
+                                onChange={(date) => this.filterFechaDevolucionHasta(date)}/>
                     <Table className="mt-4">
                         <thead>
                         <tr>
