@@ -283,7 +283,7 @@ class TallerEdit extends Component {
                             <span className="error">{this.state.errors["barrio"]}</span>
                         </FormGroup>
                         <FormGroup className="col-md-4 mb-3">
-                            <Label for="telefono">Telefono</Label>
+                            <Label for="telefono">Teléfono</Label>
                             <Input type="text" name="telefono" id="telefono" value={item.telefono || ''}
                                    onChange={this.handleChange} autoComplete="telefono"/>
                             <span className="error">{this.state.errors["telefono"]}</span>
@@ -297,7 +297,7 @@ class TallerEdit extends Component {
                             <span className="error">{this.state.errors["mail"]}</span>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
-                            <Label for="ubicacion">Ubicacion</Label>
+                            <Label for="ubicacion">Ubicación</Label>
                             <Input type="text" name="ubicacion" id="ubicacion" value={item.ubicacion || ''}
                                    onChange={this.handleChange} autoComplete="ubicacion"/>
                             <span className="error">{this.state.errors["ubicacion"]}</span>
@@ -306,7 +306,7 @@ class TallerEdit extends Component {
                     <div>
                         <div className="row">
                             <FormGroup className="col-md-12 mb-3">
-                                <Label for="descripcionTaller">Breve Descripcion del Taller</Label>
+                                <Label for="descripcionTaller">Breve Descripción del Taller</Label>
                                 <Input type="text" name="descripcionTaller" id="descripcionTaller" value={item.descripcionTaller || ''}
                                        onChange={this.handleChange} autoComplete="descripcionTaller"/>
                             </FormGroup>
@@ -356,7 +356,7 @@ class TallerEdit extends Component {
                     )}
                     {item.idTaller && (
                         <FormGroup>
-                            <Label for="clasificacion">Especializacion</Label>
+                            <Label for="clasificacion">Especialización</Label>
                             <br></br>
                             <div>
                                 <select required="required" className="select" name="clasificacion" id="clasificacion"
@@ -369,12 +369,12 @@ class TallerEdit extends Component {
                     )}
                     {item.idTaller == null && (
                         <FormGroup>
-                            <Label for="clasificacion">Especializacion</Label>
+                            <Label for="clasificacion">Especialización</Label>
                             <br></br>
                             <div>
                                 <select required="required" className="select" name="clasificacion" id="clasificacion"
                                         onChange={this.handleChange} autoComplete="clasificacion">
-                                    <option value="" default>Seleccionar Especializacion...</option>
+                                    <option value="" default>Seleccionar Especialización...</option>
                                     {newOptionsClasifs}
                                 </select>
                             </div>
@@ -384,14 +384,14 @@ class TallerEdit extends Component {
 
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
-                            <Label for="maximosVehiculos">Capacidad Maxima de Vehiculos</Label>
+                            <Label for="maximosVehiculos">Capacidad Maxima de Vehículos</Label>
                             <Input type="number" name="maximosVehiculos" id="maximosVehiculos"
                                    value={item.maximosVehiculos || ''}
                                    onChange={this.handleChange} autoComplete="maximosVehiculos"/>
                             <span className="error">{this.state.errors["maximosVehiculos"]}</span>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
-                            <Label for="retrasosContemplados">Espacios Reservados por Precaucion</Label>
+                            <Label for="retrasosContemplados">Espacios Reservados por Precaución</Label>
                             <Input type="number" name="retrasosContemplados" id="retrasosContemplados"
                                    value={item.retrasosContemplados || ''}
                                    onChange={this.handleChange} autoComplete="retrasosContemplados"/>

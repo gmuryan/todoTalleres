@@ -286,17 +286,17 @@ class TallerList extends Component {
                     &nbsp;&nbsp;
                     <input type="text" onChange={this.filterMarca} placeholder="Marca..."></input>
                     &nbsp;&nbsp;
-                    <input type="text" onChange={this.filterClasificacion} placeholder="Especializacion..."></input>
+                    <input type="text" onChange={this.filterClasificacion} placeholder="Especialización..."></input>
                     <Table className="mt-4">
                         <thead>
                         <tr>
                             <th width="10%">ID</th>
                             <th width="10%">Nombre</th>
                             <th width="10%">Barrio</th>
-                            <th width="10%">Telefono</th>
+                            <th width="10%">Teléfono</th>
                             <th width="10%">Mail</th>
                             <th width="10%">Marca</th>
-                            <th width="10%">Especializacion</th>
+                            <th width="10%">Especialización</th>
                             {adminUser &&
                             <th width="10%">Habilitado</th>
                             }

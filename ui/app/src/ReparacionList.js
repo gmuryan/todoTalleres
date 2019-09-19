@@ -305,8 +305,8 @@ class ReparacionList extends Component {
                             <th width="5%">ID</th>
                             <th width="10%">Fecha Reserva</th>
                             <th width="10%">Horario Reserva</th>
-                            <th width="10%">Fecha Devolucion</th>
-                            <th width="10%">Horario Devolucion</th>
+                            <th width="10%">Fecha Devolución</th>
+                            <th width="10%">Horario Devolución</th>
                             <th width="10%">Estado</th>
                             <th width="10%">Importe</th>
                             {tallerUser !== null &&

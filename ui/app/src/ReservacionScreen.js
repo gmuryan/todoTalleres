@@ -467,7 +467,7 @@ class ReservacionScreen extends Component {
                                    onChange={this.handleChange} autoComplete="barrio"/>
                         </FormGroup>
                         <FormGroup className="col-md-4 mb-3">
-                            <Label for="telefono">Telefono</Label>
+                            <Label for="telefono">Teléfono</Label>
                             <Input readOnly type="text" name="telefono" id="telefono" value={item.telefono || ''}
                                    onChange={this.handleChange} autoComplete="telefono"/>
                         </FormGroup>
@@ -481,7 +481,7 @@ class ReservacionScreen extends Component {
                                    onChange={this.handleChange} autoComplete="mail"/>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
-                            <Label for="ubicacion">Ubicacion</Label>
+                            <Label for="ubicacion">Ubicación</Label>
                             <Input readOnly type="text" name="ubicacion" id="ubicacion" value={item.ubicacion || ''}
                                    onChange={this.handleChange} autoComplete="ubicacion"/>
                         </FormGroup>
@@ -491,7 +491,7 @@ class ReservacionScreen extends Component {
                     <div>
                         <div className="row">
                             <FormGroup className="col-md-12 mb-3">
-                                <Label for="descripcionTaller">Descripcion del Taller</Label>
+                                <Label for="descripcionTaller">Descripción del Taller</Label>
                                 <Input readOnly type="text" name="descripcionTaller" id="descripcionTaller"
                                        value={item.descripcionTaller || ''}
                                        onChange={this.handleChange} autoComplete="descripcionTaller"/>
@@ -507,7 +507,7 @@ class ReservacionScreen extends Component {
                                    onChange={this.handleChange} autoComplete="mail"/>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
-                            <Label for="clasificacion">Especializacion</Label>
+                            <Label for="clasificacion">Especialización</Label>
                             <Input readOnly type="text" name="clasificacion" id="clasificacion"
                                    value={item.clasificacion.descripcion || ''}
                                    onChange={this.handleChange} autoComplete="clasificacion"/>
@@ -568,7 +568,7 @@ class ReservacionScreen extends Component {
                         }
                         {clienteAux !== null &&
                         <FormGroup className="col-md-6 mb-3">
-                            <Label for="descripcionProblemaCliente">Descripcion del Problema</Label>
+                            <Label for="descripcionProblemaCliente">Descripción del Problema</Label>
                             <textarea className="input-big" type="text" name="descripcionProblemaCliente"
                                       id="descripcionProblemaCliente"
                                       value={itemReparacion.descripcionProblemaCliente || ''}

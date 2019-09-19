@@ -160,7 +160,7 @@ class ReseñaScreen extends Component {
                                        onChange={this.handleChange} autoComplete="barrio"/>
                             </FormGroup>
                             <FormGroup className="col-md-4 mb-3">
-                                <Label for="telefono">Telefono</Label>
+                                <Label for="telefono">Teléfono</Label>
                                 <Input readOnly type="text" name="telefono" id="telefono" value={taller.telefono || ''}
                                        onChange={this.handleChange} autoComplete="telefono"/>
                             </FormGroup>
@@ -174,7 +174,7 @@ class ReseñaScreen extends Component {
                                        onChange={this.handleChange} autoComplete="mail"/>
                             </FormGroup>
                             <FormGroup className="col-md-6 mb-3">
-                                <Label for="ubicacion">Ubicacion</Label>
+                                <Label for="ubicacion">Ubicación</Label>
                                 <Input readOnly type="text" name="ubicacion" id="ubicacion"
                                        value={taller.ubicacion || ''}
                                        onChange={this.handleChange} autoComplete="ubicacion"/>
@@ -185,7 +185,7 @@ class ReseñaScreen extends Component {
                         <div>
                             <div className="row">
                                 <FormGroup className="col-md-12 mb-3">
-                                    <Label for="descripcionTaller">Descripcion del Taller</Label>
+                                    <Label for="descripcionTaller">Descripción del Taller</Label>
                                     <Input readOnly type="text" name="descripcionTaller" id="descripcionTaller"
                                            value={taller.descripcionTaller || ''}
                                            onChange={this.handleChange} autoComplete="descripcionTaller"/>
@@ -201,7 +201,7 @@ class ReseñaScreen extends Component {
                                        onChange={this.handleChange} autoComplete="marca"/>
                             </FormGroup>
                             <FormGroup className="col-md-6 mb-3">
-                                <Label for="clasificacion">Especializacion</Label>
+                                <Label for="clasificacion">Especialización</Label>
                                 <Input readOnly type="text" name="clasificacion" id="clasificacion"
                                        value={taller.clasificacion.descripcion || ''}
                                        onChange={this.handleChange} autoComplete="clasificacion"/>
@@ -220,7 +220,7 @@ class ReseñaScreen extends Component {
                     }
                     <Form onSubmit={this.handleSubmit}>
                         {clienteAux !== null &&
-                        <textarea className="input-big" type="text" placeholder="Deje su comentario aqui..."
+                        <textarea className="input-big" type="text" placeholder="Deje su comentario aquí..."
                                   name="comentario" id="comentario" value={item.comentario || ''}
                                   onChange={this.handleChange} autoComplete="comentario"/>
                         }

@@ -226,7 +226,7 @@ class Registracion extends Component {
                     </div>
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
-                            <Label for="telefono">Telefono</Label>
+                            <Label for="telefono">Teléfono</Label>
                             <Input type="text" name="telefono" id="telefono" value={item.telefono || ''}
                                    onChange={this.handleChange} autoComplete="telefono"/>
                             <span className="error">{this.state.errors["telefono"]}</span>
