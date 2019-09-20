@@ -246,7 +246,7 @@ class ReparacionEdit extends Component {
         const {item, flagImporte, mecanicosTaller} = this.state;
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
-        const title = <h2>Detalles de la Reparacion</h2>;
+        const title = <h2>Detalles de la Reparación</h2>;
         const descEstado = item.estadoReparacion.descripcion;
         var mecanicoList;
         if (tallerUser !== null && descEstado !== "En diagnostico" && descEstado !== "En reparacion") {
@@ -354,7 +354,7 @@ class ReparacionEdit extends Component {
                     {clienteUser !== null || tallerUser !== null && item.fechaDevolucion !== null && item.horaDevolucion !== null &&
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
-                            <Label for="fechaDevolucion">Fecha Devolucion</Label>
+                            <Label for="fechaDevolucion">Fecha Devolución</Label>
                             <Input
                                 readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
                                 type="text"
@@ -364,7 +364,7 @@ class ReparacionEdit extends Component {
                             <span className="error">{this.state.errors["fechaDevolucion"]}</span>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
-                            <Label for="horaDevolucion">Hora Devolucion</Label>
+                            <Label for="horaDevolucion">Hora Devolución</Label>
                             <Input
                                 readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
                                 type="text"
@@ -417,7 +417,7 @@ class ReparacionEdit extends Component {
                     </div>
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
-                            <Label for="descripcionProblemaCliente">Descripcion del problema del cliente</Label>
+                            <Label for="descripcionProblemaCliente">Descripción del problema del cliente</Label>
                             <textarea readOnly className="input-big-readOnly" type="text"
                                       name="descripcionProblemaCliente"
                                       id="descripcionProblemaCliente"
@@ -454,7 +454,7 @@ class ReparacionEdit extends Component {
                         {tallerUser !== null && item.fechaDevolucion === null && item.horaDevolucion === null && descEstado !== "Cancelado" && descEstado !== "Pendiente Diagnostico" &&
                         <FormGroup className="col-md-6 mb-3">
                             <div>
-                                <Label for="fechaHoraDevolucion">Fecha y hora de devolucion</Label>
+                                <Label for="fechaHoraDevolucion">Fecha y hora de devolución</Label>
                             </div>
                             <DatePicker
                                 inline
@@ -488,7 +488,7 @@ class ReparacionEdit extends Component {
                             <th width="20%">ID</th>
                             <th width="20%">Nombre</th>
                             <th width="20%">Apellido</th>
-                            <th width="20%">Telefono</th>
+                            <th width="20%">Teléfono</th>
                             <th width="20%">Mail</th>
                             <th width="20%">Habilitado</th>
                             {(descEstado === "En diagnostico" || descEstado === "En reparacion") &&

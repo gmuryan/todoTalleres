@@ -225,7 +225,7 @@ class MecanicoList extends Component {
                             <th width="20%">ID</th>
                             <th width="20%">Nombre</th>
                             <th width="20%">Apellido</th>
-                            <th width="20%">Telefono</th>
+                            <th width="20%">Teléfono</th>
                             <th width="20%">Mail</th>
                             <th width="10%">Habilitado</th>
                             <th width="10%">Acciones</th>

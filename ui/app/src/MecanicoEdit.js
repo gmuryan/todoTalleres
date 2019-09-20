@@ -186,7 +186,7 @@ class MecanicoEdit extends Component {
                     </div>
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
-                            <Label for="telefono">Telefono</Label>
+                            <Label for="telefono">Teléfono</Label>
                             <Input type="text" name="telefono" id="telefono" value={item.telefono || ''}
                                    onChange={this.handleChange} autoComplete="telefono"/>
                             <span className="error">{this.state.errors["telefono"]}</span>
@@ -206,8 +206,8 @@ class MecanicoEdit extends Component {
                         <thead>
                         <tr>
                             <th width="5%">ID</th>
-                            <th width="10%">Dia Devolucion</th>
-                            <th width="10%">Hora Devolucion</th>
+                            <th width="10%">Fecha Devolución</th>
+                            <th width="10%">Hora Devolución</th>
                             <th width="10%">Estado</th>
                             <th width="10%">Importe</th>
                             <th width="10%">Cliente</th>

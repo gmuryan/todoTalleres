@@ -292,11 +292,11 @@ class ReparacionList extends Component {
                                 selected={this.state.filtroFechaReservaHasta}
                                 onChange={(date) => this.filterFechaReservaHasta(date)}/>
                     &nbsp;&nbsp;
-                    <DatePicker placeholderText="Fecha Devolucion Desde" dateFormat="dd/MM/yyyy"
+                    <DatePicker placeholderText="Fecha Devolución Desde" dateFormat="dd/MM/yyyy"
                                 selected={this.state.filtroFechaDevolucionDesde}
                                 onChange={(date) => this.filterFechaDevolucionDesde(date)}/>
                     &nbsp;&nbsp;
-                    <DatePicker placeholderText="Fecha Devolucion Hasta" dateFormat="dd/MM/yyyy"
+                    <DatePicker placeholderText="Fecha Devolución Hasta" dateFormat="dd/MM/yyyy"
                                 selected={this.state.filtroFechaDevolucionHasta}
                                 onChange={(date) => this.filterFechaDevolucionHasta(date)}/>
                     <Table className="mt-4">
