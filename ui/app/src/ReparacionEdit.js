@@ -131,11 +131,11 @@ class ReparacionEdit extends Component {
         let diaActual = new Date();
 
         if (fields["estadoReparacion"].descripcion === "Pendiente Diagnostico") {
-            if (fields["modeloAuto"].length === 0) {
+            if (fields["modeloAuto"] === null || fields["modeloAuto"] === '') {
                 formIsValid = false;
                 errors["modeloAuto"] = "No puede estar vacio";
             }
-            if (fields["patenteAuto"].length === 0) {
+            if (fields["patenteAuto"] === null || fields["patenteAuto"] === '') {
                 formIsValid = false;
                 errors["patenteAuto"] = "No puede estar vacio";
             }
@@ -161,6 +161,12 @@ class ReparacionEdit extends Component {
                 } else if (this.state.endDate.getHours() === 0) {
                     formIsValid = false;
                     errors["hora"] = "Debe seleccionar una hora";
+                }
+                let fechaSeparada = fields["fechaReserva"].split("-");
+                let fechaReOrdenada = fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0];
+                if (Date.parse(fechaReOrdenada) - this.state.endDate > 0){
+                    formIsValid = false;
+                    errors["hora"] = "La fecha de devolución debe ser mayor a la fecha de reserva";
                 }
             } else {
                 formIsValid = false;
@@ -517,7 +523,7 @@ class ReparacionEdit extends Component {
                         {tallerUser !== null && descEstado === "En reparacion" &&
                         <Button color="info" onClick={this.guardarReparacion}>Guardar</Button>
                         }{' '}
-                        <Button color="secondary" tag={Link} to="/reparaciones">Cancelar</Button>
+                        <Button color="secondary" tag={Link} to="/reparaciones">Volver</Button>
                     </FormGroup>
                 </Form>
             </Container>
