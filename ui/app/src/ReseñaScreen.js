@@ -74,6 +74,11 @@ class ReseñaScreen extends Component {
         let errors = {};
         let formIsValid = true;
 
+        if (fields["comentario"] === null || fields["comentario"] === ''){
+            formIsValid = false;
+            errors["comentario"] = "No puede estar vacio";
+        }
+
         this.setState({errors: errors});
         return formIsValid;
     }
@@ -223,6 +228,16 @@ class ReseñaScreen extends Component {
                         <textarea className="input-big" type="text" placeholder="Deje su comentario aquí..."
                                   name="comentario" id="comentario" value={item.comentario || ''}
                                   onChange={this.handleChange} autoComplete="comentario"/>
+
+                        }
+                        {clienteAux !== null &&
+                        <span className="error">{this.state.errors["comentario"]}</span>
+                        }
+                        {clienteAux !== null &&
+                        <br></br>
+                        }
+                        {clienteAux !== null &&
+                        <br></br>
                         }
                         <FormGroup>
                             {clienteAux !== null &&
