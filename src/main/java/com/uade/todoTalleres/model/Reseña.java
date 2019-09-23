@@ -1,7 +1,5 @@
 package com.uade.todoTalleres.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -23,7 +21,7 @@ public class Reseña {
 
     @Column
     @Temporal(TemporalType.DATE)
-    private Date fechaReserva;
+    private Date fechaReseña;
 
     @Column
     private String comentario;
@@ -71,11 +69,11 @@ public class Reseña {
         this.comentario = comentario;
     }
 
-    public Date getFechaReserva() {
-        return fechaReserva;
+    public Date getFechaReseña() {
+        return fechaReseña;
     }
 
-    public void setFechaReserva(Date fechaReserva) {
-        this.fechaReserva = fechaReserva;
+    public void setFechaReseña(Date fechaReseña) {
+        this.fechaReseña = fechaReseña;
     }
 }

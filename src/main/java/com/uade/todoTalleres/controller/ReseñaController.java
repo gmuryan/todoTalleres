@@ -49,7 +49,7 @@ public class ReseñaController {
         log.info("Request to create a reseña: {}", reseña);
         Date fechaComentario = new Date();
         fechaComentario.setDate(fechaComentario.getDate()+1);
-        reseña.setFechaReserva(fechaComentario);
+        reseña.setFechaReseña(fechaComentario);
         Reseña result = reseñaService.save(reseña);
         return ResponseEntity.created(new URI("/api/reseña" + result.getIdReseña())).body(result);
     }
