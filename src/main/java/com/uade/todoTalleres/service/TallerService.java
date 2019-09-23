@@ -138,18 +138,20 @@ public class TallerService {
         HashMap<Integer, Integer> totalesPorMes = new HashMap<>();
         List<Reparacion> reparaciones = reparacionService.findAllByTaller(id);
         for (Reparacion reparacion : reparaciones){
-            Date aux = reparacion.getFechaReserva();
-            Calendar calendar = Calendar.getInstance();
-            Calendar calendarAux = Calendar.getInstance();
-            calendar.setTime(aux);
-            int mes = calendar.get(Calendar.MONTH);
-            int año = calendar.get(Calendar.YEAR);
-            if (año == calendarAux.get(Calendar.YEAR)) {
-                if (totalesPorMes.containsKey(mes)) {
-                    int value = totalesPorMes.get(mes);
-                    totalesPorMes.put(mes, value+1);
-                } else {
-                    totalesPorMes.put(mes, 1);
+            if (!reparacion.getEstadoReparacion().getDescripcion().equalsIgnoreCase("Cancelado")) {
+                Date aux = reparacion.getFechaReserva();
+                Calendar calendar = Calendar.getInstance();
+                Calendar calendarAux = Calendar.getInstance();
+                calendar.setTime(aux);
+                int mes = calendar.get(Calendar.MONTH);
+                int año = calendar.get(Calendar.YEAR);
+                if (año == calendarAux.get(Calendar.YEAR)) {
+                    if (totalesPorMes.containsKey(mes)) {
+                        int value = totalesPorMes.get(mes);
+                        totalesPorMes.put(mes, value + 1);
+                    } else {
+                        totalesPorMes.put(mes, 1);
+                    }
                 }
             }
         }

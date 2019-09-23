@@ -91,12 +91,20 @@ class HomeTaller extends Component {
                 backgroundColor: [
                     '#FF6384',
                     '#36A2EB',
-                    '#FFCE56'
+                    '#FFCE56',
+                    '#65fff0',
+                    '#53ff17',
+                    '#ff1de3',
+                    '#8376ff'
                 ],
                 hoverBackgroundColor: [
                     '#FF6384',
                     '#36A2EB',
-                    '#FFCE56'
+                    '#FFCE56',
+                    '#65fff0',
+                    '#53ff17',
+                    '#ff1de3',
+                    '#8376ff'
                 ]
             }]
         };
