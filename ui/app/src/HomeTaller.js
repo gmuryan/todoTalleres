@@ -137,7 +137,7 @@ class HomeTaller extends Component {
                         </div>
                         <br></br>
                         <div style={{height: '300px'}}>
-                            <h2>Asignacion de mecanicos</h2>
+                            <h2>Asignación de mecánicos</h2>
                             <Form>
                                 <div className="row">
                                     <FormGroup className="col-md-6 mb-3">

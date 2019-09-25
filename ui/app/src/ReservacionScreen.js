@@ -312,6 +312,21 @@ class ReservacionScreen extends Component {
             if (!data) {
                 this.setState({formIsValid: false});
                 errors["hora"] = "Ese horario no esta disponible";
+                let fechaReservaAux = this.state.startDate.getDate() + "-" + this.state.startDate.getMonth() + "-" + this.state.startDate.getFullYear();
+                let horaReservaAux = this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
+                fetch(`/api/getProximaFechaDisponible?idTaller=${encodeURIComponent(this.props.match.params.id)}&fechaReserva=${encodeURIComponent(fechaReservaAux)}&hora=${encodeURIComponent(horaReservaAux)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => response.text()).then((data) => {
+                    let fechaSeparada = data.split("-");
+                    let soloFecha = fechaSeparada[0] + "/" + fechaSeparada[1] + "/" + fechaSeparada[2];
+                    let soloHora = fechaSeparada[3];
+                    errors["proximoHorario"] = "La proxima fecha libre es el " + soloFecha + " a las " + soloHora;
+                    this.setState({errors: errors});
+                });
             }
             this.setState({errors: errors});
         });
@@ -545,6 +560,8 @@ class ReservacionScreen extends Component {
                             />
                             <br></br>
                             <span className="error">{this.state.errors["hora"]}</span>
+                            <br></br>
+                            <span className="error">{this.state.errors["proximoHorario"]}</span>
                         </FormGroup>
                         {tallerAux !== null &&
                         <FormGroup className="col-md-6 mb-3">

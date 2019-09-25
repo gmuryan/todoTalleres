@@ -57,7 +57,7 @@ class ReparacionEdit extends Component {
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const reparacion = await (await fetch(`/api/reparacion/${this.props.match.params.id}`)).json();
         this.setState({item: reparacion});
-        if (this.state.item.estadoReparacion.descripcion === "En diagnostico") {
+        if (this.state.item.estadoReparacion.descripcion === "En diagnostico" && tallerUser !== null) {
             this.setState({flagMostrarPresupuesto: true});
         }
         if (this.state.item.importeTotal !== null)

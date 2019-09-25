@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -216,6 +219,46 @@ public class TallerService {
         Optional<Taller> taller = this.findById(id);
         taller.get().setActivo(true);
         tallerRepository.save(taller.get());
+    }
+
+    public String getProximaFechaDisponible(Long idTaller, String fecha, String hora)  throws ParseException{
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date fechaReserva = dateFormat.parse(fecha);
+        fechaReserva.setMonth((fechaReserva.getMonth() - 1 + 1) % 12 + 1);
+        if (hora.equalsIgnoreCase("9:00")){
+            String aux = "0";
+            hora = aux + hora;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fechaReserva);
+        LocalTime horaReserva = LocalTime.parse(hora);
+        while (!fechaEstaDisponible(idTaller, calendar.getTime(), horaReserva)){
+            if (horaReserva.getHour() != 17){
+                horaReserva = horaReserva.plusHours(1);
+            }else{
+                horaReserva = horaReserva.minusHours(8);
+                if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY)
+                    calendar.add(Calendar.DATE, 3);
+                else
+                    calendar.add(Calendar.DATE, 1);
+            }
+        }
+        return dateFormat.format(calendar.getTime()) + "-" + horaReserva.toString();
+    }
+
+    private boolean fechaEstaDisponible(Long idTaller, Date fechaReserva, LocalTime horaReserva) {
+        Boolean valido = true;
+        Optional<Taller> taller= this.findById(idTaller);
+        if (taller.get().getMaximosVehiculos()-reparacionService.validateEspacio(fechaReserva, horaReserva, idTaller)-taller.get().getRetrasosContemplados()<=0){
+            valido = false;
+        }
+        if (reparacionService.validateMecanicos(fechaReserva, horaReserva, idTaller)<=0){
+            valido = false;
+        }
+        if (valido)
+            return true;
+        else
+            return false;
     }
 
     public void delete(Taller taller) {

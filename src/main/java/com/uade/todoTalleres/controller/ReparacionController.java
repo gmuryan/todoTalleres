@@ -160,6 +160,11 @@ public class ReparacionController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/getProximaFechaDisponible")
+    String getProximaFechaDisponible(Long idTaller, String fechaReserva, String hora) throws ParseException {
+        return tallerService.getProximaFechaDisponible(idTaller, fechaReserva, hora);
+    }
+
     @GetMapping("/validarReparacion")
     public Boolean validateReparacion (Long id, String fecha, String hora) throws ParseException {
         Boolean valido = true;
