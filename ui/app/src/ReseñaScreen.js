@@ -29,7 +29,8 @@ class ReseñaScreen extends Component {
     emptyItem = {
         cliente: '',
         taller: '',
-        comentario: ''
+        comentario: '',
+        fechaReseña: ''
     }
 
     constructor(props) {
@@ -51,8 +52,8 @@ class ReseñaScreen extends Component {
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         const adminUser = JSON.parse(localStorage.getItem("adminUser"));
         if (clienteUser !== null || tallerUser !== null || adminUser !== null) {
-            const reseñasList = await (await fetch(`/api/reseñas/${this.props.match.params.id}`)).json();
-            this.setState({reseñas: reseñasList});
+            const res = await (await fetch(`/api/reseñas/${this.props.match.params.id}`)).json();
+            this.setState({reseñas: res});
             if (clienteUser !== null) {
                 const taller = await (await fetch(`/api/taller/${this.props.match.params.id}`)).json();
                 this.setState({taller: taller});
@@ -74,7 +75,7 @@ class ReseñaScreen extends Component {
         let errors = {};
         let formIsValid = true;
 
-        if (fields["comentario"] === null || fields["comentario"] === ''){
+        if (fields["comentario"] === null || fields["comentario"] === '') {
             formIsValid = false;
             errors["comentario"] = "No puede estar vacio";
         }
@@ -125,14 +126,14 @@ class ReseñaScreen extends Component {
         const tallerAux = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteAux = JSON.parse(localStorage.getItem("clienteUser"));
         const adminAux = JSON.parse(localStorage.getItem("adminUser"));
-        console.log(tallerAux);
         if (clienteAux !== null) {
             item.cliente = JSON.stringify(clienteAux);
             item.taller = taller;
         }
         const reseñasList = reseñas.map(reseña => {
             return (
-                <Comment idReseña={reseña.idReseña} fecha={reseña.fechaReserva} nombre={reseña.cliente.nombre} apellido={reseña.cliente.apellido}
+                <Comment idReseña={reseña.idReseña} fecha={reseña.fechaReseña} nombre={reseña.cliente.nombre}
+                         apellido={reseña.cliente.apellido}
                          comentario={reseña.comentario} adminAux={adminAux}/>
             );
         });
