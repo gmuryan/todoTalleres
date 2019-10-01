@@ -205,6 +205,7 @@ class Registracion extends Component {
             this.setState({flag: !this.state.flag});
         }
 
+        document.body.style.backgroundColor = "gray-bg";
 
         return <div>
             <Container>
