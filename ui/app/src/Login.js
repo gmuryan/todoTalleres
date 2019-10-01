@@ -2,6 +2,15 @@ import React, {Component} from "react";
 import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import './App.css';
 import {Link, Redirect} from "react-router-dom";
+import {useState} from "react";
+
+const imgTaller = require('./taller.jpg');
+const divStyle = {
+    width: '100%',
+    height: '800px',
+    backgroundImage: `url(${imgTaller})`,
+    backgroundSize: 'cover'
+};
 
 class Login extends Component {
     constructor(props) {
@@ -17,6 +26,7 @@ class Login extends Component {
     }
 
     handleChange = event => {
+        event.preventDefault();
         this.setState({
             [event.target.id]: event.target.value
         });
@@ -38,19 +48,18 @@ class Login extends Component {
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
-                if (response.ok){
+                if (response.ok) {
                     response.json().then(json => {
-                        if (email == json.mail && password == json.password && json.activo) {
+                        if (email === json.mail && password === json.password && json.activo) {
                             localStorage.clear();
                             localStorage.setItem("tallerUser", JSON.stringify(json));
                             this.props.history.push('/homeTaller');
                         }
                     })
-                }else{
-                    this.setState({formIsValid: false});
                 }
             });
 
+            console.log("test");
             await fetch(`/api/clienteByMail?mail=${encodeURIComponent(email)}`, {
                 method: 'GET',
                 headers: {
@@ -58,21 +67,25 @@ class Login extends Component {
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
-                if (response.ok){
+                if (response.ok) {
                     response.json().then(json => {
-                        if (email == json.mail && password == json.password && json.activo) {
+                        if (email === json.mail && password === json.password && json.activo) {
                             localStorage.clear();
                             localStorage.setItem("clienteUser", JSON.stringify(json));
                             this.props.history.push('/homeCliente');
+                        }else{
+                            this.setState({formIsValid: false});
+                            errors["password"] = "Datos invalidos";
+                            this.setState({errors: errors});
                         }
                     })
-                }else{
+                } else {
                     this.setState({formIsValid: false});
                 }
             });
-
         }
-        if (!this.state.formIsValid){
+
+        if (!this.state.formIsValid) {
             errors["password"] = "Datos invalidos";
             this.setState({errors: errors});
         }
@@ -81,35 +94,24 @@ class Login extends Component {
     }
 
     render() {
-        const {email, password} = this.state;
-        const title = <h2 className="headertekst">Ingreso al Sistema</h2>;
-
-
-        return <div>
+        return <div className="img-login" style={divStyle}>
             <Container>
-                {title}
-                <Form onSubmit={this.handleSubmit}>
-                    <div className="row">
-                        <FormGroup className="col-md-6 col-centered">
-                            <Label for="email">Email</Label>
-                            <Input type="text" name="email" id="email"
-                                   onChange={this.handleChange} autoComplete="email"/>
-                            <span className="error">{this.state.errors["email"]}</span>
-                        </FormGroup>
-                    </div>
-                    <div className="row">
-                        <FormGroup className="col-md-6 col-centered">
-                            <Label for="password">Contraseña</Label>
-                            <Input type="password" name="password" id="password"
-                                   onChange={this.handleChange} autoComplete="password"/>
-                            <span className="error-login">{this.state.errors["password"]}</span>
-                        </FormGroup>
-                    </div>
+                <Form className="login-form" onSubmit={this.handleSubmit}>
+                    <h1 className="text-center">
+                        <span className="font-weight-bold">TodoTalleres</span>
+                    </h1>
+                    <h2 className="text-center">Bienvenido</h2>
                     <FormGroup>
-                        <Button className="button-allign" color="primary" type="submit">Login</Button>{' '}
-                        <Button className="button-allign2" color="secondary" tag={Link}
-                                to="/registracion">Registrarse</Button>
+                        <Input type="text" name="email" id="email" placeholder="Email"
+                               onChange={this.handleChange} autoComplete="email"/>
                     </FormGroup>
+                    <FormGroup>
+                        <Input type="password" name="password" id="password" placeholder="Contraseña"
+                               onChange={this.handleChange} autoComplete="password"/>
+                    </FormGroup>
+                    <span className="error-login">{this.state.errors["password"]}</span>
+                    <Button className="btn-lg btn-dark btn-block" type="submit">Ingresar</Button>
+                    <Button className="btn-lg btn-blue btn-block" tag={Link} to="/registracion">Registrarse</Button>
                 </Form>
             </Container>
         </div>

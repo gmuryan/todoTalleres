@@ -22,6 +22,18 @@
   color: #61dafb;
 }
 
+.login-form{
+    width:100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+    height: 100%;
+}
+
+.img-login{
+    margin-top: -20px;
+}
+
 .container, .container-fluid {
   margin-top: 20px;
 }  
@@ -58,9 +70,10 @@ input[type=checkbox]{
 }
 
 .error-login{
-    margin-left: 42%;
-    font-size: 13px;
+    margin-left: 25%;
+    font-size: 20px;
     color: red;
+    font-weight: bolder;
 }
 
 #page-numbers {
