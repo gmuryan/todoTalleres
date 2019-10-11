@@ -110,8 +110,8 @@ class Login extends Component {
                                onChange={this.handleChange} autoComplete="password"/>
                     </FormGroup>
                     <span className="error-login">{this.state.errors["password"]}</span>
-                    <Button className="btn-lg btn-dark btn-block" type="submit">Ingresar</Button>
-                    <Button className="btn-lg btn-blue btn-block" tag={Link} to="/registracion">Registrarse</Button>
+                    <Button className="btn-lg btn-block" color="success" type="submit">Ingresar</Button>
+                    <Button className="btn-lg btn-block" color="primary" tag={Link} to="/registracion">Registrarse</Button>
                 </Form>
             </Container>
         </div>
