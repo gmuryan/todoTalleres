@@ -231,7 +231,7 @@ class ReparacionEdit extends Component {
             if (this.state.endDate !== null) {
                 item.fechaDevolucion = this.state.endDate.getDate() + "-" + this.state.endDate.getMonth() + "-" + this.state.endDate.getFullYear();
                 if (this.state.endDate.getHours() === 9) {
-                    item.horaDevolucion = "0" + this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
+                    item.horaDevolucion = "0" + this.state.endDate.getHours() + ":" + this.state.endDate.getMinutes() + "0";
                 } else {
                     item.horaDevolucion = this.state.endDate.getHours() + ":" + this.state.endDate.getMinutes() + "0";
                 }
@@ -357,7 +357,7 @@ class ReparacionEdit extends Component {
                             <span className="error">{this.state.errors["horaReserva"]}</span>
                         </FormGroup>
                     </div>
-                    {clienteUser !== null || tallerUser !== null && item.fechaDevolucion !== null && item.horaDevolucion !== null &&
+                    {(clienteUser !== null || tallerUser !== null) && item.fechaDevolucion !== null && item.horaDevolucion !== null &&
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
                             <Label for="fechaDevolucion">Fecha Devolución</Label>
@@ -383,7 +383,7 @@ class ReparacionEdit extends Component {
                     }
                     <div className="row">
                         {this.state.flagImporte && !this.state.flagMostrarPresupuesto &&
-                        <FormGroup className={descEstado === "En reparacion" ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
+                        <FormGroup className={descEstado === "En reparacion" && tallerUser !== null ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
                             <Label for="importeTotal">Importe</Label>
                             <Input
                                 readOnly={!this.state.flagMostrarPresupuesto}
@@ -394,7 +394,7 @@ class ReparacionEdit extends Component {
                         </FormGroup>
                         }
                         {(!this.state.flagImporte || this.state.flagMostrarPresupuesto) &&
-                        <FormGroup className={descEstado === "En reparacion" ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
+                        <FormGroup className={descEstado === "En reparacion" && tallerUser !== null ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
                             <Label for="importeTotal">Importe</Label>
                             <Input
                                 readOnly={!this.state.flagMostrarPresupuesto}
@@ -404,7 +404,7 @@ class ReparacionEdit extends Component {
                             <span className="error">{this.state.errors["importeTotal"]}</span>
                         </FormGroup>
                         }
-                        {descEstado === "En reparacion" &&
+                        {descEstado === "En reparacion" && tallerUser !== null &&
                         <FormGroup className="col-md-4 mb-3">
                             <Label for="nuevoPresupuesto">Nuevo Presupuesto</Label>
                             <br></br>
@@ -413,7 +413,7 @@ class ReparacionEdit extends Component {
                                    onChange={this.handleChange}/>
                         </FormGroup>
                         }
-                        <FormGroup className={descEstado === "En reparacion" ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
+                        <FormGroup className={descEstado === "En reparacion" && tallerUser !== null ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
                             <Label for="estadoReparacion">Estado</Label>
                             <Input readOnly type="text" name="estadoReparacion" id="estadoReparacion"
                                    value={item.estadoReparacion.descripcion || ''}

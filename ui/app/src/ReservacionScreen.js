@@ -310,11 +310,17 @@ class ReservacionScreen extends Component {
         this.setState({errors: errors});
         return this.validateReservacion().then(response => response.json()).then((data) => {
             if (!data) {
+                var idTaller;
+                if (tallerUser !== null){
+                    idTaller = tallerUser.idTaller;
+                }else{
+                    idTaller = this.props.match.params.id;
+                }
                 this.setState({formIsValid: false});
                 errors["hora"] = "Ese horario no esta disponible";
                 let fechaReservaAux = this.state.startDate.getDate() + "-" + this.state.startDate.getMonth() + "-" + this.state.startDate.getFullYear();
                 let horaReservaAux = this.state.startDate.getHours() + ":" + this.state.startDate.getMinutes() + "0";
-                fetch(`/api/getProximaFechaDisponible?idTaller=${encodeURIComponent(this.props.match.params.id)}&fechaReserva=${encodeURIComponent(fechaReservaAux)}&hora=${encodeURIComponent(horaReservaAux)}`, {
+                fetch(`/api/getProximaFechaDisponible?idTaller=${encodeURIComponent(idTaller)}&fechaReserva=${encodeURIComponent(fechaReservaAux)}&hora=${encodeURIComponent(horaReservaAux)}`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
