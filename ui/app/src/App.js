@@ -18,6 +18,7 @@ import ReparacionList from "./ReparacionList";
 import ReservacionScreen from "./ReservacionScreen";
 import ReparacionEdit from "./ReparacionEdit";
 import ReseñaScreen from "./ReseñaScreen";
+import { BrowserRouter } from "react-router-dom";
 
 class App extends Component {
     componentDidMount(){
@@ -25,7 +26,7 @@ class App extends Component {
     }
   render() {
     return (
-      <Router>
+      <BrowserRouter>
         <Switch>
           <Route path='/home' exact={true} component={Home}/>
           <Route path='/homeTaller' exact={true} component={HomeTaller}/>
@@ -45,7 +46,7 @@ class App extends Component {
           <Route path='/reparaciones/:id' component={ReparacionEdit}/>
           <Route path='/reseñas/:id' component={ReseñaScreen}/>
         </Switch>
-      </Router>
+      </BrowserRouter>
     )
   }
 }

@@ -7,6 +7,7 @@ import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import {Bar} from 'react-chartjs-2';
 import {Pie} from 'react-chartjs-2';
+import Typography from "@material-ui/core/Typography";
 
 
 class HomeTaller extends Component {
@@ -113,7 +114,9 @@ class HomeTaller extends Component {
                 <TalleresNavbar/>
                 <Container fluid>
                     <div>
-                        <h2>Reparaciones 2019</h2>
+                        <Typography variant="h4">
+                            Reparaciones 2019
+                        </Typography>
                         <div style={{height: '250px'}}>
                             <Bar
                                 data={dataFacturacion}
@@ -137,7 +140,9 @@ class HomeTaller extends Component {
                         </div>
                         <br></br>
                         <div style={{height: '300px'}}>
-                            <h2>Asignación de mecánicos</h2>
+                            <Typography variant="h4">
+                                Asignación de mecánicos
+                            </Typography>
                             <Form>
                                 <div className="row">
                                     <FormGroup className="col-md-6 mb-3">

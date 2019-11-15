@@ -10,6 +10,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ClipLoader from 'react-spinners/ClipLoader';
 import {css} from "@emotion/core";
+import TextField from "@material-ui/core/TextField";
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardTimePicker,
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
+import Typography from "@material-ui/core/Typography";
 
 const override = css`
     display: block;
@@ -29,10 +37,10 @@ class ReparacionList extends Component {
             localStorage.clear();
         }
         this.state = {
-            filtroFechaReservaDesde: '',
-            filtroFechaReservaHasta: '',
-            filtroFechaDevolucionDesde: '',
-            filtroFechaDevolucionHasta: '',
+            filtroFechaReservaDesde: null,
+            filtroFechaReservaHasta: null,
+            filtroFechaDevolucionDesde: null,
+            filtroFechaDevolucionHasta: null,
             reparaciones: [],
             isLoading: true,
             fechaDevolucion: '',
@@ -179,7 +187,7 @@ class ReparacionList extends Component {
             let fechaSeparada = value.split("-");
             let fechaReOrdenada = fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0];
             return this.state.filtroFechaDevolucionHasta - Date.parse(fechaReOrdenada) > 0;
-        }else{
+        } else {
             return false;
         }
     }
@@ -188,6 +196,11 @@ class ReparacionList extends Component {
         const {reparaciones, isLoading, fechaDevolucion, horaDevolucion, fechaReserva, horaReserva, importeTotal, estadoReparacion, descripcionProblema, descripcionReparacion, taller, cliente, currentPage, todosPerPage, estado} = this.state;
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
+        const classes = {
+            textField: {
+                width: 200,
+            },
+        };
         let filterReparaciones = this.state.reparaciones.slice();
         if (this.state.estado) {
             filterReparaciones = filterReparaciones.filter(reparacion => reparacion.estadoReparacion.descripcion.toLowerCase().indexOf(estado.toLowerCase()) !== -1);
@@ -297,24 +310,95 @@ class ReparacionList extends Component {
                         <Button color="success" tag={Link} to="/reservacion/new">Crear Reparacion</Button>
                     </div>
                     }
-                    <h3>Reparaciones</h3>
-                    <input type="text" onChange={this.filterEstado} placeholder="Estado..."></input>
+                    <Typography variant="h4">
+                        Reparaciones
+                    </Typography>
+                    {/*<input type="text" onChange={this.filterEstado} placeholder="Estado..."></input>*/}
+                    <TextField
+                        id="standard-basic"
+                        className={classes.textField}
+                        label="Estado"
+                        margin="normal"
+                        onChange={this.filterEstado}
+                    />
                     &nbsp;&nbsp;
-                    <DatePicker placeholderText="Fecha Reserva Desde" dateFormat="dd/MM/yyyy"
-                                selected={this.state.filtroFechaReservaDesde}
-                                onChange={(date) => this.filterFechaReservaDesde(date)}/>
                     &nbsp;&nbsp;
-                    <DatePicker placeholderText="Fecha Reserva Hasta" dateFormat="dd/MM/yyyy"
-                                selected={this.state.filtroFechaReservaHasta}
-                                onChange={(date) => this.filterFechaReservaHasta(date)}/>
-                    &nbsp;&nbsp;
-                    <DatePicker placeholderText="Fecha Devolución Desde" dateFormat="dd/MM/yyyy"
-                                selected={this.state.filtroFechaDevolucionDesde}
-                                onChange={(date) => this.filterFechaDevolucionDesde(date)}/>
-                    &nbsp;&nbsp;
-                    <DatePicker placeholderText="Fecha Devolución Hasta" dateFormat="dd/MM/yyyy"
-                                selected={this.state.filtroFechaDevolucionHasta}
-                                onChange={(date) => this.filterFechaDevolucionHasta(date)}/>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="dd/MM/yyyy"
+                            margin="normal"
+                            id="date-picker-inline"
+                            label="Fecha Reserva Desde"
+                            value={this.state.filtroFechaReservaDesde}
+                            onChange={(date) => this.filterFechaReservaDesde(date)}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                        &nbsp;&nbsp;
+                        &nbsp;&nbsp;
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="dd/MM/yyyy"
+                            margin="normal"
+                            id="date-picker-inline"
+                            label="Fecha Reserva Hasta"
+                            value={this.state.filtroFechaReservaHasta}
+                            onChange={(date) => this.filterFechaReservaHasta(date)}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                        &nbsp;&nbsp;
+                        &nbsp;&nbsp;
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="dd/MM/yyyy"
+                            margin="normal"
+                            id="date-picker-inline"
+                            label="Fecha Devolución Desde"
+                            value={this.state.filtroFechaDevolucionDesde}
+                            onChange={(date) => this.filterFechaDevolucionDesde(date)}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                        &nbsp;&nbsp;
+                        &nbsp;&nbsp;
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="dd/MM/yyyy"
+                            margin="normal"
+                            id="date-picker-inline"
+                            label="Fecha Devolución Hasta"
+                            value={this.state.filtroFechaDevolucionHasta}
+                            onChange={(date) => this.filterFechaDevolucionHasta(date)}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                    </MuiPickersUtilsProvider>
+
+                    {/*<DatePicker placeholderText="Fecha Reserva Desde" dateFormat="dd/MM/yyyy"*/}
+                    {/*            selected={this.state.filtroFechaReservaDesde}*/}
+                    {/*            onChange={(date) => this.filterFechaReservaDesde(date)}/>*/}
+                    {/*&nbsp;&nbsp;*/}
+                    {/*<DatePicker placeholderText="Fecha Reserva Hasta" dateFormat="dd/MM/yyyy"*/}
+                    {/*            selected={this.state.filtroFechaReservaHasta}*/}
+                    {/*            onChange={(date) => this.filterFechaReservaHasta(date)}/>*/}
+                    {/*&nbsp;&nbsp;*/}
+                    {/*<DatePicker placeholderText="Fecha Devolución Desde" dateFormat="dd/MM/yyyy"*/}
+                    {/*            selected={this.state.filtroFechaDevolucionDesde}*/}
+                    {/*            onChange={(date) => this.filterFechaDevolucionDesde(date)}/>*/}
+                    {/*&nbsp;&nbsp;*/}
+                    {/*<DatePicker placeholderText="Fecha Devolución Hasta" dateFormat="dd/MM/yyyy"*/}
+                    {/*            selected={this.state.filtroFechaDevolucionHasta}*/}
+                    {/*            onChange={(date) => this.filterFechaDevolucionHasta(date)}/>*/}
                     <Table className="mt-4">
                         <thead>
                         <tr>

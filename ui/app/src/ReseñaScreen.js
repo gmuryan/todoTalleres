@@ -11,6 +11,7 @@ import TalleresNavbar from "./TalleresNavbar";
 import Comment from "./Comment";
 import AppNavbar from "./AppNavbar";
 import App from "./App";
+import Typography from "@material-ui/core/Typography";
 
 class ReseñaScreen extends Component {
 
@@ -122,7 +123,9 @@ class ReseñaScreen extends Component {
 
     render() {
         const {item, reseñas, taller} = this.state;
-        const title = <h2>Reseñas</h2>;
+        const title = <Typography variant="h4">
+            Reseñas
+        </Typography>;
         const tallerAux = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteAux = JSON.parse(localStorage.getItem("clienteUser"));
         const adminAux = JSON.parse(localStorage.getItem("adminUser"));

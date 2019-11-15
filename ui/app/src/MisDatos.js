@@ -3,6 +3,7 @@ import {Link, withRouter} from 'react-router-dom';
 import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import ClientesNavbar from './ClientesNavbar';
 import {confirmAlert} from "react-confirm-alert";
+import Typography from "@material-ui/core/Typography";
 
 class MisDatos extends Component {
 
@@ -203,7 +204,9 @@ class MisDatos extends Component {
 
     render() {
         const {item, flag} = this.state;
-        const title = <h2>{item.idCliente ? 'Editar Cliente' : 'Crear Cliente'}</h2>;
+        const title = <Typography variant="h4">
+            Editar Cliente
+        </Typography>;
 
         if (flag == false && item.idCliente) {
             item.repeatPassword = item.password;

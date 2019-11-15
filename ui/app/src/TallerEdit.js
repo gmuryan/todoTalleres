@@ -3,7 +3,8 @@ import {Link, withRouter} from 'react-router-dom';
 import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {confirmAlert} from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
+import 'react-confirm-alert/src/react-confirm-alert.css'
+import Typography from "@material-ui/core/Typography"; // Import css
 
 class TallerEdit extends Component {
 
@@ -262,12 +263,16 @@ class TallerEdit extends Component {
         let newOptionsClasifs = clasificaciones.map((clasif) =>
             <option key={clasif.idClasificacion} value={JSON.stringify(clasif)}>{clasif.descripcion}</option>
         );
-        const title = <h2>{item.idTaller ? 'Editar Taller' : 'Crear Taller'}</h2>;
 
         return <div>
             <AppNavbar/>
             <Container>
-                {title}
+                {item.idTaller &&
+                    <Typography variant="h4">Editar Taller</Typography>
+                }
+                {item.idTaller === undefined &&
+                    <Typography variant="h4">Crear Taller</Typography>
+                }
                 <Form onSubmit={this.handleSubmit}>
                     <div className="row">
                         <FormGroup className="col-md-4 mb-3">

@@ -3,6 +3,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {confirmAlert} from "react-confirm-alert";
+import SignInSide from "./SignInSide";
+import SignUp from "./SignUp";
 
 class Registracion extends Component {
 
@@ -32,14 +34,6 @@ class Registracion extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    async componentDidMount() {
-        if (this.props.match.params.id !== 'new') {
-            const cliente = await (await fetch(`/api/cliente/${this.props.match.params.id}`)).json();
-            this.setState({mailCargado: cliente.mail});
-            this.setState({item: cliente});
-        }
-    }
-
     handleChange(event) {
         const target = event.target;
         const value = target.value;
@@ -51,6 +45,7 @@ class Registracion extends Component {
 
     validateMailTaller() {
         let fields = this.state.item;
+        console.log(this.state.item);
         return fetch(`/api/tallerByMail?mail=${encodeURIComponent(fields["mail"])}`, {
             method: 'GET',
             headers: {
@@ -62,6 +57,7 @@ class Registracion extends Component {
 
     validateMailCliente(){
         let fields = this.state.item;
+        console.log(this.state.item);
         return fetch(`/api/clienteByMail?mail=${encodeURIComponent(fields["mail"])}`, {
             method: 'GET',
             headers: {
@@ -182,7 +178,7 @@ class Registracion extends Component {
         this.handleValidation().then((result) =>{
             if (this.state.formIsValid){
                 const {item} = this.state;
-
+                console.log(item);
                 fetch('/api/cliente', {
                     method: (item.idCliente) ? 'PUT' : 'POST',
                     headers: {
@@ -197,67 +193,9 @@ class Registracion extends Component {
     }
 
     render() {
-        const {item, flag} = this.state;
-        const title = <h2>Registrar Cliente</h2>;
-
-        if (flag == false && item.idCliente){
-            item.repeatPassword = item.password;
-            this.setState({flag: !this.state.flag});
-        }
-
-        return <div>
-            <Container>
-                {title}
-                <Form onSubmit={this.handleSubmit}>
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="nombre">Nombre</Label>
-                            <Input type="text" name="nombre" id="nombre" value={item.nombre || ''}
-                                   onChange={this.handleChange} autoComplete="nombre"/>
-                            <span className="error">{this.state.errors["nombre"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="apellido">Apellido</Label>
-                            <Input type="text" name="apellido" id="apellido" value={item.apellido || ''}
-                                   onChange={this.handleChange} autoComplete="apellido"/>
-                            <span className="error">{this.state.errors["apellido"]}</span>
-                        </FormGroup>
-                    </div>
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="telefono">Teléfono</Label>
-                            <Input type="text" name="telefono" id="telefono" value={item.telefono || ''}
-                                   onChange={this.handleChange} autoComplete="telefono"/>
-                            <span className="error">{this.state.errors["telefono"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="mail">Mail</Label>
-                            <Input type="text" name="mail" id="mail" value={item.mail || ''}
-                                   onChange={this.handleChange} autoComplete="mail"/>
-                            <span className="error">{this.state.errors["mail"]}</span>
-                        </FormGroup>
-                    </div>
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="password">Contraseña</Label>
-                            <Input type="password" name="password" id="password" value={item.password || ''}
-                                   onChange={this.handleChange} autoComplete="password"/>
-                            <span className="error">{this.state.errors["password"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="repeatPassword">Repetir Contraseña</Label>
-                            <Input type="password" name="repeatPassword" id="repeatPassword" value={item.repeatPassword || ''}
-                                   onChange={this.handleChange} autoComplete="repeatPassword"/>
-                            <span className="error">{this.state.errors["repeatPassword"]}</span>
-                        </FormGroup>
-                    </div>
-                    <FormGroup>
-                        <Button color="primary" type="submit">Guardar</Button>{' '}
-                        <Button color="secondary" tag={Link} to="/">Cancelar</Button>
-                    </FormGroup>
-                </Form>
-            </Container>
-        </div>
+        return(
+            <SignUp errores={this.state.errors} handleSubmit={this.handleSubmit} handleChange={this.handleChange.bind(this)}/>
+        );
     }
 }
 

@@ -7,6 +7,10 @@ import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import './App.css';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { css } from '@emotion/core';
+import TextField from "@material-ui/core/TextField";
+import ClientesEnhancedTable from "./ClientesSortableTable";
+import MecanicosEnhancedTable from "./MecanicosSortableTable";
+import Typography from "@material-ui/core/Typography";
 
 const override = css`
     display: block;
@@ -33,6 +37,9 @@ class MecanicoList extends Component {
             currentPage: 1,
             todosPerPage: 5
         };
+        this.dialogDeshabilitar = this.dialogDeshabilitar.bind(this);
+        this.dialogHabilitar = this.dialogHabilitar.bind(this);
+        this.edit = this.edit.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.remove = this.remove.bind(this);
     }
@@ -139,6 +146,10 @@ class MecanicoList extends Component {
         })
     };
 
+    edit(idMecanico){
+        this.props.history.push('/mecanicos/' + idMecanico);
+    }
+
     filterMail = e => {
         this.setState({mail: e.target.value});
     }
@@ -153,6 +164,11 @@ class MecanicoList extends Component {
 
     render() {
         const {mecanicos, isLoading, nombre, apellido, mail, currentPage, todosPerPage} = this.state;
+        const classes = {
+            textField: {
+                width: 200,
+            },
+        };
         let filterMecanicos = this.state.mecanicos.slice();
         if (this.state.nombre) {
             filterMecanicos = filterMecanicos.filter(mecanico => mecanico.nombre.toLowerCase().indexOf(nombre.toLowerCase()) !== -1);
@@ -229,33 +245,61 @@ class MecanicoList extends Component {
                     <div className="float-right">
                         <Button color="success" tag={Link} to="/mecanicos/new">Crear Mecanico</Button>
                     </div>
-                    <h3>Mecanicos</h3>
-                    <input type="text" onChange={this.filterNombre} placeholder="Nombre..."></input>
+                    <Typography variant="h4">
+                        Mecanicos
+                    </Typography>
+                    <TextField
+                        id="standard-basic"
+                        className={classes.textField}
+                        label="Nombre"
+                        margin="normal"
+                        onChange={this.filterNombre}
+                    />
                     &nbsp;&nbsp;
-                    <input type="text" onChange={this.filterApellido} placeholder="Apellido..."></input>
                     &nbsp;&nbsp;
-                    <input type="text" onChange={this.filterMail} placeholder="Mail..."></input>
-                    <Table className="mt-4">
-                        <thead>
-                        <tr>
-                            <th width="20%">ID</th>
-                            <th width="20%">Nombre</th>
-                            <th width="20%">Apellido</th>
-                            <th width="20%">Teléfono</th>
-                            <th width="20%">Mail</th>
-                            <th width="10%">Habilitado</th>
-                            <th width="10%">Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {mecanicoList}
-                        </tbody>
-                    </Table>
-                    <ul id="page-numbers">
-                        <Label>Paginas:</Label>
-                        <span>&nbsp;&nbsp;</span>
-                        {renderPageNumbers}
-                    </ul>
+                    <TextField
+                        id="standard-basic"
+                        className={classes.textField}
+                        label="Apellido"
+                        margin="normal"
+                        onChange={this.filterApellido}
+                    />
+                    &nbsp;&nbsp;
+                    &nbsp;&nbsp;
+                    <TextField
+                        id="standard-basic"
+                        className={classes.textField}
+                        label="Mail"
+                        margin="normal"
+                        onChange={this.filterMail}
+                    />
+                    {/*<input type="text" onChange={this.filterNombre} placeholder="Nombre..."></input>*/}
+                    {/*&nbsp;&nbsp;*/}
+                    {/*<input type="text" onChange={this.filterApellido} placeholder="Apellido..."></input>*/}
+                    {/*&nbsp;&nbsp;*/}
+                    {/*<input type="text" onChange={this.filterMail} placeholder="Mail..."></input>*/}
+                    <MecanicosEnhancedTable rows={filterMecanicos} habilitarMecanico={this.dialogHabilitar} deshabilitarMecanico={this.dialogDeshabilitar} editar={this.edit}/>
+                    {/*<Table className="mt-4">*/}
+                    {/*    <thead>*/}
+                    {/*    <tr>*/}
+                    {/*        <th width="20%">ID</th>*/}
+                    {/*        <th width="20%">Nombre</th>*/}
+                    {/*        <th width="20%">Apellido</th>*/}
+                    {/*        <th width="20%">Teléfono</th>*/}
+                    {/*        <th width="20%">Mail</th>*/}
+                    {/*        <th width="10%">Habilitado</th>*/}
+                    {/*        <th width="10%">Acciones</th>*/}
+                    {/*    </tr>*/}
+                    {/*    </thead>*/}
+                    {/*    <tbody>*/}
+                    {/*    {mecanicoList}*/}
+                    {/*    </tbody>*/}
+                    {/*</Table>*/}
+                    {/*<ul id="page-numbers">*/}
+                    {/*    <Label>Paginas:</Label>*/}
+                    {/*    <span>&nbsp;&nbsp;</span>*/}
+                    {/*    {renderPageNumbers}*/}
+                    {/*</ul>*/}
                 </Container>
             </div>
         );

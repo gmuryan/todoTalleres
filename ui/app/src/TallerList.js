@@ -8,6 +8,9 @@ import './App.css';
 import ClientesNavbar from "./ClientesNavbar";
 import ClipLoader from 'react-spinners/ClipLoader';
 import {css} from "@emotion/core";
+import TextField from "@material-ui/core/TextField";
+import TalleresEnhancedTable from "./TalleresSortableTable";
+import Typography from "@material-ui/core/Typography";
 
 const override = css`
     display: block;
@@ -31,7 +34,12 @@ class TallerList extends Component {
             todosPerPage: 5
         };
         this.handleClick = this.handleClick.bind(this);
+        this.dialogHabilitar = this.dialogHabilitar.bind(this);
+        this.dialogDeshabilitar = this.dialogDeshabilitar.bind(this);
+        this.edit = this.edit.bind(this);
+        this.reviews = this.reviews.bind(this);
         this.remove = this.remove.bind(this);
+        this.book = this.book.bind(this);
         const admin = JSON.parse(localStorage.getItem("adminUser"));
         const cliente = JSON.parse(localStorage.getItem("clienteUser"));
         if (admin === null && cliente === null) {
@@ -142,6 +150,18 @@ class TallerList extends Component {
         })
     };
 
+    edit(idTaller) {
+        this.props.history.push('/talleres/' + idTaller);
+    }
+
+    reviews(idTaller) {
+        this.props.history.push('/reseñas/' + idTaller);
+    }
+
+    book(idTaller){
+        this.props.history.push('/reservacion/' + idTaller);
+    }
+
     filterBarrio = e => {
         this.setState({barrio: e.target.value});
     }
@@ -162,6 +182,11 @@ class TallerList extends Component {
         const {talleres, isLoading, nombre, barrio, clasificacion, marca, currentPage, todosPerPage} = this.state;
         const adminUser = JSON.parse(localStorage.getItem("adminUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
+        const classes = {
+            textField: {
+                width: 200,
+            },
+        };
         let filterTalleres = this.state.talleres.slice();
         if (this.state.nombre) {
             filterTalleres = filterTalleres.filter(taller => taller.nombre.toLowerCase().indexOf(nombre.toLowerCase()) !== -1);
@@ -233,10 +258,12 @@ class TallerList extends Component {
                                     to={"/reseñas/" + taller.idTaller}>Reseñas</Button>
                             &nbsp;&nbsp;
                             {taller.activo &&
-                            <Button size="sm" color="danger" onClick={() => this.dialogDeshabilitar(taller)}>Deshabilitar</Button>
+                            <Button size="sm" color="danger"
+                                    onClick={() => this.dialogDeshabilitar(taller)}>Deshabilitar</Button>
                             }
                             {!taller.activo &&
-                            <Button size="sm" color="success" onClick={() => this.dialogHabilitar(taller)}>Habilitar</Button>
+                            <Button size="sm" color="success"
+                                    onClick={() => this.dialogHabilitar(taller)}>Habilitar</Button>
                             }
                         </ButtonGroup>
                         }
@@ -295,39 +322,78 @@ class TallerList extends Component {
                         <Button color="success" tag={Link} to="/talleres/new">Crear Taller</Button>
                     </div>
                     }
-                    <h3>Talleres</h3>
-                    <input type="text" onChange={this.filterNombre} placeholder="Nombre..."></input>
+                    <Typography variant="h4">
+                        Talleres
+                    </Typography>
+                    <TextField
+                        id="standard-basic"
+                        className={classes.textField}
+                        label="Nombre"
+                        margin="normal"
+                        onChange={this.filterNombre}
+                    />
                     &nbsp;&nbsp;
-                    <input type="text" onChange={this.filterBarrio} placeholder="Barrio..."></input>
                     &nbsp;&nbsp;
-                    <input type="text" onChange={this.filterMarca} placeholder="Marca..."></input>
+                    <TextField
+                        id="standard-basic"
+                        className={classes.textField}
+                        label="Barrio"
+                        margin="normal"
+                        onChange={this.filterBarrio}
+                    />
                     &nbsp;&nbsp;
-                    <input type="text" onChange={this.filterClasificacion} placeholder="Especialización..."></input>
-                    <Table className="mt-4">
-                        <thead>
-                        <tr>
-                            <th width="10%">ID</th>
-                            <th width="10%">Nombre</th>
-                            <th width="10%">Barrio</th>
-                            <th width="10%">Teléfono</th>
-                            <th width="10%">Mail</th>
-                            <th width="10%">Marca</th>
-                            <th width="10%">Especialización</th>
-                            {adminUser &&
-                            <th width="10%">Habilitado</th>
-                            }
-                            <th width="10%">Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {tallerList}
-                        </tbody>
-                    </Table>
-                    <ul id="page-numbers">
-                        <Label>Paginas:</Label>
-                        <span>&nbsp;&nbsp;</span>
-                        {renderPageNumbers}
-                    </ul>
+                    &nbsp;&nbsp;
+                    <TextField
+                        id="standard-basic"
+                        className={classes.textField}
+                        label="Marca"
+                        margin="normal"
+                        onChange={this.filterMarca}
+                    />
+                    &nbsp;&nbsp;
+                    &nbsp;&nbsp;
+                    <TextField
+                        id="standard-basic"
+                        className={classes.textField}
+                        label="Especialización"
+                        margin="normal"
+                        onChange={this.filterClasificacion}
+                    />
+                    {/*<input type="text" onChange={this.filterNombre} placeholder="Nombre..."></input>*/}
+                    {/*&nbsp;&nbsp;*/}
+                    {/*<input type="text" onChange={this.filterBarrio} placeholder="Barrio..."></input>*/}
+                    {/*&nbsp;&nbsp;*/}
+                    {/*<input type="text" onChange={this.filterMarca} placeholder="Marca..."></input>*/}
+                    {/*&nbsp;&nbsp;*/}
+                    {/*<input type="text" onChange={this.filterClasificacion} placeholder="Especialización..."></input>*/}
+                    <TalleresEnhancedTable rows={filterTalleres} habilitarTaller={this.dialogHabilitar}
+                                           deshabilitarTaller={this.dialogDeshabilitar} editar={this.edit}
+                                           verReseñas={this.reviews} reservar={this.book} usuarioCliente={clienteUser} usuarioAdmin={adminUser}/>
+                    {/*<Table className="mt-4">*/}
+                    {/*    <thead>*/}
+                    {/*    <tr>*/}
+                    {/*        <th width="10%">ID</th>*/}
+                    {/*        <th width="10%">Nombre</th>*/}
+                    {/*        <th width="10%">Barrio</th>*/}
+                    {/*        <th width="10%">Teléfono</th>*/}
+                    {/*        <th width="10%">Mail</th>*/}
+                    {/*        <th width="10%">Marca</th>*/}
+                    {/*        <th width="10%">Especialización</th>*/}
+                    {/*        {adminUser &&*/}
+                    {/*        <th width="10%">Habilitado</th>*/}
+                    {/*        }*/}
+                    {/*        <th width="10%">Acciones</th>*/}
+                    {/*    </tr>*/}
+                    {/*    </thead>*/}
+                    {/*    <tbody>*/}
+                    {/*    {tallerList}*/}
+                    {/*    </tbody>*/}
+                    {/*</Table>*/}
+                    {/*<ul id="page-numbers">*/}
+                    {/*    <Label>Paginas:</Label>*/}
+                    {/*    <span>&nbsp;&nbsp;</span>*/}
+                    {/*    {renderPageNumbers}*/}
+                    {/*</ul>*/}
                 </Container>
             </div>
         );

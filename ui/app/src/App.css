@@ -36,7 +36,11 @@
 
 .container, .container-fluid {
   margin-top: 20px;
-}  
+}
+
+.titulo-filtro{
+    margin-bottom: -1rem;
+}
 
 .select{
     width: 100%;

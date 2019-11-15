@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {confirmAlert} from "react-confirm-alert";
+import Typography from "@material-ui/core/Typography";
 
 class ClienteEdit extends Component {
 
@@ -200,7 +201,6 @@ class ClienteEdit extends Component {
 
     render() {
         const {item, flag} = this.state;
-        const title = <h2>{item.idCliente ? 'Editar Cliente' : 'Crear Cliente'}</h2>;
 
         if (flag == false && item.idCliente){
             item.repeatPassword = item.password;
@@ -211,7 +211,12 @@ class ClienteEdit extends Component {
         return <div>
             <AppNavbar/>
             <Container>
-                {title}
+                {item.idCliente &&
+                <Typography variant="h4">Editar Cliente</Typography>
+                }
+                {item.idCliente === undefined &&
+                <Typography variant="h4">Crear Cliente</Typography>
+                }
                 <Form onSubmit={this.handleSubmit}>
                     <div className="row">
                     <FormGroup className="col-md-6 mb-3">

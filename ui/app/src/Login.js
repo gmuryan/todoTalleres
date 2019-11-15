@@ -3,6 +3,7 @@ import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import './App.css';
 import {Link, Redirect} from "react-router-dom";
 import {useState} from "react";
+import SignInSide from "./SignInSide";
 
 const imgTaller = require('./taller.jpg');
 const divStyle = {
@@ -32,9 +33,10 @@ class Login extends Component {
         });
     }
 
-    async handleSubmit(event) {
+    handleSubmit = async(event) => {
         event.preventDefault();
         let errors = {};
+        debugger;
         const {email, password} = this.state;
         if (email == 'admin' && password == 'admin') {
             localStorage.clear();
@@ -89,32 +91,12 @@ class Login extends Component {
             errors["password"] = "Datos invalidos";
             this.setState({errors: errors});
         }
-
-
     }
 
     render() {
-        return <div className="img-login" style={divStyle}>
-            <Container>
-                <Form className="login-form" onSubmit={this.handleSubmit}>
-                    <h1 className="text-center">
-                        <span className="font-weight-bold">TodoTalleres</span>
-                    </h1>
-                    <h2 className="text-center">Bienvenido</h2>
-                    <FormGroup>
-                        <Input type="text" name="email" id="email" placeholder="Email"
-                               onChange={this.handleChange} autoComplete="email"/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Input type="password" name="password" id="password" placeholder="Contraseña"
-                               onChange={this.handleChange} autoComplete="password"/>
-                    </FormGroup>
-                    <span className="error-login">{this.state.errors["password"]}</span>
-                    <Button className="btn-lg btn-block" color="success" type="submit">Ingresar</Button>
-                    <Button className="btn-lg btn-block" color="primary" tag={Link} to="/registracion">Registrarse</Button>
-                </Form>
-            </Container>
-        </div>
+        return(
+            <SignInSide errores={this.state.errors} handleSubmit={this.handleSubmit} handleChange={this.handleChange.bind(this)}/>
+        );
     }
 
 }

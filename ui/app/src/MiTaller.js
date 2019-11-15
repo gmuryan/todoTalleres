@@ -3,7 +3,8 @@ import {Link, withRouter} from 'react-router-dom';
 import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import TalleresNavbar from './TalleresNavbar';
 import {confirmAlert} from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
+import 'react-confirm-alert/src/react-confirm-alert.css'
+import Typography from "@material-ui/core/Typography"; // Import css
 
 class MiTaller extends Component {
 
@@ -272,12 +273,13 @@ class MiTaller extends Component {
         let newOptionsClasifs = clasificaciones.map((clasif) =>
             <option key={clasif.idClasificacion} value={JSON.stringify(clasif)}>{clasif.descripcion}</option>
         );
-        const title = <h2>{item.idTaller ? 'Editar Taller' : 'Crear Taller'}</h2>;
 
         return <div>
             <TalleresNavbar/>
             <Container>
-                {title}
+                <Typography variant="h4">
+                    Editar Taller
+                </Typography>
                 <Form onSubmit={this.handleSubmit}>
                     <div className="row">
                         <FormGroup className="col-md-4 mb-3">
