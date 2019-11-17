@@ -47,7 +47,7 @@ class HomeCliente extends Component {
     dialogNuevoPresupuesto(value){
         confirmAlert({
             title: 'Nuevo Presupuesto',
-            message: 'Hay un nuevo presupuesto en la reparacion con ID ' + value,
+            message: 'Hay un nuevo presupuesto en la reparación con ID ' + value,
             buttons: [
                 {
                     label: 'Aceptar',

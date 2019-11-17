@@ -268,45 +268,47 @@ const TalleresEnhancedTable = ({rows, habilitarTaller, deshabilitarTaller, edita
                                     const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
-                                    return (
-                                        <TableRow
-                                            hover
-                                            onClick={event => handleClick(event, row.idTaller)}
-                                            key={row.idTaller}
-                                            selected={isItemSelected}
-                                        >
-                                            <TableCell component="th" id={labelId} scope="row" align="right">
-                                                {row.idTaller}
-                                            </TableCell>
-                                            <TableCell align="left">{row.nombre}</TableCell>
-                                            <TableCell align="left">{row.barrio}</TableCell>
-                                            <TableCell align="right">{row.telefono}</TableCell>
-                                            <TableCell align="left">{row.mail}</TableCell>
-                                            <TableCell align="left">{row.marca.descripcion}</TableCell>
-                                            <TableCell align="left">{row.clasificacion.descripcion}</TableCell>
-                                            <TableCell align="left">{row.activo ? "Si" : "No"}</TableCell>
-                                            <TableCell component="th" scope="row">
-                                                {usuarioCliente &&
+                                    if (usuarioAdmin || (usuarioCliente && row.activo)) {
+                                        return (
+                                            <TableRow
+                                                hover
+                                                onClick={event => handleClick(event, row.idTaller)}
+                                                key={row.idTaller}
+                                                selected={isItemSelected}
+                                            >
+                                                <TableCell component="th" id={labelId} scope="row" align="right">
+                                                    {row.idTaller}
+                                                </TableCell>
+                                                <TableCell align="left">{row.nombre}</TableCell>
+                                                <TableCell align="left">{row.barrio}</TableCell>
+                                                <TableCell align="right">{row.telefono}</TableCell>
+                                                <TableCell align="left">{row.mail}</TableCell>
+                                                <TableCell align="left">{row.marca.descripcion}</TableCell>
+                                                <TableCell align="left">{row.clasificacion.descripcion}</TableCell>
+                                                <TableCell align="left">{row.activo ? "Si" : "No"}</TableCell>
+                                                <TableCell component="th" scope="row">
+                                                    {usuarioCliente &&
                                                     bookmarkIcon(row.idTaller)
-                                                }
-                                                {usuarioCliente &&
+                                                    }
+                                                    {usuarioCliente &&
                                                     infoIcon(row.idTaller)
-                                                }
-                                                {usuarioAdmin &&
+                                                    }
+                                                    {usuarioAdmin &&
                                                     editIcon(row.idTaller)
-                                                }
-                                                {usuarioAdmin &&
+                                                    }
+                                                    {usuarioAdmin &&
                                                     reviewsIcon(row.idTaller)
-                                                }
-                                                {!row.activo && usuarioAdmin &&
+                                                    }
+                                                    {!row.activo && usuarioAdmin &&
                                                     enableIcon(row)
-                                                }
-                                                {row.activo && usuarioAdmin &&
+                                                    }
+                                                    {row.activo && usuarioAdmin &&
                                                     disableIcon(row)
-                                                }
-                                            </TableCell>
-                                        </TableRow>
-                                    );
+                                                    }
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    }
                                 })}
                             {emptyRows > 0 && (
                                 <TableRow style={{height: (dense ? 33 : 53) * emptyRows}}>

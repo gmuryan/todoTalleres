@@ -3,6 +3,8 @@ import { Link, withRouter } from 'react-router-dom';
 import {Button, ButtonGroup, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
 import TalleresNavbar from './TalleresNavbar';
 import {confirmAlert} from "react-confirm-alert";
+import Typography from "@material-ui/core/Typography";
+import ReparacionesEnhancedTable from "./ReparacionesSortableTable";
 
 class MecanicoEdit extends Component {
 
@@ -147,28 +149,16 @@ class MecanicoEdit extends Component {
         const title = <h2>{item.idMecanico ? 'Editar Mecanico' : 'Crear Mecanico'}</h2>;
         const tallerAux = JSON.parse(localStorage.getItem("tallerUser"));
         item.taller = JSON.stringify(tallerAux);
-        const reparacionesList = reparaciones.map(reparacion => {
-            return <tr key={reparacion.idReparacion}>
-                <td>{reparacion.idReparacion}</td>
-                <td>{reparacion.fechaDevolucion}</td>
-                <td>{reparacion.horaDevolucion ? reparacion.horaDevolucion.substring(0, 5) : reparacion.horaDevolucion}</td>
-                <td>{reparacion.estadoReparacion.descripcion}</td>
-                {reparacion.importeTotal &&
-                <td> ${new Intl.NumberFormat('de-DE', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }).format(reparacion.importeTotal)}</td>
-                }
-                {!reparacion.importeTotal &&
-                <td>{reparacion.importeTotal}</td>
-                }
-                <td>{reparacion.cliente.nombre + " " + reparacion.cliente.apellido}</td>
-            </tr>
-        });
+
         return <div>
             <TalleresNavbar/>
             <Container>
-                {title}
+                {this.props.match.params.id !== 'new' &&
+                <Typography variant="h4">Editar Mecanico</Typography>
+                }
+                {this.props.match.params.id === 'new' &&
+                <Typography variant="h4">Crear Mecanico</Typography>
+                }
                 <Form onSubmit={this.handleSubmit}>
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
@@ -199,24 +189,12 @@ class MecanicoEdit extends Component {
                         </FormGroup>
                     </div>
                     {this.props.match.params.id !== 'new' &&
-                    <h3> Reparaciones asignadas</h3>
+                    <Typography variant="h4">
+                        Reparaciones Asignadas
+                    </Typography>
                     }
                     {this.props.match.params.id !== 'new' &&
-                    <Table className="mt-4">
-                        <thead>
-                        <tr>
-                            <th width="5%">ID</th>
-                            <th width="10%">Fecha Devolución</th>
-                            <th width="10%">Hora Devolución</th>
-                            <th width="10%">Estado</th>
-                            <th width="10%">Importe</th>
-                            <th width="10%">Cliente</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {reparacionesList}
-                        </tbody>
-                    </Table>
+                    <ReparacionesEnhancedTable rows={reparaciones} tallerUser={tallerAux} dense={true}  acciones={false}/>
                     }
                     {this.props.match.params.id !== 'new' &&
                     <br></br>

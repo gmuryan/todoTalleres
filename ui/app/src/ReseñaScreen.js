@@ -153,7 +153,7 @@ class ReseñaScreen extends Component {
                 }
                 <Container>
                     {clienteAux !== null &&
-                    <h2>Información del Taller</h2>
+                    <Typography variant="h4">Información del Taller</Typography>
                     }
                     <Form>
                         {clienteAux !== null &&

@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment'
 import ClientesNavbar from "./ClientesNavbar";
 import TalleresNavbar from "./TalleresNavbar";
+import Typography from "@material-ui/core/Typography";
 
 class ReservacionScreen extends Component {
 
@@ -472,7 +473,7 @@ class ReservacionScreen extends Component {
             }
             <Container>
                 {clienteAux !== null &&
-                <h2>Información del Taller</h2>
+                <Typography variant="h4">Información del Taller</Typography>
                 }
                 <Form onSubmit={this.handleSubmit}>
                     {clienteAux !== null &&
@@ -536,15 +537,15 @@ class ReservacionScreen extends Component {
                     </div>
                     }
                     {clienteAux !== null &&
-                    <h2>Fecha de Reservación</h2>
+                    <Typography variant="h4">Fecha de Reservación</Typography>
                     }
                     {tallerAux !== null &&
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
-                            <h2>Fecha de Reservación</h2>
+                            <Typography variant="h4">Fecha de Reservación</Typography>
                         </FormGroup>
                         <FormGroup className="col-md-6 mb-3">
-                            <h2>Fecha Devolución</h2>
+                            <Typography variant="h4">Fecha de Devolución</Typography>
                         </FormGroup>
                     </div>
                     }
@@ -600,7 +601,7 @@ class ReservacionScreen extends Component {
                         }
                     </div>
                     {tallerAux !== null &&
-                    <h2>Datos del Auto</h2>
+                    <Typography variant="h4">Datos del Auto</Typography>
                     }
                     {tallerAux !== null &&
                     <div className="row">
@@ -621,7 +622,7 @@ class ReservacionScreen extends Component {
                     </div>
                     }
                     {tallerAux !== null &&
-                    <h2>Información de la Reparación</h2>
+                    <Typography variant="h4">Información de la Reparación</Typography>
                     }
                     {tallerAux !== null &&
                     <div className="row">

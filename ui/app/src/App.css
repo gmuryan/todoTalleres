@@ -114,6 +114,10 @@ h2.headertekst {
 
 }
 
+.react-confirm-alert-body {
+    width: 450px;
+}
+
 .input-big{
     height: calc(7rem + 2px);
     width: 100%;

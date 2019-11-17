@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, ButtonGroup, Container, Label, Table} from 'reactstrap';
+import {Container, Label, Table} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {Link} from 'react-router-dom';
 import {confirmAlert} from 'react-confirm-alert'; // Import
@@ -11,6 +11,8 @@ import {css} from '@emotion/core';
 import TextField from "@material-ui/core/TextField";
 import ClientesEnhancedTable from "./ClientesSortableTable";
 import Typography from "@material-ui/core/Typography";
+import Button from '@material-ui/core/Button';
+import MenuAppBar from "./AppBar";
 
 const override = css`
     display: block;
@@ -28,9 +30,7 @@ class ClienteList extends Component {
             isLoading: true,
             nombre: '',
             apellido: '',
-            mail: '',
-            currentPage: 1,
-            todosPerPage: 5
+            mail: ''
         };
         this.handleClick = this.handleClick.bind(this);
         this.dialogHabilitar = this.dialogHabilitar.bind(this);
@@ -92,7 +92,7 @@ class ClienteList extends Component {
 
     dialogHabilitado() {
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             message: 'Cliente Habilitado',
             buttons: [
                 {
@@ -105,7 +105,7 @@ class ClienteList extends Component {
 
     dialogEliminado() {
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             message: 'Cliente Deshabilitado',
             buttons: [
                 {
@@ -118,7 +118,7 @@ class ClienteList extends Component {
     dialogDeshabilitar(cliente) {
         confirmAlert({
             title: 'Confirmar',
-            message: 'Esta seguro de realizar esta accion?',
+            message: '¿Esta seguro de realizar esta acción?',
             buttons: [
                 {
                     label: 'Si',
@@ -134,7 +134,7 @@ class ClienteList extends Component {
     dialogHabilitar(cliente) {
         confirmAlert({
             title: 'Confirmar',
-            message: 'Esta seguro de realizar esta accion?',
+            message: '¿Esta seguro de realizar esta acción?',
             buttons: [
                 {
                     label: 'Si',
@@ -164,7 +164,7 @@ class ClienteList extends Component {
     }
 
     render() {
-        const {clientes, isLoading, nombre, apellido, mail, currentPage, todosPerPage} = this.state;
+        const {clientes, isLoading, nombre, apellido, mail} = this.state;
         const classes = {
             textField: {
                 width: 200,
@@ -197,60 +197,14 @@ class ClienteList extends Component {
             )
         }
 
-        // Logic for displaying current todos
-        const indexOfLastTodo = currentPage * todosPerPage;
-        const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-        const currentTodos = filterClientes.slice(indexOfFirstTodo, indexOfLastTodo);
-
-        // Logic for displaying page numbers
-        const pageNumbers = [];
-        for (let i = 1; i <= Math.ceil(clientes.length / todosPerPage); i++) {
-            pageNumbers.push(i);
-        }
-        const renderPageNumbers = pageNumbers.map(number => {
-            return (
-                <li
-                    key={number}
-                    id={number}
-                    onClick={this.handleClick}
-                >
-                    [{number}]
-                </li>
-            );
-        });
-
-        const clienteList = currentTodos.map(cliente => {
-            return <tr key={cliente.idCliente}>
-                <td>{cliente.idCliente}</td>
-                <td style={{whiteSpace: 'nowrap'}}>{cliente.nombre}</td>
-                <td>{cliente.apellido}</td>
-                <td>{cliente.telefono}</td>
-                <td>{cliente.mail}</td>
-                <td>{cliente.activo ? "Si" : "No"}</td>
-                <td>
-                    <ButtonGroup>
-                        <Button size="sm" color="primary" /*tag={Link}
-                                to={"/clientes/" + cliente.idCliente}*/ onClick={() => this.edit(cliente.idCliente)}>Editar</Button>
-                        &nbsp;&nbsp;
-                        {cliente.activo &&
-                        <Button size="sm" color="danger"
-                                onClick={() => this.dialogDeshabilitar(cliente)}>Deshabilitar</Button>
-                        }
-                        {!cliente.activo &&
-                        <Button size="sm" color="success"
-                                onClick={() => this.dialogHabilitar(cliente)}>Habilitar</Button>
-                        }
-                    </ButtonGroup>
-                </td>
-            </tr>
-        });
-
         return (
             <div>
                 <AppNavbar/>
                 <Container fluid>
                     <div className="float-right">
-                        <Button color="success" tag={Link} to="/clientes/new">Crear Cliente</Button>
+                        <Button type="button" variant="contained" color="primary" className={classes.button} onClick={() => this.props.history.push('/clientes/new')}>
+                            Crear Cliente
+                        </Button>
                     </div>
                     <Typography variant="h4">
                         Clientes
@@ -280,33 +234,7 @@ class ClienteList extends Component {
                         margin="normal"
                         onChange={this.filterMail}
                     />
-                    {/*<input type="text" onChange={this.filterNombre} placeholder="Nombre..."></input>*/}
-                    {/*&nbsp;&nbsp;*/}
-                    {/*<input type="text" onChange={this.filterApellido} placeholder="Apellido..."></input>*/}
-                    {/*&nbsp;&nbsp;*/}
-                    {/*<input type="text" onChange={this.filterMail} placeholder="Mail..."></input>*/}
                     <ClientesEnhancedTable rows={filterClientes} habilitarCliente={this.dialogHabilitar} deshabilitarCliente={this.dialogDeshabilitar} editar={this.edit}/>
-                    {/*<Table className="mt-4">*/}
-                    {/*    <thead>*/}
-                    {/*    <tr>*/}
-                    {/*        <th width="20%">ID</th>*/}
-                    {/*        <th width="20%">Nombre</th>*/}
-                    {/*        <th width="20%">Apellido</th>*/}
-                    {/*        <th width="20%">Teléfono</th>*/}
-                    {/*        <th width="20%">Mail</th>*/}
-                    {/*        <th width="10%">Habilitado</th>*/}
-                    {/*        <th width="10%">Acciones</th>*/}
-                    {/*    </tr>*/}
-                    {/*    </thead>*/}
-                    {/*    <tbody>*/}
-                    {/*    {clienteList}*/}
-                    {/*    </tbody>*/}
-                    {/*</Table>*/}
-                    {/*<ul id="page-numbers">*/}
-                    {/*    <Label>Paginas:</Label>*/}
-                    {/*    <span>&nbsp;&nbsp;</span>*/}
-                    {/*    {renderPageNumbers}*/}
-                    {/*</ul>*/}
                 </Container>
             </div>
         );

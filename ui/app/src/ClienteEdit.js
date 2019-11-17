@@ -211,10 +211,10 @@ class ClienteEdit extends Component {
         return <div>
             <AppNavbar/>
             <Container>
-                {item.idCliente &&
+                {this.props.match.params.id !== 'new' &&
                 <Typography variant="h4">Editar Cliente</Typography>
                 }
-                {item.idCliente === undefined &&
+                {this.props.match.params.id === 'new' &&
                 <Typography variant="h4">Crear Cliente</Typography>
                 }
                 <Form onSubmit={this.handleSubmit}>

@@ -12,10 +12,8 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import CancelIcon from '@material-ui/icons/Cancel';
+import InfoIcon from '@material-ui/icons/Info';
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -41,38 +39,54 @@ function getSorting(order, orderBy) {
     return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
-const headCells_acciones = [
-    {id: 'idMecanico', numeric: true, disablePadding: false, label: 'ID'},
-    {id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre'},
-    {id: 'apellido', numeric: false, disablePadding: false, label: 'Apellido'},
-    {id: 'telefono', numeric: true, disablePadding: false, label: 'Teléfono'},
-    {id: 'mail', numeric: false, disablePadding: false, label: 'Mail'},
-    {id: 'habilitado', numeric: false, disablePadding: false, label: 'Habilitado'},
-    {id: 'accion', numeric: false, disablePadding: false, label: 'Acciones'},
+const headCells_taller = [
+    {id: 'idReparacion', numeric: true, disablePadding: false, label: 'ID'},
+    {id: 'fechaReserva', numeric: false, disablePadding: false, label: 'Fecha Reserva'},
+    {id: 'horarioReserva', numeric: false, disablePadding: false, label: 'Horario Reserva'},
+    {id: 'fechaDevolucion', numeric: false, disablePadding: false, label: 'Fecha Devolución'},
+    {id: 'horarioDevolucion', numeric: false, disablePadding: false, label: 'Horario Devolución'},
+    {id: 'estado', numeric: false, disablePadding: false, label: 'Estado'},
+    {id: 'importe', numeric: true, disablePadding: false, label: 'Importe'},
+    {id: 'cliente', numeric: false, disablePadding: false, label: 'Cliente'},
+    {id: 'acciones', numeric: false, disablePadding: false, label: 'Acciones'},
+];
+
+const headCells_cliente = [
+    {id: 'idReparacion', numeric: true, disablePadding: false, label: 'ID'},
+    {id: 'fechaReserva', numeric: false, disablePadding: false, label: 'Fecha Reserva'},
+    {id: 'horarioReserva', numeric: false, disablePadding: false, label: 'Horario Reserva'},
+    {id: 'fechaDevolucion', numeric: false, disablePadding: false, label: 'Fecha Devolución'},
+    {id: 'horarioDevolucion', numeric: false, disablePadding: false, label: 'Horario Devolución'},
+    {id: 'estado', numeric: false, disablePadding: false, label: 'Estado'},
+    {id: 'importe', numeric: true, disablePadding: false, label: 'Importe'},
+    {id: 'taller', numeric: false, disablePadding: false, label: 'Taller'},
+    {id: 'acciones', numeric: false, disablePadding: false, label: 'Acciones'},
 ];
 
 const headCells_sin_acciones = [
-    {id: 'idMecanico', numeric: true, disablePadding: false, label: 'ID'},
-    {id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre'},
-    {id: 'apellido', numeric: false, disablePadding: false, label: 'Apellido'},
-    {id: 'telefono', numeric: true, disablePadding: false, label: 'Teléfono'},
-    {id: 'mail', numeric: false, disablePadding: false, label: 'Mail'},
-    {id: 'habilitado', numeric: false, disablePadding: false, label: 'Habilitado'},
+    {id: 'idReparacion', numeric: true, disablePadding: false, label: 'ID'},
+    {id: 'fechaDevolucion', numeric: false, disablePadding: false, label: 'Fecha Devolución'},
+    {id: 'horarioDevolucion', numeric: false, disablePadding: false, label: 'Horario Devolución'},
+    {id: 'estado', numeric: false, disablePadding: false, label: 'Estado'},
+    {id: 'importe', numeric: true, disablePadding: false, label: 'Importe'},
+    {id: 'cliente', numeric: false, disablePadding: false, label: 'Cliente'},
 ];
 
-
 function EnhancedTableHead(props) {
-    const {classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, acciones} = props;
+    const {classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, tallerUser, acciones} = props;
     const createSortHandler = property => event => {
         onRequestSort(event, property);
     };
-
     let headCells;
 
-    if (acciones)
-        headCells = headCells_acciones;
-    else
+    if (acciones) {
+        if (tallerUser)
+            headCells = headCells_taller;
+        else
+            headCells = headCells_cliente;
+    }else{
         headCells = headCells_sin_acciones;
+    }
 
     return (
         <TableHead>
@@ -141,7 +155,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const MecanicosEnhancedTable = ({rows, habilitarMecanico, deshabilitarMecanico, editar, acciones, mecanicosEnReparacion, enReparacion, asignarMecanico, desasignarMecanico, dense}) => {
+const ReparacionesEnhancedTable = ({rows, cancelarTurno, editar, clienteUser, tallerUser, acciones, dense}) => {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -197,42 +211,26 @@ const MecanicosEnhancedTable = ({rows, habilitarMecanico, deshabilitarMecanico, 
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-    const editIcon = (idMecanico) => (
+    const editIcon = (idReparacion) => (
         <Tooltip title="Editar">
-            <IconButton aria-label="Editar" onClick={() => editar(idMecanico)}>
+            <IconButton aria-label="Editar" onClick={() => editar(idReparacion)}>
                 <EditIcon color="primary"/>
             </IconButton>
         </Tooltip>
     );
 
-    const enableIcon = (mecanico) => (
-        <Tooltip title="Habilitar">
-            <IconButton aria-label="Habilitar" onClick={() => habilitarMecanico(mecanico)}>
-                <AddIcon color="primary"/>
-            </IconButton>
-        </Tooltip>
-    );
-
-    const disableIcon = (mecanico) => (
-        <Tooltip title="Deshabilitar">
-            <IconButton aria-label="Deshabilitar" onClick={() => deshabilitarMecanico(mecanico)}>
-                <RemoveIcon color="error"/>
-            </IconButton>
-        </Tooltip>
-    );
-
-    const assignIcon = (mecanico) => (
-        <Tooltip title="Asignar">
-            <IconButton aria-label="Asignar" onClick={() => asignarMecanico(mecanico)}>
-                <AssignmentTurnedInIcon color="primary"/>
-            </IconButton>
-        </Tooltip>
-    );
-
-    const unassignIcon = (mecanico) => (
-        <Tooltip title="Desasignar">
-            <IconButton aria-label="Desasignar" onClick={() => desasignarMecanico(mecanico)}>
+    const cancelIcon = (idReparacion) => (
+        <Tooltip title="Cancelar Turno">
+            <IconButton aria-label="Cancelar Turno" onClick={() => cancelarTurno(idReparacion)}>
                 <CancelIcon color="secondary"/>
+            </IconButton>
+        </Tooltip>
+    );
+
+    const infoIcon = (idReparacion) => (
+        <Tooltip title="Más Información">
+            <IconButton aria-label="Más Información" onClick={() => editar(idReparacion)}>
+                <InfoIcon color="primary"/>
             </IconButton>
         </Tooltip>
     );
@@ -255,6 +253,7 @@ const MecanicosEnhancedTable = ({rows, habilitarMecanico, deshabilitarMecanico, 
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
+                            tallerUser={tallerUser}
                             acciones={acciones}
                         />
                         <TableBody>
@@ -263,66 +262,56 @@ const MecanicosEnhancedTable = ({rows, habilitarMecanico, deshabilitarMecanico, 
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
-                                    if (enReparacion) {
-                                        if (row.activo || mecanicosEnReparacion.some(mec => (mec.idMecanico === row.idMecanico))) {
-                                            return (
-                                                <TableRow
-                                                    hover
-                                                    onClick={event => handleClick(event, row.idMecanico)}
-                                                    key={row.idMecanico}
-                                                    selected={isItemSelected}
-                                                >
-                                                    <TableCell component="th" id={labelId} scope="row" align="right">
-                                                        {row.idMecanico}
-                                                    </TableCell>
-                                                    <TableCell align="left">{row.nombre}</TableCell>
-                                                    <TableCell align="left">{row.apellido}</TableCell>
-                                                    <TableCell align="right">{row.telefono}</TableCell>
-                                                    <TableCell align="left">{row.mail}</TableCell>
-                                                    <TableCell align="left">{row.activo ? "Si" : "No"}</TableCell>
-                                                    {acciones &&
-                                                    <TableCell component="th" scope="row">
-                                                        {!mecanicosEnReparacion.some(mec => (mec.idMecanico === row.idMecanico)) && row.activo &&
-                                                        assignIcon(row)
-                                                        }
-                                                        {mecanicosEnReparacion.some(mec => (mec.idMecanico === row.idMecanico)) &&
-                                                        unassignIcon(row)
-                                                        }
-                                                    </TableCell>
-                                                    }
-                                                </TableRow>
-                                            );
-                                        }
-                                    } else {
-                                        return (
-                                            <TableRow
-                                                hover
-                                                onClick={event => handleClick(event, row.idMecanico)}
-                                                key={row.idMecanico}
-                                                selected={isItemSelected}
-                                            >
-                                                <TableCell component="th" id={labelId} scope="row" align="right">
-                                                    {row.idMecanico}
-                                                </TableCell>
-                                                <TableCell align="left">{row.nombre}</TableCell>
-                                                <TableCell align="left">{row.apellido}</TableCell>
-                                                <TableCell align="right">{row.telefono}</TableCell>
-                                                <TableCell align="left">{row.mail}</TableCell>
-                                                <TableCell align="left">{row.activo ? "Si" : "No"}</TableCell>
-                                                {acciones &&
-                                                <TableCell component="th" scope="row">
-                                                    {editIcon(row.idMecanico)}
-                                                    {!row.activo &&
-                                                    enableIcon(row)
-                                                    }
-                                                    {row.activo &&
-                                                    disableIcon(row)
-                                                    }
-                                                </TableCell>
+
+                                    return (
+                                        <TableRow
+                                            hover
+                                            onClick={event => handleClick(event, row.idReparacion)}
+                                            key={row.idReparacion}
+                                            selected={isItemSelected}
+                                        >
+                                            <TableCell component="th" id={labelId} scope="row" align="right">
+                                                {row.idReparacion}
+                                            </TableCell>
+                                            {acciones &&
+                                            <TableCell align="left">{row.fechaReserva}</TableCell>
+                                            }
+                                            {acciones &&
+                                            <TableCell align="left">{row.horaReserva.substring(0, 5)}</TableCell>
+                                            }
+                                            <TableCell align="left">{row.fechaDevolucion}</TableCell>
+                                            <TableCell
+                                                align="left">{row.horaDevolucion ? row.horaDevolucion.substring(0, 5) : row.horaDevolucion}</TableCell>
+                                            <TableCell align="left">{row.estadoReparacion.descripcion}</TableCell>
+                                            {row.importeTotal &&
+                                            <TableCell align="right"> ${new Intl.NumberFormat('de-DE', {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2
+                                            }).format(row.importeTotal)}</TableCell>
+                                            }
+                                            {!row.importeTotal &&
+                                            <TableCell align="right">{row.importeTotal}</TableCell>
+                                            }
+                                            {tallerUser !== null  &&
+                                            <TableCell
+                                                align="left">{row.cliente.nombre + " " + row.cliente.apellido}</TableCell>
+                                            }
+                                            {clienteUser !== null && acciones &&
+                                            <TableCell align="left">{row.taller.nombre}</TableCell>
+                                            }
+                                            {acciones &&
+                                            <TableCell component="th" scope="row">
+                                                {tallerUser &&
+                                                editIcon(row.idReparacion)
                                                 }
-                                            </TableRow>
-                                        );
-                                    }
+                                                {clienteUser &&
+                                                infoIcon(row.idReparacion)
+                                                }
+                                                {cancelIcon(row.idReparacion)}
+                                            </TableCell>
+                                            }
+                                        </TableRow>
+                                    );
                                 })}
                             {emptyRows > 0 && (
                                 <TableRow style={{height: (dense ? 33 : 53) * emptyRows}}>
@@ -352,4 +341,4 @@ const MecanicosEnhancedTable = ({rows, habilitarMecanico, deshabilitarMecanico, 
     );
 }
 
-export default MecanicosEnhancedTable;
+export default ReparacionesEnhancedTable;

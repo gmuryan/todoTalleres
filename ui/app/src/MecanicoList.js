@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Button, ButtonGroup, Container, Label, Table} from 'reactstrap';
 import TalleresNavbar from './TalleresNavbar';
 import {Link} from 'react-router-dom';
+import {Container, Label, Table} from 'reactstrap';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import './App.css';
@@ -11,6 +11,7 @@ import TextField from "@material-ui/core/TextField";
 import ClientesEnhancedTable from "./ClientesSortableTable";
 import MecanicosEnhancedTable from "./MecanicosSortableTable";
 import Typography from "@material-ui/core/Typography";
+import Button from '@material-ui/core/Button';
 
 const override = css`
     display: block;
@@ -33,9 +34,7 @@ class MecanicoList extends Component {
             isLoading: true,
             nombre: '',
             apellido: '',
-            mail: '',
-            currentPage: 1,
-            todosPerPage: 5
+            mail: ''
         };
         this.dialogDeshabilitar = this.dialogDeshabilitar.bind(this);
         this.dialogHabilitar = this.dialogHabilitar.bind(this);
@@ -92,7 +91,7 @@ class MecanicoList extends Component {
 
     dialogHabilitado(){
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             message: 'Mecanico Habilitado',
             buttons: [
                 {
@@ -104,7 +103,7 @@ class MecanicoList extends Component {
 
     dialogEliminado(){
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             message: 'Mecanico Deshabilitado',
             buttons: [
                 {
@@ -117,7 +116,7 @@ class MecanicoList extends Component {
     dialogDeshabilitar(mecanico) {
         confirmAlert({
             title: 'Confirmar',
-            message: 'Esta seguro de realizar esta accion?',
+            message: '¿Esta seguro de realizar esta acción?',
             buttons: [
                 {
                     label: 'Si',
@@ -133,7 +132,7 @@ class MecanicoList extends Component {
     dialogHabilitar(mecanico) {
         confirmAlert({
             title: 'Confirmar',
-            message: 'Esta seguro de realizar esta accion?',
+            message: '¿Esta seguro de realizar esta acción?',
             buttons: [
                 {
                     label: 'Si',
@@ -163,7 +162,7 @@ class MecanicoList extends Component {
     }
 
     render() {
-        const {mecanicos, isLoading, nombre, apellido, mail, currentPage, todosPerPage} = this.state;
+        const {mecanicos, isLoading, nombre, apellido, mail} = this.state;
         const classes = {
             textField: {
                 width: 200,
@@ -192,58 +191,14 @@ class MecanicoList extends Component {
             </div>
         }
 
-        // Logic for displaying current todos
-        const indexOfLastTodo = currentPage * todosPerPage;
-        const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-        const currentTodos = filterMecanicos.slice(indexOfFirstTodo, indexOfLastTodo);
-
-        // Logic for displaying page numbers
-        const pageNumbers = [];
-        for (let i = 1; i <= Math.ceil(mecanicos.length / todosPerPage); i++) {
-            pageNumbers.push(i);
-        }
-        const renderPageNumbers = pageNumbers.map(number => {
-            return (
-                <li
-                    key={number}
-                    id={number}
-                    onClick={this.handleClick}
-                >
-                    [{number}]
-                </li>
-            );
-        });
-
-        const mecanicoList = currentTodos.map(mecanico => {
-            return <tr key={mecanico.idMecanico}>
-                <td>{mecanico.idMecanico}</td>
-                <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
-                <td>{mecanico.apellido}</td>
-                <td>{mecanico.telefono}</td>
-                <td>{mecanico.mail}</td>
-                <td>{mecanico.activo ? "Si" : "No"}</td>
-                <td>
-                    <ButtonGroup>
-                        <Button size="sm" color="primary" tag={Link}
-                                to={"/mecanicos/" + mecanico.idMecanico}>Editar</Button>
-                        &nbsp;&nbsp;
-                        {mecanico.activo &&
-                        <Button size="sm" color="danger" onClick={() => this.dialogDeshabilitar(mecanico)}>Deshabilitar</Button>
-                        }
-                        {!mecanico.activo &&
-                        <Button size="sm" color="success" onClick={() => this.dialogHabilitar(mecanico)}>Habilitar</Button>
-                        }
-                    </ButtonGroup>
-                </td>
-            </tr>
-        });
-
         return (
             <div>
                 <TalleresNavbar/>
                 <Container fluid>
                     <div className="float-right">
-                        <Button color="success" tag={Link} to="/mecanicos/new">Crear Mecanico</Button>
+                        <Button type="button" variant="contained" color="primary" className={classes.button} onClick={() => this.props.history.push('/mecanicos/new')}>
+                            Crear Mecanico
+                        </Button>
                     </div>
                     <Typography variant="h4">
                         Mecanicos
@@ -273,33 +228,7 @@ class MecanicoList extends Component {
                         margin="normal"
                         onChange={this.filterMail}
                     />
-                    {/*<input type="text" onChange={this.filterNombre} placeholder="Nombre..."></input>*/}
-                    {/*&nbsp;&nbsp;*/}
-                    {/*<input type="text" onChange={this.filterApellido} placeholder="Apellido..."></input>*/}
-                    {/*&nbsp;&nbsp;*/}
-                    {/*<input type="text" onChange={this.filterMail} placeholder="Mail..."></input>*/}
-                    <MecanicosEnhancedTable rows={filterMecanicos} habilitarMecanico={this.dialogHabilitar} deshabilitarMecanico={this.dialogDeshabilitar} editar={this.edit}/>
-                    {/*<Table className="mt-4">*/}
-                    {/*    <thead>*/}
-                    {/*    <tr>*/}
-                    {/*        <th width="20%">ID</th>*/}
-                    {/*        <th width="20%">Nombre</th>*/}
-                    {/*        <th width="20%">Apellido</th>*/}
-                    {/*        <th width="20%">Teléfono</th>*/}
-                    {/*        <th width="20%">Mail</th>*/}
-                    {/*        <th width="10%">Habilitado</th>*/}
-                    {/*        <th width="10%">Acciones</th>*/}
-                    {/*    </tr>*/}
-                    {/*    </thead>*/}
-                    {/*    <tbody>*/}
-                    {/*    {mecanicoList}*/}
-                    {/*    </tbody>*/}
-                    {/*</Table>*/}
-                    {/*<ul id="page-numbers">*/}
-                    {/*    <Label>Paginas:</Label>*/}
-                    {/*    <span>&nbsp;&nbsp;</span>*/}
-                    {/*    {renderPageNumbers}*/}
-                    {/*</ul>*/}
+                    <MecanicosEnhancedTable rows={filterMecanicos} habilitarMecanico={this.dialogHabilitar} deshabilitarMecanico={this.dialogDeshabilitar} editar={this.edit} acciones={true}/>
                 </Container>
             </div>
         );

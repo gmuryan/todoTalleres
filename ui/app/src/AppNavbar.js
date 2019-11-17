@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, Button } from 'reactstrap';
 import {Link, withRouter} from 'react-router-dom';
 import {confirmAlert} from "react-confirm-alert";
+import MenuAppBar from "./AppBar";
 
-export default class AppNavbar extends Component {
+class AppNavbar extends Component {
   constructor(props) {
     super(props);
     this.state = {isOpen: false};
@@ -23,7 +24,8 @@ export default class AppNavbar extends Component {
 
 
   render() {
-    return <Navbar color="dark" dark expand="md">
+    const admin = JSON.parse(localStorage.getItem("adminUser"));
+    return <MenuAppBar logout={this.logout} adminUser={admin}/>/*<Navbar color="dark" dark expand="md">
       <NavbarBrand tag={Link} to="/home">Home</NavbarBrand>
       <NavbarBrand tag={Link} to="/clientes">Clientes</NavbarBrand>
       <NavbarBrand tag={Link} to="/talleres">Talleres</NavbarBrand>
@@ -31,10 +33,12 @@ export default class AppNavbar extends Component {
       <Collapse isOpen={this.state.isOpen} navbar>
         <Nav className="ml-auto" navbar>
           <NavItem>
-              <Button onClick={this.logout} tag={Link} to="/">Logout</Button>
+              <Button onClick={this.logout} >Logout</Button>
           </NavItem>
         </Nav>
       </Collapse>
-    </Navbar>;
+    </Navbar>*/;
   }
 }
+
+export default withRouter(AppNavbar);

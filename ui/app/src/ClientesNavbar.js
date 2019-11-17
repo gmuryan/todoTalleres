@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Button, Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from 'reactstrap';
 import { Link } from 'react-router-dom';
+import MenuAppBar from "./AppBar";
 
 export default class ClientesNavbar extends Component {
     constructor(props) {
@@ -22,7 +23,7 @@ export default class ClientesNavbar extends Component {
     render() {
         const cliente = JSON.parse(localStorage.getItem("clienteUser"));
         if (cliente !== null){
-        return <Navbar color="dark" dark expand="md">
+        return <MenuAppBar clienteUser={cliente} logout={this.logout}/>/*<Navbar color="dark" dark expand="md">
             <NavbarBrand tag={Link} to="/homeCliente">Home</NavbarBrand>
             <NavbarBrand tag={Link} to={"/misDatos/" + cliente.idCliente}>Mis Datos</NavbarBrand>
             <NavbarBrand tag={Link} to="/talleres">Talleres</NavbarBrand>
@@ -33,12 +34,9 @@ export default class ClientesNavbar extends Component {
                     <NavItem>
                         <Button onClick={this.logout} tag={Link} to="/">Logout</Button>
                     </NavItem>
-                    {/*  <NavItem>*/}
-                    {/*    <NavLink href="https://github.com/oktadeveloper/okta-spring-boot-react-crud-example">GitHub</NavLink>*/}
-                    {/*  </NavItem>*/}
                 </Nav>
             </Collapse>
-        </Navbar>;
+        </Navbar>*/;
         }else{
             return  null;
         }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, ButtonGroup, Container, Label, Table} from 'reactstrap';
+import {Container, Label, Table} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {Link} from 'react-router-dom';
 import {confirmAlert} from 'react-confirm-alert'; // Import
@@ -11,6 +11,7 @@ import {css} from "@emotion/core";
 import TextField from "@material-ui/core/TextField";
 import TalleresEnhancedTable from "./TalleresSortableTable";
 import Typography from "@material-ui/core/Typography";
+import Button from '@material-ui/core/Button';
 
 const override = css`
     display: block;
@@ -29,9 +30,7 @@ class TallerList extends Component {
             nombre: '',
             barrio: '',
             clasificacion: '',
-            marca: '',
-            currentPage: 1,
-            todosPerPage: 5
+            marca: ''
         };
         this.handleClick = this.handleClick.bind(this);
         this.dialogHabilitar = this.dialogHabilitar.bind(this);
@@ -96,7 +95,7 @@ class TallerList extends Component {
 
     dialogHabilitado() {
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             message: 'Taller Habilitado',
             buttons: [
                 {
@@ -108,7 +107,7 @@ class TallerList extends Component {
 
     dialogEliminado() {
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             message: 'Taller Deshabilitado',
             buttons: [
                 {
@@ -121,7 +120,7 @@ class TallerList extends Component {
     dialogDeshabilitar(taller) {
         confirmAlert({
             title: 'Confirmar',
-            message: 'Esta seguro de realizar esta accion?',
+            message: '¿Esta seguro de realizar esta acción?',
             buttons: [
                 {
                     label: 'Si',
@@ -137,7 +136,7 @@ class TallerList extends Component {
     dialogHabilitar(taller) {
         confirmAlert({
             title: 'Confirmar',
-            message: 'Esta seguro de realizar esta accion?',
+            message: '¿Esta seguro de realizar esta acción?',
             buttons: [
                 {
                     label: 'Si',
@@ -179,7 +178,7 @@ class TallerList extends Component {
     }
 
     render() {
-        const {talleres, isLoading, nombre, barrio, clasificacion, marca, currentPage, todosPerPage} = this.state;
+        const {talleres, isLoading, nombre, barrio, clasificacion, marca} = this.state;
         const adminUser = JSON.parse(localStorage.getItem("adminUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         const classes = {
@@ -213,101 +212,6 @@ class TallerList extends Component {
             </div>
         }
 
-        // Logic for displaying current todos
-        const indexOfLastTodo = currentPage * todosPerPage;
-        const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-        const currentTodos = filterTalleres.slice(indexOfFirstTodo, indexOfLastTodo);
-
-        // Logic for displaying page numbers
-        const pageNumbers = [];
-        for (let i = 1; i <= Math.ceil(talleres.length / todosPerPage); i++) {
-            pageNumbers.push(i);
-        }
-        const renderPageNumbers = pageNumbers.map(number => {
-            return (
-                <li
-                    key={number}
-                    id={number}
-                    onClick={this.handleClick}
-                >
-                    [{number}]
-                </li>
-            );
-        });
-
-        const tallerList = currentTodos.map(taller => {
-            if (adminUser) {
-                return <tr key={taller.idTaller}>
-                    <td>{taller.idTaller}</td>
-                    <td style={{whiteSpace: 'nowrap'}}>{taller.nombre}</td>
-                    <td>{taller.barrio}</td>
-                    <td>{taller.telefono}</td>
-                    <td>{taller.mail}</td>
-                    <td>{taller.marca.descripcion}</td>
-                    <td>{taller.clasificacion.descripcion}</td>
-                    {adminUser &&
-                    <td>{taller.activo ? "Si" : "No"}</td>
-                    }
-                    <td>
-                        {adminUser !== null &&
-                        <ButtonGroup>
-                            <Button size="sm" color="primary" tag={Link}
-                                    to={"/talleres/" + taller.idTaller}>Editar</Button>
-                            &nbsp;&nbsp;
-                            <Button size="sm" color="secondary" tag={Link}
-                                    to={"/reseñas/" + taller.idTaller}>Reseñas</Button>
-                            &nbsp;&nbsp;
-                            {taller.activo &&
-                            <Button size="sm" color="danger"
-                                    onClick={() => this.dialogDeshabilitar(taller)}>Deshabilitar</Button>
-                            }
-                            {!taller.activo &&
-                            <Button size="sm" color="success"
-                                    onClick={() => this.dialogHabilitar(taller)}>Habilitar</Button>
-                            }
-                        </ButtonGroup>
-                        }
-                    </td>
-                </tr>
-            }
-            if (clienteUser && taller.activo) {
-                return <tr key={taller.idTaller}>
-                    <td>{taller.idTaller}</td>
-                    <td style={{whiteSpace: 'nowrap'}}>{taller.nombre}</td>
-                    <td>{taller.barrio}</td>
-                    <td>{taller.telefono}</td>
-                    <td>{taller.mail}</td>
-                    <td>{taller.marca.descripcion}</td>
-                    <td>{taller.clasificacion.descripcion}</td>
-                    {adminUser &&
-                    <td>{taller.activo ? "Si" : "No"}</td>
-                    }
-                    <td>
-                        {adminUser !== null &&
-                        <ButtonGroup>
-                            <Button size="sm" color="primary" tag={Link}
-                                    to={"/talleres/" + taller.idTaller}>Editar</Button>
-                            &nbsp;&nbsp;
-                            <Button size="sm" color="secondary" tag={Link}
-                                    to={"/reseñas/" + taller.idTaller}>Reseñas</Button>
-                            &nbsp;&nbsp;
-                            <Button size="sm" color="danger" onClick={() => this.dialog(taller)}>Eliminar</Button>
-                        </ButtonGroup>
-                        }
-                        {clienteUser !== null &&
-                        <ButtonGroup>
-                            <Button size="sm" color="primary" tag={Link}
-                                    to={"/reservacion/" + taller.idTaller}>Reservar</Button>
-                            &nbsp;&nbsp;
-                            <Button size="sm" color="info" tag={Link}
-                                    to={"/reseñas/" + taller.idTaller}>Ver más</Button>
-                        </ButtonGroup>
-                        }
-                    </td>
-                </tr>
-            }
-        });
-
         return (
             <div>
                 {adminUser !== null &&
@@ -319,7 +223,9 @@ class TallerList extends Component {
                 <Container fluid>
                     {adminUser !== null &&
                     <div className="float-right">
-                        <Button color="success" tag={Link} to="/talleres/new">Crear Taller</Button>
+                        <Button type="button" variant="contained" color="primary" className={classes.button} onClick={() => this.props.history.push('/talleres/new')}>
+                            Crear Taller
+                        </Button>
                     </div>
                     }
                     <Typography variant="h4">
@@ -359,41 +265,9 @@ class TallerList extends Component {
                         margin="normal"
                         onChange={this.filterClasificacion}
                     />
-                    {/*<input type="text" onChange={this.filterNombre} placeholder="Nombre..."></input>*/}
-                    {/*&nbsp;&nbsp;*/}
-                    {/*<input type="text" onChange={this.filterBarrio} placeholder="Barrio..."></input>*/}
-                    {/*&nbsp;&nbsp;*/}
-                    {/*<input type="text" onChange={this.filterMarca} placeholder="Marca..."></input>*/}
-                    {/*&nbsp;&nbsp;*/}
-                    {/*<input type="text" onChange={this.filterClasificacion} placeholder="Especialización..."></input>*/}
                     <TalleresEnhancedTable rows={filterTalleres} habilitarTaller={this.dialogHabilitar}
                                            deshabilitarTaller={this.dialogDeshabilitar} editar={this.edit}
                                            verReseñas={this.reviews} reservar={this.book} usuarioCliente={clienteUser} usuarioAdmin={adminUser}/>
-                    {/*<Table className="mt-4">*/}
-                    {/*    <thead>*/}
-                    {/*    <tr>*/}
-                    {/*        <th width="10%">ID</th>*/}
-                    {/*        <th width="10%">Nombre</th>*/}
-                    {/*        <th width="10%">Barrio</th>*/}
-                    {/*        <th width="10%">Teléfono</th>*/}
-                    {/*        <th width="10%">Mail</th>*/}
-                    {/*        <th width="10%">Marca</th>*/}
-                    {/*        <th width="10%">Especialización</th>*/}
-                    {/*        {adminUser &&*/}
-                    {/*        <th width="10%">Habilitado</th>*/}
-                    {/*        }*/}
-                    {/*        <th width="10%">Acciones</th>*/}
-                    {/*    </tr>*/}
-                    {/*    </thead>*/}
-                    {/*    <tbody>*/}
-                    {/*    {tallerList}*/}
-                    {/*    </tbody>*/}
-                    {/*</Table>*/}
-                    {/*<ul id="page-numbers">*/}
-                    {/*    <Label>Paginas:</Label>*/}
-                    {/*    <span>&nbsp;&nbsp;</span>*/}
-                    {/*    {renderPageNumbers}*/}
-                    {/*</ul>*/}
                 </Container>
             </div>
         );

@@ -36,7 +36,6 @@ class Login extends Component {
     handleSubmit = async(event) => {
         event.preventDefault();
         let errors = {};
-        debugger;
         const {email, password} = this.state;
         if (email == 'admin' && password == 'admin') {
             localStorage.clear();

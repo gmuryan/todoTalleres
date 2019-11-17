@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, ButtonGroup, Container, Label, Table} from 'reactstrap';
+import {Container, Label, Table} from 'reactstrap';
 import TalleresNavbar from "./TalleresNavbar";
 import {Link} from 'react-router-dom';
 import {confirmAlert} from 'react-confirm-alert'; // Import
@@ -18,6 +18,9 @@ import {
     KeyboardDatePicker,
 } from '@material-ui/pickers';
 import Typography from "@material-ui/core/Typography";
+import ReparacionesEnhancedTable from "./ReparacionesSortableTable";
+import Button from '@material-ui/core/Button';
+
 
 const override = css`
     display: block;
@@ -53,11 +56,11 @@ class ReparacionList extends Component {
             descripcionReparacion: '',
             taller: '',
             cliente: '',
-            estado: '',
-            currentPage: 1,
-            todosPerPage: 5
+            estado: ''
         };
         this.handleClick = this.handleClick.bind(this);
+        this.dialogCancelarTurno = this.dialogCancelarTurno.bind(this);
+        this.edit = this.edit.bind(this);
         this.remove = this.remove.bind(this);
     }
 
@@ -113,7 +116,7 @@ class ReparacionList extends Component {
 
     dialogCancelacionCorrecta() {
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             buttons: [
                 {
                     label: 'Aceptar',
@@ -126,7 +129,7 @@ class ReparacionList extends Component {
     dialogCancelarTurno(idReparacion) {
         confirmAlert({
             title: 'Confirmar',
-            message: 'Esta seguro de realizar esta accion?',
+            message: '¿Esta seguro de realizar esta acción?',
             buttons: [
                 {
                     label: 'Si',
@@ -137,6 +140,10 @@ class ReparacionList extends Component {
                 }
             ]
         })
+    }
+
+    edit(idReparacion) {
+        this.props.history.push('/reparaciones/' + idReparacion);
     }
 
     filterEstado = e => {
@@ -193,7 +200,7 @@ class ReparacionList extends Component {
     }
 
     render() {
-        const {reparaciones, isLoading, fechaDevolucion, horaDevolucion, fechaReserva, horaReserva, importeTotal, estadoReparacion, descripcionProblema, descripcionReparacion, taller, cliente, currentPage, todosPerPage, estado} = this.state;
+        const {reparaciones, isLoading, fechaDevolucion, horaDevolucion, fechaReserva, horaReserva, importeTotal, estadoReparacion, descripcionProblema, descripcionReparacion, taller, cliente, estado} = this.state;
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         const classes = {
@@ -201,7 +208,9 @@ class ReparacionList extends Component {
                 width: 200,
             },
         };
+
         let filterReparaciones = this.state.reparaciones.slice();
+
         if (this.state.estado) {
             filterReparaciones = filterReparaciones.filter(reparacion => reparacion.estadoReparacion.descripcion.toLowerCase().indexOf(estado.toLowerCase()) !== -1);
         }
@@ -230,72 +239,6 @@ class ReparacionList extends Component {
             </div>
         }
 
-        // Logic for displaying current todos
-        const indexOfLastTodo = currentPage * todosPerPage;
-        const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-        const currentTodos = filterReparaciones.slice(indexOfFirstTodo, indexOfLastTodo);
-
-        // Logic for displaying page numbers
-        const pageNumbers = [];
-        for (let i = 1; i <= Math.ceil(reparaciones.length / todosPerPage); i++) {
-            pageNumbers.push(i);
-        }
-        const renderPageNumbers = pageNumbers.map(number => {
-            return (
-                <li
-                    key={number}
-                    id={number}
-                    onClick={this.handleClick}
-                >
-                    [{number}]
-                </li>
-            );
-        });
-
-        const reparacionesList = currentTodos.map(reparacion => {
-            return <tr key={reparacion.idReparacion}>
-                <td>{reparacion.idReparacion}</td>
-                <td>{reparacion.fechaReserva}</td>
-                <td style={{whiteSpace: 'nowrap'}}>{reparacion.horaReserva.substring(0, 5)}</td>
-                <td>{reparacion.fechaDevolucion}</td>
-                <td>{reparacion.horaDevolucion ? reparacion.horaDevolucion.substring(0, 5) : reparacion.horaDevolucion}</td>
-                <td>{reparacion.estadoReparacion.descripcion}</td>
-                {reparacion.importeTotal &&
-                <td> ${new Intl.NumberFormat('de-DE', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }).format(reparacion.importeTotal)}</td>
-                }
-                {!reparacion.importeTotal &&
-                <td>{reparacion.importeTotal}</td>
-                }
-                {tallerUser !== null &&
-                <td>{reparacion.cliente.nombre + " " + reparacion.cliente.apellido}</td>
-                }
-                {clienteUser !== null &&
-                <td>{reparacion.taller.nombre}</td>
-                }
-                <td>
-                    <ButtonGroup>
-                        {tallerUser !== null &&
-                        <Button size="sm" color="primary" tag={Link}
-                                to={"/reparaciones/" + reparacion.idReparacion}>Editar</Button>
-                        }
-                        {clienteUser !== null &&
-                        <Button size="sm" color="info" tag={Link}
-                                to={"/reparaciones/" + reparacion.idReparacion}>Ver más</Button>
-                        }
-                        &nbsp;&nbsp;
-                        {reparacion.estadoReparacion.descripcion !== "Cancelado" &&
-                        <Button size="sm" color="danger"
-                                onClick={() => this.dialogCancelarTurno(reparacion.idReparacion)}>Cancelar
-                            Turno</Button>
-                        }
-                    </ButtonGroup>
-                </td>
-            </tr>
-        });
-
         return (
             <div>
                 {clienteUser !== null &&
@@ -307,13 +250,14 @@ class ReparacionList extends Component {
                 <Container fluid>
                     {tallerUser !== null &&
                     <div className="float-right">
-                        <Button color="success" tag={Link} to="/reservacion/new">Crear Reparacion</Button>
+                        <Button type="button" variant="contained" color="primary" className={classes.button} onClick={() => this.props.history.push('/reservacion/new')}>
+                            Crear Reparación
+                        </Button>
                     </div>
                     }
                     <Typography variant="h4">
                         Reparaciones
                     </Typography>
-                    {/*<input type="text" onChange={this.filterEstado} placeholder="Estado..."></input>*/}
                     <TextField
                         id="standard-basic"
                         className={classes.textField}
@@ -384,49 +328,8 @@ class ReparacionList extends Component {
                         />
                     </MuiPickersUtilsProvider>
 
-                    {/*<DatePicker placeholderText="Fecha Reserva Desde" dateFormat="dd/MM/yyyy"*/}
-                    {/*            selected={this.state.filtroFechaReservaDesde}*/}
-                    {/*            onChange={(date) => this.filterFechaReservaDesde(date)}/>*/}
-                    {/*&nbsp;&nbsp;*/}
-                    {/*<DatePicker placeholderText="Fecha Reserva Hasta" dateFormat="dd/MM/yyyy"*/}
-                    {/*            selected={this.state.filtroFechaReservaHasta}*/}
-                    {/*            onChange={(date) => this.filterFechaReservaHasta(date)}/>*/}
-                    {/*&nbsp;&nbsp;*/}
-                    {/*<DatePicker placeholderText="Fecha Devolución Desde" dateFormat="dd/MM/yyyy"*/}
-                    {/*            selected={this.state.filtroFechaDevolucionDesde}*/}
-                    {/*            onChange={(date) => this.filterFechaDevolucionDesde(date)}/>*/}
-                    {/*&nbsp;&nbsp;*/}
-                    {/*<DatePicker placeholderText="Fecha Devolución Hasta" dateFormat="dd/MM/yyyy"*/}
-                    {/*            selected={this.state.filtroFechaDevolucionHasta}*/}
-                    {/*            onChange={(date) => this.filterFechaDevolucionHasta(date)}/>*/}
-                    <Table className="mt-4">
-                        <thead>
-                        <tr>
-                            <th width="5%">ID</th>
-                            <th width="10%">Fecha Reserva</th>
-                            <th width="10%">Horario Reserva</th>
-                            <th width="10%">Fecha Devolución</th>
-                            <th width="10%">Horario Devolución</th>
-                            <th width="10%">Estado</th>
-                            <th width="10%">Importe</th>
-                            {tallerUser !== null &&
-                            <th width="10%">Cliente</th>
-                            }
-                            {clienteUser !== null &&
-                            <th width="10%">Taller</th>
-                            }
-                            <th width="10%">Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {reparacionesList}
-                        </tbody>
-                    </Table>
-                    <ul id="page-numbers">
-                        <Label>Paginas:</Label>
-                        <span>&nbsp;&nbsp;</span>
-                        {renderPageNumbers}
-                    </ul>
+                    <ReparacionesEnhancedTable rows={filterReparaciones} cancelarTurno={this.dialogCancelarTurno}
+                                               clienteUser={clienteUser} tallerUser={tallerUser} editar={this.edit} acciones={true}/>
                 </Container>
             </div>
         );

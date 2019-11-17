@@ -8,6 +8,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment'
 import TalleresNavbar from "./TalleresNavbar";
 import ClientesNavbar from "./ClientesNavbar";
+import Typography from "@material-ui/core/Typography";
+import MecanicosEnhancedTable from "./MecanicosSortableTable";
 
 class ReparacionEdit extends Component {
 
@@ -45,6 +47,8 @@ class ReparacionEdit extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.guardarReparacion = this.guardarReparacion.bind(this);
+        this.asignarMecanico = this.asignarMecanico.bind(this);
+        this.desasignarMecanico = this.desasignarMecanico.bind(this);
         const taller = JSON.parse(localStorage.getItem("tallerUser"));
         const cliente = JSON.parse(localStorage.getItem("clienteUser"));
         if (taller === null && cliente === null) {
@@ -164,7 +168,7 @@ class ReparacionEdit extends Component {
                 }
                 let fechaSeparada = fields["fechaReserva"].split("-");
                 let fechaReOrdenada = fechaSeparada[2] + "-" + fechaSeparada[1] + "-" + fechaSeparada[0];
-                if (Date.parse(fechaReOrdenada) - this.state.endDate > 0){
+                if (Date.parse(fechaReOrdenada) - this.state.endDate > 0) {
                     formIsValid = false;
                     errors["hora"] = "La fecha de devolución debe ser mayor a la fecha de reserva";
                 }
@@ -204,12 +208,14 @@ class ReparacionEdit extends Component {
         let itemReparacion = {...this.state.item};
         itemReparacion.mecanicos.push(mecanico);
         this.setState({item: itemReparacion});
+        console.log(this.state.item);
     }
 
     desasignarMecanico(mecanico) {
         let itemReparacion = {...this.state.item};
         itemReparacion.mecanicos = itemReparacion.mecanicos.filter(mec => mec.idMecanico !== mecanico.idMecanico);
         this.setState({item: itemReparacion});
+        console.log(this.state.item);
     }
 
     dialogCreado() {
@@ -317,7 +323,9 @@ class ReparacionEdit extends Component {
             <ClientesNavbar/>
             }
             <Container>
-                {title}
+                <Typography variant="h4">
+                    Detalles de la Reparación
+                </Typography>
                 <Form onSubmit={this.handleSubmit}>
                     <div className="row">
                         <FormGroup className="col-md-6 mb-3">
@@ -383,7 +391,8 @@ class ReparacionEdit extends Component {
                     }
                     <div className="row">
                         {this.state.flagImporte && !this.state.flagMostrarPresupuesto &&
-                        <FormGroup className={descEstado === "En reparacion" && tallerUser !== null ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
+                        <FormGroup
+                            className={descEstado === "En reparacion" && tallerUser !== null ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
                             <Label for="importeTotal">Importe</Label>
                             <Input
                                 readOnly={!this.state.flagMostrarPresupuesto}
@@ -394,7 +403,8 @@ class ReparacionEdit extends Component {
                         </FormGroup>
                         }
                         {(!this.state.flagImporte || this.state.flagMostrarPresupuesto) &&
-                        <FormGroup className={descEstado === "En reparacion" && tallerUser !== null ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
+                        <FormGroup
+                            className={descEstado === "En reparacion" && tallerUser !== null ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
                             <Label for="importeTotal">Importe</Label>
                             <Input
                                 readOnly={!this.state.flagMostrarPresupuesto}
@@ -413,7 +423,8 @@ class ReparacionEdit extends Component {
                                    onChange={this.handleChange}/>
                         </FormGroup>
                         }
-                        <FormGroup className={descEstado === "En reparacion" && tallerUser !== null ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
+                        <FormGroup
+                            className={descEstado === "En reparacion" && tallerUser !== null ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
                             <Label for="estadoReparacion">Estado</Label>
                             <Input readOnly type="text" name="estadoReparacion" id="estadoReparacion"
                                    value={item.estadoReparacion.descripcion || ''}
@@ -482,30 +493,20 @@ class ReparacionEdit extends Component {
                         }
                     </div>
                     {tallerUser !== null && descEstado !== "En diagnostico" &&
-                    <h3> Mecanicos asignados</h3>
+                    <Typography variant="h4">
+                        Mecanicos Asignados
+                    </Typography>
                     }
                     {tallerUser !== null && descEstado === "En diagnostico" &&
-                    <h3> Asignacion de mecanicos</h3>
+                    <Typography variant="h4">
+                        Asignación de Mecanicos
+                    </Typography>
                     }
-                    {tallerUser !== null &&
-                    <Table className="mt-4">
-                        <thead>
-                        <tr>
-                            <th width="20%">ID</th>
-                            <th width="20%">Nombre</th>
-                            <th width="20%">Apellido</th>
-                            <th width="20%">Teléfono</th>
-                            <th width="20%">Mail</th>
-                            <th width="20%">Habilitado</th>
-                            {(descEstado === "En diagnostico" || descEstado === "En reparacion") &&
-                            <th width="10%">Acciones</th>
-                            }
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {mecanicoList}
-                        </tbody>
-                    </Table>
+                    {tallerUser !== null && descEstado !== "En diagnostico" && descEstado !== "En reparacion" &&
+                        <MecanicosEnhancedTable rows={item.mecanicos} acciones={false} dense={true}/>
+                    }
+                    {(tallerUser !== null && (descEstado === "En diagnostico" || descEstado === "En reparacion")) &&
+                        <MecanicosEnhancedTable rows={mecanicosTaller} acciones={true} mecanicosEnReparacion={item.mecanicos} enReparacion={true} asignarMecanico={this.asignarMecanico} desasignarMecanico={this.desasignarMecanico} dense={true}/>
                     }
                     {tallerUser !== null &&
                     <span className="error">{this.state.errors["mecanicos"]}</span>

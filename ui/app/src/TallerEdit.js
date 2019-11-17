@@ -267,10 +267,10 @@ class TallerEdit extends Component {
         return <div>
             <AppNavbar/>
             <Container>
-                {item.idTaller &&
+                {this.props.match.params.id !== 'new' &&
                     <Typography variant="h4">Editar Taller</Typography>
                 }
-                {item.idTaller === undefined &&
+                {this.props.match.params.id === 'new' &&
                     <Typography variant="h4">Crear Taller</Typography>
                 }
                 <Form onSubmit={this.handleSubmit}>
