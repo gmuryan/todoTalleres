@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import ClientesNavbar from './ClientesNavbar';
 import {confirmAlert} from "react-confirm-alert";
 import Typography from "@material-ui/core/Typography";
+import Button from '@material-ui/core/Button';
 
 class MisDatos extends Component {
 
@@ -263,8 +264,14 @@ class MisDatos extends Component {
                         </FormGroup>
                     </div>
                     <FormGroup>
-                        <Button color="primary" type="submit">Guardar</Button>{' '}
-                        <Button color="secondary" tag={Link} to="/homeCliente">Cancelar</Button>
+                        <Button variant="contained" color="primary" type="submit">
+                            Guardar
+                        </Button>{' '}
+                        <Link to='/homeCliente' style={{ textDecoration: 'none' }}>
+                            <Button variant="contained" color="secondary">
+                                Cancelar
+                            </Button>
+                        </Link>
                     </FormGroup>
                 </Form>
             </Container>

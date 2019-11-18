@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Button, ButtonGroup, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
+import {ButtonGroup, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import DatePicker from "react-datepicker";
@@ -9,6 +9,7 @@ import moment from 'moment'
 import ClientesNavbar from "./ClientesNavbar";
 import TalleresNavbar from "./TalleresNavbar";
 import Typography from "@material-ui/core/Typography";
+import Button from '@material-ui/core/Button';
 
 class ReservacionScreen extends Component {
 
@@ -715,13 +716,15 @@ class ReservacionScreen extends Component {
                     <br></br>
                     }
                     <FormGroup>
-                        <Button color="primary" type="submit">Reservar</Button>{' '}
-                        {clienteAux !== null &&
-                        <Button color="secondary" tag={Link} to="/talleres">Cancelar</Button>
-                        }
-                        {tallerAux !== null &&
-                        <Button color="secondary" tag={Link} to="/reparaciones">Cancelar</Button>
-                        }
+                        <Button variant="contained" color="primary" type="submit">
+                            Reservar
+                        </Button>
+                        {' '}
+                        <Link to={clienteAux ? '/talleres' : '/reparaciones'} style={{ textDecoration: 'none' }}>
+                            <Button variant="contained" color="secondary">
+                                Cancelar
+                            </Button>
+                        </Link>
                     </FormGroup>
                 </Form>
             </Container>

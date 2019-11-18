@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Button, ButtonGroup, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
+import {ButtonGroup, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {confirmAlert} from "react-confirm-alert";
 import DatePicker from "react-datepicker";
@@ -10,6 +10,7 @@ import TalleresNavbar from "./TalleresNavbar";
 import ClientesNavbar from "./ClientesNavbar";
 import Typography from "@material-ui/core/Typography";
 import MecanicosEnhancedTable from "./MecanicosSortableTable";
+import Button from '@material-ui/core/Button';
 
 class ReparacionEdit extends Component {
 
@@ -519,12 +520,20 @@ class ReparacionEdit extends Component {
                     }
                     <FormGroup>
                         {((tallerUser !== null && descEstado !== "Pendiente Confirmacion" && descEstado !== "Finalizado" && descEstado !== "Cancelado") || (clienteUser !== null && descEstado === "Pendiente Confirmacion")) &&
-                        <Button color="primary" type="submit">Confirmar</Button>
+                        <Button variant="contained" color="primary" type="submit">
+                            Confirmar
+                        </Button>
                         }{' '}
                         {tallerUser !== null && descEstado === "En reparacion" &&
-                        <Button color="info" onClick={this.guardarReparacion}>Guardar</Button>
+                        <Button onClick={this.guardarReparacion} variant="contained" color="default">
+                            Guardar
+                        </Button>
                         }{' '}
-                        <Button color="secondary" tag={Link} to="/reparaciones">Volver</Button>
+                        <Link to='/reparaciones' style={{ textDecoration: 'none' }}>
+                            <Button variant="contained" color="secondary">
+                                Volver
+                            </Button>
+                        </Link>
                     </FormGroup>
                 </Form>
             </Container>

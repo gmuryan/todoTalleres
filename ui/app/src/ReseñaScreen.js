@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Button, ButtonGroup, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
+import {Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import DatePicker from "react-datepicker";
@@ -12,6 +12,7 @@ import Comment from "./Comment";
 import AppNavbar from "./AppNavbar";
 import App from "./App";
 import Typography from "@material-ui/core/Typography";
+import Button from '@material-ui/core/Button';
 
 class ReseñaScreen extends Component {
 
@@ -221,6 +222,11 @@ class ReseñaScreen extends Component {
                     <br></br>
                     {title}
                     {reseñasList}
+                    {reseñasList.length === 0 &&
+                    <Typography variant="h6">
+                        No hay reseñas disponibles
+                    </Typography>
+                    }
                     {reseñasList.length > 0 &&
                     <br></br>
                     }
@@ -245,17 +251,26 @@ class ReseñaScreen extends Component {
                         }
                         <FormGroup>
                             {clienteAux !== null &&
-                            <Button color="primary" type="submit">Publicar</Button>
+                            <Button variant="contained" color="primary" type="submit">
+                                Publicar
+                            </Button>
                             }
                             {clienteAux !== null &&
                             ' '
                             }
                             {clienteAux !== null &&
-                            <Button color="secondary" tag={Link} to="/talleres">Cancelar</Button>
+                            <Link to='/talleres' style={{ textDecoration: 'none' }}>
+                                <Button variant="contained" color="secondary">
+                                    Cancelar
+                                </Button>
+                            </Link>
                             }
                             {(tallerAux !== null || adminAux !== null) &&
-                            <Button color="secondary" tag={Link}
-                                    to={tallerAux !== null ? "/homeTaller" : "/talleres"}>Volver</Button>
+                            <Link to={tallerAux !== null ? "/homeTaller" : "/talleres"} style={{ textDecoration: 'none' }}>
+                                <Button variant="contained" color="primary">
+                                    Volver
+                                </Button>
+                            </Link>
                             }
                         </FormGroup>
                     </Form>

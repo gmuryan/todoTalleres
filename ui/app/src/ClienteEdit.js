@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import React, {Component} from 'react';
+import {Link, withRouter} from 'react-router-dom';
+import {Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {confirmAlert} from "react-confirm-alert";
 import Typography from "@material-ui/core/Typography";
+import Button from '@material-ui/core/Button';
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
 
 class ClienteEdit extends Component {
 
@@ -13,7 +16,7 @@ class ClienteEdit extends Component {
         apellido: '',
         telefono: '',
         mail: '',
-        password : '',
+        password: '',
         repeatPassword: ''
     };
 
@@ -32,7 +35,7 @@ class ClienteEdit extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         const admin = JSON.parse(localStorage.getItem("adminUser"));
-        if (admin === null){
+        if (admin === null) {
             localStorage.clear();
             this.props.history.push('/');
         }
@@ -66,7 +69,7 @@ class ClienteEdit extends Component {
         });
     }
 
-    validateMailCliente(){
+    validateMailCliente() {
         let fields = this.state.item;
         return fetch(`/api/clienteByMail?mail=${encodeURIComponent(fields["mail"])}`, {
             method: 'GET',
@@ -77,58 +80,55 @@ class ClienteEdit extends Component {
         });
     }
 
-    handleValidation(){
+    handleValidation() {
         let fields = this.state.item;
         let errors = {};
         this.setState({formIsValid: true});
 
         //Name
-        if(fields["nombre"].length === 0){
+        if (fields["nombre"].length === 0) {
             this.setState({formIsValid: false});
             errors["nombre"] = "No puede estar vacio";
-        }
-        else if(typeof fields["nombre"] !== "undefined"){
-            if(!fields["nombre"].match(/^[a-zA-Z]+$/)){
+        } else if (typeof fields["nombre"] !== "undefined") {
+            if (!fields["nombre"].match(/^[a-zA-Z]+$/)) {
                 this.setState({formIsValid: false});
                 errors["nombre"] = "Solo letras";
             }
         }
 
         //Apellido
-        if(fields["apellido"].length === 0){
+        if (fields["apellido"].length === 0) {
             this.setState({formIsValid: false});
             errors["apellido"] = "No puede estar vacio";
-        }
-        else if(typeof fields["apellido"] !== "undefined"){
-            if(!fields["apellido"].match(/^[a-zA-Z]+$/)){
+        } else if (typeof fields["apellido"] !== "undefined") {
+            if (!fields["apellido"].match(/^[a-zA-Z]+$/)) {
                 this.setState({formIsValid: false});
                 errors["apellido"] = "Solo letras";
             }
         }
 
         //Telefono
-        if(fields["telefono"].length === 0){
+        if (fields["telefono"].length === 0) {
             this.setState({formIsValid: false});
             errors["telefono"] = "No puede estar vacio";
-        }
-        else if(typeof fields["telefono"] !== "undefined"){
-            if(!fields["telefono"].match(/^[0-9]+$/)){
+        } else if (typeof fields["telefono"] !== "undefined") {
+            if (!fields["telefono"].match(/^[0-9]+$/)) {
                 this.setState({formIsValid: false});
                 errors["telefono"] = "Solo numeros";
             }
         }
 
         //Contraseña
-        if(!fields["password"]){
+        if (!fields["password"]) {
             this.setState({formIsValid: false});
             errors["password"] = "No puede estar vacio";
         }
 
         //RepetirContraseña
-        if(!fields["repeatPassword"]){
+        if (!fields["repeatPassword"]) {
             this.setState({formIsValid: false});
             errors["repeatPassword"] = "No puede estar vacio";
-        }else if(fields["password"] !== fields["repeatPassword"]){
+        } else if (fields["password"] !== fields["repeatPassword"]) {
             this.setState({formIsValid: false});
             errors["repeatPassword"] = "Debe ser igual a la contraseña";
         }
@@ -150,14 +150,14 @@ class ClienteEdit extends Component {
             }
         }
         return this.validateMailTaller().then((response) => {
-            if (response.ok && this.state.mailCargado !== fields["mail"]){
+            if (response.ok && this.state.mailCargado !== fields["mail"]) {
                 console.log("aca");
                 this.setState({formIsValid: false});
                 errors["mail"] = "Este mail ya esta registrado";
                 this.setState({errors: errors});
-            }else{
+            } else {
                 return this.validateMailCliente().then((response) => {
-                    if (response.ok && this.state.mailCargado !== fields["mail"]){
+                    if (response.ok && this.state.mailCargado !== fields["mail"]) {
                         this.setState({formIsValid: false});
                         errors["mail"] = "Este mail ya esta registrado";
                         this.setState({errors: errors});
@@ -167,13 +167,13 @@ class ClienteEdit extends Component {
         });
     }
 
-    dialogCreado(){
+    dialogCreado() {
         confirmAlert({
             title: 'Operacion Exitosa',
             buttons: [
                 {
                     label: 'Aceptar',
-                    onClick: () =>  this.props.history.push('/clientes')
+                    onClick: () => this.props.history.push('/clientes')
                 }
             ]
         })
@@ -182,8 +182,8 @@ class ClienteEdit extends Component {
     async handleSubmit(event) {
         event.preventDefault();
 
-        this.handleValidation().then((result) =>{
-            if (this.state.formIsValid){
+        this.handleValidation().then((result) => {
+            if (this.state.formIsValid) {
                 const {item} = this.state;
 
                 fetch('/api/cliente', {
@@ -202,7 +202,7 @@ class ClienteEdit extends Component {
     render() {
         const {item, flag} = this.state;
 
-        if (flag == false && item.idCliente){
+        if (flag == false && item.idCliente) {
             item.repeatPassword = item.password;
             this.setState({flag: !this.state.flag});
         }
@@ -217,52 +217,123 @@ class ClienteEdit extends Component {
                 {this.props.match.params.id === 'new' &&
                 <Typography variant="h4">Crear Cliente</Typography>
                 }
-                <Form onSubmit={this.handleSubmit}>
-                    <div className="row">
-                    <FormGroup className="col-md-6 mb-3">
-                        <Label for="nombre">Nombre</Label>
-                        <Input type="text" name="nombre" id="nombre" value={item.nombre || ''}
-                               onChange={this.handleChange} autoComplete="nombre"/>
-                        <span className="error">{this.state.errors["nombre"]}</span>
-                    </FormGroup>
-                    <FormGroup className="col-md-6 mb-3">
-                        <Label for="apellido">Apellido</Label>
-                        <Input type="text" name="apellido" id="apellido" value={item.apellido || ''}
-                               onChange={this.handleChange} autoComplete="apellido"/>
-                        <span className="error">{this.state.errors["apellido"]}</span>
-                    </FormGroup>
-                    </div>
-                    <div className="row">
-                    <FormGroup className="col-md-6 mb-3">
-                        <Label for="telefono">Teléfono</Label>
-                        <Input type="text" name="telefono" id="telefono" value={item.telefono || ''}
-                               onChange={this.handleChange} autoComplete="telefono"/>
-                        <span className="error">{this.state.errors["telefono"]}</span>
-                    </FormGroup>
-                    <FormGroup className="col-md-6 mb-3">
-                        <Label for="mail">Mail</Label>
-                        <Input type="text" name="mail" id="mail" value={item.mail || ''}
-                               onChange={this.handleChange} autoComplete="mail"/>
-                        <span className="error">{this.state.errors["mail"]}</span>
-                    </FormGroup>
-                    </div>
-                    <div className="row">
-                    <FormGroup className="col-md-6 mb-3">
-                        <Label for="password">Contraseña</Label>
-                        <Input type="password" name="password" id="password" value={item.password || ''}
-                               onChange={this.handleChange} autoComplete="password"/>
-                        <span className="error">{this.state.errors["password"]}</span>
-                    </FormGroup>
-                    <FormGroup className="col-md-6 mb-3">
-                        <Label for="repeatPassword">Repetir Contraseña</Label>
-                        <Input type="password" name="repeatPassword" id="repeatPassword" value={item.repeatPassword || ''}
-                               onChange={this.handleChange} autoComplete="repeatPassword"/>
-                        <span className="error">{this.state.errors["repeatPassword"]}</span>
-                    </FormGroup>
-                    </div>
+                <Form onSubmit={this.handleSubmit} noValidate>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={3}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Nombre"
+                                margin="normal"
+                                variant="outlined"
+                                name="nombre"
+                                id="nombre"
+                                required
+                                value={item.nombre || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["nombre"]}
+                                helperText={this.state.errors["nombre"]}
+                                autoComplete="nombre"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                            <TextField id="outlined-basic"
+                                // className={classes.textField}
+                                       label="Apellido"
+                                       margin="normal"
+                                       variant="outlined"
+                                       name="apellido"
+                                       id="apellido"
+                                       required
+                                       value={item.apellido || ''}
+                                       onChange={this.handleChange}
+                                       error={this.state.errors["apellido"]}
+                                       helperText={this.state.errors["apellido"]}
+                                       autoComplete="apellido"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={3}>
+                            <TextField id="outlined-basic"
+                                // className={classes.textField}
+                                       label="Teléfono"
+                                       margin="normal"
+                                       variant="outlined"
+                                       name="telefono"
+                                       id="telefono"
+                                       required
+                                       value={item.telefono || ''}
+                                       onChange={this.handleChange}
+                                       error={this.state.errors["telefono"]}
+                                       helperText={this.state.errors["telefono"]}
+                                       autoComplete="telefono"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                            <TextField id="outlined-basic"
+                                // className={classes.textField}
+                                       label="Mail"
+                                       margin="normal"
+                                       variant="outlined"
+                                       name="mail"
+                                       id="mail"
+                                       required
+                                       value={item.mail || ''}
+                                       onChange={this.handleChange}
+                                       error={this.state.errors["mail"]}
+                                       helperText={this.state.errors["mail"]}
+                                       autoComplete="mail"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={3}>
+                            <TextField id="outlined-basic"
+                                // className={classes.textField}
+                                       label="Contraseña"
+                                       margin="normal"
+                                       variant="outlined"
+                                       name="password"
+                                       id="password"
+                                       type="password"
+                                       required
+                                       value={item.password || ''}
+                                       onChange={this.handleChange}
+                                       error={this.state.errors["password"]}
+                                       helperText={this.state.errors["password"]}
+                                       autoComplete="password"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                            <TextField id="outlined-basic"
+                                // className={classes.textField}
+                                       label="Repetir Contraseña"
+                                       margin="normal"
+                                       variant="outlined"
+                                       name="repeatPassword"
+                                       id="repeatPassword"
+                                       type="password"
+                                       required
+                                       value={item.repeatPassword || ''}
+                                       onChange={this.handleChange}
+                                       error={this.state.errors["repeatPassword"]}
+                                       helperText={this.state.errors["repeatPassword"]}
+                                       autoComplete="repeatPassword"
+                            />
+                        </Grid>
+                    </Grid>
+                    <br></br>
                     <FormGroup>
-                        <Button color="primary" type="submit">Guardar</Button>{' '}
-                        <Button color="secondary" tag={Link} to="/clientes">Cancelar</Button>
+                        <Button variant="contained" color="primary" type="submit">
+                            Guardar
+                        </Button>
+                        {' '}
+                        <Link to='/clientes' style={{textDecoration: 'none'}}>
+                            <Button variant="contained" color="secondary">
+                                Cancelar
+                            </Button>
+                        </Link>
                     </FormGroup>
                 </Form>
             </Container>

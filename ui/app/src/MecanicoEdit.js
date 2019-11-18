@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import {Button, ButtonGroup, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
+import {Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
 import TalleresNavbar from './TalleresNavbar';
 import {confirmAlert} from "react-confirm-alert";
 import Typography from "@material-ui/core/Typography";
 import ReparacionesEnhancedTable from "./ReparacionesSortableTable";
+import Button from '@material-ui/core/Button';
+
 
 class MecanicoEdit extends Component {
 
@@ -203,8 +205,14 @@ class MecanicoEdit extends Component {
                     <br></br>
                     }
                     <FormGroup>
-                        <Button color="primary" type="submit">Guardar</Button>{' '}
-                        <Button color="secondary" tag={Link} to="/mecanicos">Cancelar</Button>
+                        <Button variant="contained" color="primary" type="submit">
+                            Guardar
+                        </Button>{' '}
+                        <Link to='/mecanicos' style={{ textDecoration: 'none' }}>
+                            <Button variant="contained" color="secondary">
+                                Cancelar
+                            </Button>
+                        </Link>
                     </FormGroup>
                 </Form>
             </Container>

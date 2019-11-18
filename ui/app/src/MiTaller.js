@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import TalleresNavbar from './TalleresNavbar';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import Typography from "@material-ui/core/Typography"; // Import css
+import Button from '@material-ui/core/Button';
 
 class MiTaller extends Component {
 
@@ -403,8 +404,14 @@ class MiTaller extends Component {
                     </div>
 
                     <FormGroup>
-                        <Button color="primary" type="submit">Guardar</Button>{' '}
-                        <Button color="secondary" tag={Link} to="/homeTaller">Cancelar</Button>
+                        <Button variant="contained" color="primary" type="submit">
+                            Guardar
+                        </Button>{' '}
+                        <Link to='/homeTaller' style={{ textDecoration: 'none' }}>
+                            <Button variant="contained" color="secondary">
+                                Cancelar
+                            </Button>
+                        </Link>
                     </FormGroup>
                 </Form>
             </Container>
