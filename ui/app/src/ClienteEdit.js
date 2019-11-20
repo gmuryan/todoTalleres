@@ -219,7 +219,7 @@ class ClienteEdit extends Component {
                 }
                 <Form onSubmit={this.handleSubmit} noValidate>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={3}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 id="outlined-basic"
                                 // className={classes.textField}
@@ -228,6 +228,7 @@ class ClienteEdit extends Component {
                                 variant="outlined"
                                 name="nombre"
                                 id="nombre"
+                                fullWidth
                                 required
                                 value={item.nombre || ''}
                                 onChange={this.handleChange}
@@ -236,7 +237,7 @@ class ClienteEdit extends Component {
                                 autoComplete="nombre"
                             />
                         </Grid>
-                        <Grid item xs={12} sm={3}>
+                        <Grid item xs={12} sm={6}>
                             <TextField id="outlined-basic"
                                 // className={classes.textField}
                                        label="Apellido"
@@ -245,6 +246,7 @@ class ClienteEdit extends Component {
                                        name="apellido"
                                        id="apellido"
                                        required
+                                       fullWidth
                                        value={item.apellido || ''}
                                        onChange={this.handleChange}
                                        error={this.state.errors["apellido"]}
@@ -254,7 +256,7 @@ class ClienteEdit extends Component {
                         </Grid>
                     </Grid>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={3}>
+                        <Grid item xs={12} sm={6}>
                             <TextField id="outlined-basic"
                                 // className={classes.textField}
                                        label="Teléfono"
@@ -263,6 +265,7 @@ class ClienteEdit extends Component {
                                        name="telefono"
                                        id="telefono"
                                        required
+                                       fullWidth
                                        value={item.telefono || ''}
                                        onChange={this.handleChange}
                                        error={this.state.errors["telefono"]}
@@ -270,7 +273,7 @@ class ClienteEdit extends Component {
                                        autoComplete="telefono"
                             />
                         </Grid>
-                        <Grid item xs={12} sm={3}>
+                        <Grid item xs={12} sm={6}>
                             <TextField id="outlined-basic"
                                 // className={classes.textField}
                                        label="Mail"
@@ -279,6 +282,7 @@ class ClienteEdit extends Component {
                                        name="mail"
                                        id="mail"
                                        required
+                                       fullWidth
                                        value={item.mail || ''}
                                        onChange={this.handleChange}
                                        error={this.state.errors["mail"]}
@@ -288,7 +292,7 @@ class ClienteEdit extends Component {
                         </Grid>
                     </Grid>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={3}>
+                        <Grid item xs={12} sm={6}>
                             <TextField id="outlined-basic"
                                 // className={classes.textField}
                                        label="Contraseña"
@@ -298,6 +302,7 @@ class ClienteEdit extends Component {
                                        id="password"
                                        type="password"
                                        required
+                                       fullWidth
                                        value={item.password || ''}
                                        onChange={this.handleChange}
                                        error={this.state.errors["password"]}
@@ -305,7 +310,7 @@ class ClienteEdit extends Component {
                                        autoComplete="password"
                             />
                         </Grid>
-                        <Grid item xs={12} sm={3}>
+                        <Grid item xs={12} sm={6}>
                             <TextField id="outlined-basic"
                                 // className={classes.textField}
                                        label="Repetir Contraseña"
@@ -315,6 +320,7 @@ class ClienteEdit extends Component {
                                        id="repeatPassword"
                                        type="password"
                                        required
+                                       fullWidth
                                        value={item.repeatPassword || ''}
                                        onChange={this.handleChange}
                                        error={this.state.errors["repeatPassword"]}
