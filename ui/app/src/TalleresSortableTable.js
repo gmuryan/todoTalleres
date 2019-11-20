@@ -59,7 +59,7 @@ const headCells = [
     {id: 'telefono', numeric: true, disablePadding: false, label: 'Teléfono'},
     {id: 'mail', numeric: false, disablePadding: false, label: 'Mail'},
     {id: 'marca', numeric: false, disablePadding: false, label: 'Marca'},
-    {id: 'especializacion', numeric: false, disablePadding: false, label: 'Especialización'},
+    {id: 'clasificacion', numeric: false, disablePadding: false, label: 'Especialización'},
     {id: 'habilitado', numeric: false, disablePadding: false, label: 'Habilitado'},
     {id: 'accion', numeric: false, disablePadding: false, label: 'Acciones'},
 ];
@@ -202,17 +202,17 @@ const TalleresEnhancedTable = ({rows, habilitarTaller, deshabilitarTaller, edita
         </Tooltip>
     );
 
-    const enableIcon = (taller) => (
+    const enableIcon = (idTaller) => (
         <Tooltip title="Habilitar">
-            <IconButton aria-label="Habilitar" onClick={() => habilitarTaller(taller)}>
+            <IconButton aria-label="Habilitar" onClick={() => habilitarTaller(idTaller)}>
                 <AddIcon color="primary"/>
             </IconButton>
         </Tooltip>
     );
 
-    const disableIcon = (taller) => (
+    const disableIcon = (idTaller) => (
         <Tooltip title="Deshabilitar">
-            <IconButton aria-label="Deshabilitar" onClick={() => deshabilitarTaller(taller)}>
+            <IconButton aria-label="Deshabilitar" onClick={() => deshabilitarTaller(idTaller)}>
                 <RemoveIcon color="error"/>
             </IconButton>
         </Tooltip>
@@ -242,6 +242,10 @@ const TalleresEnhancedTable = ({rows, habilitarTaller, deshabilitarTaller, edita
         </Tooltip>
     );
 
+    const flattenRows = (rows) => (
+        rows.map(r => ({...{...r}, marca: r.marca.descripcion, clasificacion:r.clasificacion.descripcion}))
+    );
+
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
@@ -262,7 +266,7 @@ const TalleresEnhancedTable = ({rows, habilitarTaller, deshabilitarTaller, edita
                             rowCount={rows.length}
                         />
                         <TableBody>
-                            {stableSort(rows, getSorting(order, orderBy))
+                            {stableSort(flattenRows(rows), getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.name);
@@ -283,8 +287,8 @@ const TalleresEnhancedTable = ({rows, habilitarTaller, deshabilitarTaller, edita
                                                 <TableCell align="left">{row.barrio}</TableCell>
                                                 <TableCell align="right">{row.telefono}</TableCell>
                                                 <TableCell align="left">{row.mail}</TableCell>
-                                                <TableCell align="left">{row.marca.descripcion}</TableCell>
-                                                <TableCell align="left">{row.clasificacion.descripcion}</TableCell>
+                                                <TableCell align="left">{row.marca}</TableCell>
+                                                <TableCell align="left">{row.clasificacion}</TableCell>
                                                 <TableCell align="left">{row.activo ? "Si" : "No"}</TableCell>
                                                 <TableCell component="th" scope="row">
                                                     {usuarioCliente &&
@@ -300,10 +304,10 @@ const TalleresEnhancedTable = ({rows, habilitarTaller, deshabilitarTaller, edita
                                                     reviewsIcon(row.idTaller)
                                                     }
                                                     {!row.activo && usuarioAdmin &&
-                                                    enableIcon(row)
+                                                    enableIcon(row.idTaller)
                                                     }
                                                     {row.activo && usuarioAdmin &&
-                                                    disableIcon(row)
+                                                    disableIcon(row.idTaller)
                                                     }
                                                 </TableCell>
                                             </TableRow>

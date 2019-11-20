@@ -45,7 +45,7 @@ const headCells_taller = [
     {id: 'horarioReserva', numeric: false, disablePadding: false, label: 'Horario Reserva'},
     {id: 'fechaDevolucion', numeric: false, disablePadding: false, label: 'Fecha Devolución'},
     {id: 'horarioDevolucion', numeric: false, disablePadding: false, label: 'Horario Devolución'},
-    {id: 'estado', numeric: false, disablePadding: false, label: 'Estado'},
+    {id: 'estadoReparacion', numeric: false, disablePadding: false, label: 'Estado'},
     {id: 'importe', numeric: true, disablePadding: false, label: 'Importe'},
     {id: 'cliente', numeric: false, disablePadding: false, label: 'Cliente'},
     {id: 'acciones', numeric: false, disablePadding: false, label: 'Acciones'},
@@ -235,6 +235,10 @@ const ReparacionesEnhancedTable = ({rows, cancelarTurno, editar, clienteUser, ta
         </Tooltip>
     );
 
+    const flattenRows = (rows) => (
+        rows.map(r => ({...{...r}, estadoReparacion: r.estadoReparacion.descripcion, cliente:r.cliente.nombre + " " +r.cliente.apellido}))
+    );
+
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
@@ -257,7 +261,7 @@ const ReparacionesEnhancedTable = ({rows, cancelarTurno, editar, clienteUser, ta
                             acciones={acciones}
                         />
                         <TableBody>
-                            {stableSort(rows, getSorting(order, orderBy))
+                            {stableSort(flattenRows(rows), getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.name);
@@ -282,7 +286,7 @@ const ReparacionesEnhancedTable = ({rows, cancelarTurno, editar, clienteUser, ta
                                             <TableCell align="left">{row.fechaDevolucion}</TableCell>
                                             <TableCell
                                                 align="left">{row.horaDevolucion ? row.horaDevolucion.substring(0, 5) : row.horaDevolucion}</TableCell>
-                                            <TableCell align="left">{row.estadoReparacion.descripcion}</TableCell>
+                                            <TableCell align="left">{row.estadoReparacion}</TableCell>
                                             {row.importeTotal &&
                                             <TableCell align="right"> ${new Intl.NumberFormat('de-DE', {
                                                 minimumFractionDigits: 2,
@@ -294,7 +298,7 @@ const ReparacionesEnhancedTable = ({rows, cancelarTurno, editar, clienteUser, ta
                                             }
                                             {tallerUser !== null  &&
                                             <TableCell
-                                                align="left">{row.cliente.nombre + " " + row.cliente.apellido}</TableCell>
+                                                align="left">{row.cliente}</TableCell>
                                             }
                                             {clienteUser !== null && acciones &&
                                             <TableCell align="left">{row.taller.nombre}</TableCell>

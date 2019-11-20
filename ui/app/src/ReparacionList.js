@@ -152,6 +152,7 @@ class ReparacionList extends Component {
 
     filterFechaReservaDesde(date) {
         this.setState({filtroFechaReservaDesde: date});
+
     }
 
     filterFechaReservaHasta(date) {

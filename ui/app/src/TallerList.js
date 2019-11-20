@@ -117,14 +117,14 @@ class TallerList extends Component {
         })
     }
 
-    dialogDeshabilitar(taller) {
+    dialogDeshabilitar(idTaller) {
         confirmAlert({
             title: 'Confirmar',
             message: '¿Esta seguro de realizar esta acción?',
             buttons: [
                 {
                     label: 'Si',
-                    onClick: () => this.remove(taller.idTaller)
+                    onClick: () => this.remove(idTaller)
                 },
                 {
                     label: 'No'
@@ -133,14 +133,14 @@ class TallerList extends Component {
         })
     };
 
-    dialogHabilitar(taller) {
+    dialogHabilitar(idTaller) {
         confirmAlert({
             title: 'Confirmar',
             message: '¿Esta seguro de realizar esta acción?',
             buttons: [
                 {
                     label: 'Si',
-                    onClick: () => this.habilitar(taller.idTaller)
+                    onClick: () => this.habilitar(idTaller)
                 },
                 {
                     label: 'No'
