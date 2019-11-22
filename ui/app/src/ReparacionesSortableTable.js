@@ -42,11 +42,11 @@ function getSorting(order, orderBy) {
 const headCells_taller = [
     {id: 'idReparacion', numeric: true, disablePadding: false, label: 'ID'},
     {id: 'fechaReserva', numeric: false, disablePadding: false, label: 'Fecha Reserva'},
-    {id: 'horarioReserva', numeric: false, disablePadding: false, label: 'Horario Reserva'},
+    {id: 'horaReserva', numeric: false, disablePadding: false, label: 'Horario Reserva'},
     {id: 'fechaDevolucion', numeric: false, disablePadding: false, label: 'Fecha Devolución'},
-    {id: 'horarioDevolucion', numeric: false, disablePadding: false, label: 'Horario Devolución'},
+    {id: 'horaDevolucion', numeric: false, disablePadding: false, label: 'Horario Devolución'},
     {id: 'estadoReparacion', numeric: false, disablePadding: false, label: 'Estado'},
-    {id: 'importe', numeric: true, disablePadding: false, label: 'Importe'},
+    {id: 'importeTotal', numeric: true, disablePadding: false, label: 'Importe'},
     {id: 'cliente', numeric: false, disablePadding: false, label: 'Cliente'},
     {id: 'acciones', numeric: false, disablePadding: false, label: 'Acciones'},
 ];
@@ -54,11 +54,11 @@ const headCells_taller = [
 const headCells_cliente = [
     {id: 'idReparacion', numeric: true, disablePadding: false, label: 'ID'},
     {id: 'fechaReserva', numeric: false, disablePadding: false, label: 'Fecha Reserva'},
-    {id: 'horarioReserva', numeric: false, disablePadding: false, label: 'Horario Reserva'},
+    {id: 'horaReserva', numeric: false, disablePadding: false, label: 'Horario Reserva'},
     {id: 'fechaDevolucion', numeric: false, disablePadding: false, label: 'Fecha Devolución'},
-    {id: 'horarioDevolucion', numeric: false, disablePadding: false, label: 'Horario Devolución'},
+    {id: 'horaDevolucion', numeric: false, disablePadding: false, label: 'Horario Devolución'},
     {id: 'estado', numeric: false, disablePadding: false, label: 'Estado'},
-    {id: 'importe', numeric: true, disablePadding: false, label: 'Importe'},
+    {id: 'importeTotal', numeric: true, disablePadding: false, label: 'Importe'},
     {id: 'taller', numeric: false, disablePadding: false, label: 'Taller'},
     {id: 'acciones', numeric: false, disablePadding: false, label: 'Acciones'},
 ];
@@ -66,9 +66,9 @@ const headCells_cliente = [
 const headCells_sin_acciones = [
     {id: 'idReparacion', numeric: true, disablePadding: false, label: 'ID'},
     {id: 'fechaDevolucion', numeric: false, disablePadding: false, label: 'Fecha Devolución'},
-    {id: 'horarioDevolucion', numeric: false, disablePadding: false, label: 'Horario Devolución'},
+    {id: 'horaDevolucion', numeric: false, disablePadding: false, label: 'Horario Devolución'},
     {id: 'estado', numeric: false, disablePadding: false, label: 'Estado'},
-    {id: 'importe', numeric: true, disablePadding: false, label: 'Importe'},
+    {id: 'importeTotal', numeric: true, disablePadding: false, label: 'Importe'},
     {id: 'cliente', numeric: false, disablePadding: false, label: 'Cliente'},
 ];
 

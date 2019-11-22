@@ -47,7 +47,7 @@ const headCells_acciones = [
     {id: 'apellido', numeric: false, disablePadding: false, label: 'Apellido'},
     {id: 'telefono', numeric: true, disablePadding: false, label: 'Teléfono'},
     {id: 'mail', numeric: false, disablePadding: false, label: 'Mail'},
-    {id: 'habilitado', numeric: false, disablePadding: false, label: 'Habilitado'},
+    {id: 'activo', numeric: false, disablePadding: false, label: 'Habilitado'},
     {id: 'accion', numeric: false, disablePadding: false, label: 'Acciones'},
 ];
 
@@ -57,7 +57,7 @@ const headCells_sin_acciones = [
     {id: 'apellido', numeric: false, disablePadding: false, label: 'Apellido'},
     {id: 'telefono', numeric: true, disablePadding: false, label: 'Teléfono'},
     {id: 'mail', numeric: false, disablePadding: false, label: 'Mail'},
-    {id: 'habilitado', numeric: false, disablePadding: false, label: 'Habilitado'},
+    {id: 'activo', numeric: false, disablePadding: false, label: 'Habilitado'},
 ];
 
 

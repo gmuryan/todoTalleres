@@ -6,6 +6,12 @@ import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import Typography from "@material-ui/core/Typography"; // Import css
 import Button from '@material-ui/core/Button';
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
 
 class TallerEdit extends Component {
 
@@ -42,7 +48,7 @@ class TallerEdit extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         const admin = JSON.parse(localStorage.getItem("adminUser"));
-        if (admin === null){
+        if (admin === null) {
             localStorage.clear();
             this.props.history.push('/');
         }
@@ -82,7 +88,7 @@ class TallerEdit extends Component {
         });
     }
 
-    validateMailCliente(){
+    validateMailCliente() {
         let fields = this.state.item;
         return fetch(`/api/clienteByMail?mail=${encodeURIComponent(fields["mail"])}`, {
             method: 'GET',
@@ -192,13 +198,13 @@ class TallerEdit extends Component {
             }
         }
         return this.validateMailTaller().then((response) => {
-            if (response.ok && this.state.mailCargado !== fields["mail"]){
+            if (response.ok && this.state.mailCargado !== fields["mail"]) {
                 this.setState({formIsValid: false});
                 errors["mail"] = "Este mail ya esta registrado";
                 this.setState({errors: errors});
-            }else{
+            } else {
                 return this.validateMailCliente().then((response) => {
-                    if (response.ok && this.state.mailCargado !== fields["mail"]){
+                    if (response.ok && this.state.mailCargado !== fields["mail"]) {
                         this.setState({formIsValid: false});
                         errors["mail"] = "Este mail ya esta registrado";
                         this.setState({errors: errors});
@@ -215,7 +221,7 @@ class TallerEdit extends Component {
             buttons: [
                 {
                     label: 'Aceptar',
-                    onClick: () =>  this.props.history.push('/talleres')
+                    onClick: () => this.props.history.push('/talleres')
                 }
             ]
         })
@@ -244,6 +250,15 @@ class TallerEdit extends Component {
     render() {
         const {item, marcas, clasificaciones, flag} = this.state;
 
+        const classes = {
+            formControl: {
+                minWidth: 120,
+            },
+            selectEmpty: {
+                marginTop: 100,
+            },
+        };
+
         if (flag == false && item.idTaller) {
             console.log(item);
             item.repeatPassword = item.password;
@@ -269,70 +284,163 @@ class TallerEdit extends Component {
             <AppNavbar/>
             <Container>
                 {this.props.match.params.id !== 'new' &&
-                    <Typography variant="h4">Editar Taller</Typography>
+                <Typography variant="h4">Editar Taller</Typography>
                 }
                 {this.props.match.params.id === 'new' &&
-                    <Typography variant="h4">Crear Taller</Typography>
+                <Typography variant="h4">Crear Taller</Typography>
                 }
-                <Form onSubmit={this.handleSubmit}>
-                    <div className="row">
-                        <FormGroup className="col-md-4 mb-3">
-                            <Label for="nombre">Nombre</Label>
-                            <Input type="text" name="nombre" id="nombre" value={item.nombre || ''}
-                                   onChange={this.handleChange} autoComplete="nombre"/>
-                            <span className="error">{this.state.errors["nombre"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-4 mb-3">
-                            <Label for="barrio">Barrio</Label>
-                            <Input type="text" name="barrio" id="barrio" value={item.barrio || ''}
-                                   onChange={this.handleChange} autoComplete="barrio"/>
-                            <span className="error">{this.state.errors["barrio"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-4 mb-3">
-                            <Label for="telefono">Teléfono</Label>
-                            <Input type="text" name="telefono" id="telefono" value={item.telefono || ''}
-                                   onChange={this.handleChange} autoComplete="telefono"/>
-                            <span className="error">{this.state.errors["telefono"]}</span>
-                        </FormGroup>
-                    </div>
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="mail">Mail</Label>
-                            <Input type="text" name="mail" id="mail" value={item.mail || ''}
-                                   onChange={this.handleChange} autoComplete="mail"/>
-                            <span className="error">{this.state.errors["mail"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="ubicacion">Ubicación</Label>
-                            <Input type="text" name="ubicacion" id="ubicacion" value={item.ubicacion || ''}
-                                   onChange={this.handleChange} autoComplete="ubicacion"/>
-                            <span className="error">{this.state.errors["ubicacion"]}</span>
-                        </FormGroup>
-                    </div>
-                    <div>
-                        <div className="row">
-                            <FormGroup className="col-md-12 mb-3">
-                                <Label for="descripcionTaller">Breve Descripción del Taller</Label>
-                                <Input type="text" name="descripcionTaller" id="descripcionTaller" value={item.descripcionTaller || ''}
-                                       onChange={this.handleChange} autoComplete="descripcionTaller"/>
-                            </FormGroup>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="password">Contraseña</Label>
-                            <Input type="password" name="password" id="password" value={item.password || ''}
-                                   onChange={this.handleChange} autoComplete="password"/>
-                            <span className="error">{this.state.errors["password"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="repeatPassword">Repetir Contraseña</Label>
-                            <Input type="password" name="repeatPassword" id="repeatPassword"
-                                   value={item.repeatPassword || ''}
-                                   onChange={this.handleChange} autoComplete="repeatPassword"/>
-                            <span className="error">{this.state.errors["repeatPassword"]}</span>
-                        </FormGroup>
-                    </div>
+                <Form onSubmit={this.handleSubmit} noValidate>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Nombre"
+                                margin="normal"
+                                variant="outlined"
+                                name="nombre"
+                                id="nombre"
+                                fullWidth
+                                required
+                                value={item.nombre || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["nombre"]}
+                                helperText={this.state.errors["nombre"]}
+                                autoComplete="nombre"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Barrio"
+                                margin="normal"
+                                variant="outlined"
+                                name="barrio"
+                                id="barrio"
+                                fullWidth
+                                required
+                                value={item.barrio || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["barrio"]}
+                                helperText={this.state.errors["barrio"]}
+                                autoComplete="barrio"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Teléfono"
+                                margin="normal"
+                                variant="outlined"
+                                name="telefono"
+                                id="telefono"
+                                fullWidth
+                                required
+                                value={item.telefono || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["telefono"]}
+                                helperText={this.state.errors["telefono"]}
+                                autoComplete="barrio"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Mail"
+                                margin="normal"
+                                variant="outlined"
+                                name="mail"
+                                id="mail"
+                                fullWidth
+                                required
+                                value={item.mail || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["mail"]}
+                                helperText={this.state.errors["mail"]}
+                                autoComplete="mail"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Ubicación"
+                                margin="normal"
+                                variant="outlined"
+                                name="ubicacion"
+                                id="ubicacion"
+                                fullWidth
+                                required
+                                value={item.ubicacion || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["ubicacion"]}
+                                helperText={this.state.errors["ubicacion"]}
+                                autoComplete="mail"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={12}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Breve Descripción del Taller"
+                                margin="normal"
+                                variant="outlined"
+                                name="descripcionTaller"
+                                id="descripcionTaller"
+                                fullWidth
+                                value={item.descripcionTaller || ''}
+                                onChange={this.handleChange}
+                                autoComplete="descripcionTaller"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Contraseña"
+                                margin="normal"
+                                variant="outlined"
+                                name="password"
+                                id="password"
+                                type="password"
+                                fullWidth
+                                required
+                                value={item.password || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["password"]}
+                                helperText={this.state.errors["password"]}
+                                autoComplete="password"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Repetir Contraseña"
+                                margin="normal"
+                                variant="outlined"
+                                name="repeatPassword"
+                                id="repeatPassword"
+                                type="password"
+                                fullWidth
+                                required
+                                value={item.repeatPassword || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["repeatPassword"]}
+                                helperText={this.state.errors["repeatPassword"]}
+                                autoComplete="repeatPassword"
+                            />
+                        </Grid>
+                    </Grid>
                     {item.idTaller && (
                         <FormGroup>
                             <Label for="marca">Marca</Label>
@@ -348,7 +456,6 @@ class TallerEdit extends Component {
                     )}
                     {item.idTaller == null && (
                         <FormGroup>
-                            <Label for="marca">Marca</Label>
                             <br></br>
                             <div>
                                 <select required="required" className="select" name="marca" id="marca"
@@ -370,13 +477,10 @@ class TallerEdit extends Component {
                                     {optionItemsClasifs}
                                 </select>
                             </div>
-                            &nbsp;&nbsp;
                         </FormGroup>
                     )}
                     {item.idTaller == null && (
                         <FormGroup>
-                            <Label for="clasificacion">Especialización</Label>
-                            <br></br>
                             <div>
                                 <select required="required" className="select" name="clasificacion" id="clasificacion"
                                         onChange={this.handleChange} autoComplete="clasificacion">
@@ -384,33 +488,53 @@ class TallerEdit extends Component {
                                     {newOptionsClasifs}
                                 </select>
                             </div>
-                            &nbsp;&nbsp;
                         </FormGroup>
                     )}
-
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="maximosVehiculos">Capacidad Maxima de Vehículos</Label>
-                            <Input type="number" name="maximosVehiculos" id="maximosVehiculos"
-                                   value={item.maximosVehiculos || ''}
-                                   onChange={this.handleChange} autoComplete="maximosVehiculos"/>
-                            <span className="error">{this.state.errors["maximosVehiculos"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="retrasosContemplados">Espacios Reservados por Precaución</Label>
-                            <Input type="number" name="retrasosContemplados" id="retrasosContemplados"
-                                   value={item.retrasosContemplados || ''}
-                                   onChange={this.handleChange} autoComplete="retrasosContemplados"/>
-                            <span className="error">{this.state.errors["retrasosContemplados"]}</span>
-                        </FormGroup>
-                    </div>
-
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Capacidad Maxima de Vehículos"
+                                margin="normal"
+                                variant="outlined"
+                                name="maximosVehiculos"
+                                id="maximosVehiculos"
+                                fullWidth
+                                required
+                                value={item.maximosVehiculos || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["maximosVehiculos"]}
+                                helperText={this.state.errors["maximosVehiculos"]}
+                                autoComplete="maximosVehiculos"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Espacios Reservados por Precaución"
+                                margin="normal"
+                                variant="outlined"
+                                name="retrasosContemplados"
+                                id="retrasosContemplados"
+                                fullWidth
+                                required
+                                value={item.retrasosContemplados || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["retrasosContemplados"]}
+                                helperText={this.state.errors["retrasosContemplados"]}
+                                autoComplete="retrasosContemplados"
+                            />
+                        </Grid>
+                    </Grid>
+                    <br></br>
                     <FormGroup>
                         <Button variant="contained" color="primary" type="submit">
                             Guardar
                         </Button>
                         {' '}
-                        <Link to='/talleres' style={{ textDecoration: 'none' }}>
+                        <Link to='/talleres' style={{textDecoration: 'none'}}>
                             <Button variant="contained" color="secondary">
                                 Cancelar
                             </Button>

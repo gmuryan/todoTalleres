@@ -60,7 +60,7 @@ const headCells = [
     {id: 'mail', numeric: false, disablePadding: false, label: 'Mail'},
     {id: 'marca', numeric: false, disablePadding: false, label: 'Marca'},
     {id: 'clasificacion', numeric: false, disablePadding: false, label: 'Especialización'},
-    {id: 'habilitado', numeric: false, disablePadding: false, label: 'Habilitado'},
+    {id: 'activo', numeric: false, disablePadding: false, label: 'Habilitado'},
     {id: 'accion', numeric: false, disablePadding: false, label: 'Acciones'},
 ];
 
