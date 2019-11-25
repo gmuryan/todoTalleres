@@ -17,7 +17,7 @@ const override = css`
     display: block;
     margin: 0 auto;
     border-color: red;
-    margin-top: 300px;
+    margin-top: 350px;
 `;
 
 class MecanicoList extends Component {

@@ -6,6 +6,8 @@ import {confirmAlert} from "react-confirm-alert";
 import Typography from "@material-ui/core/Typography";
 import ReparacionesEnhancedTable from "./ReparacionesSortableTable";
 import Button from '@material-ui/core/Button';
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
 
 
 class MecanicoEdit extends Component {
@@ -161,35 +163,80 @@ class MecanicoEdit extends Component {
                 {this.props.match.params.id === 'new' &&
                 <Typography variant="h4">Crear Mecanico</Typography>
                 }
-                <Form onSubmit={this.handleSubmit}>
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="nombre">Nombre</Label>
-                            <Input type="text" name="nombre" id="nombre" value={item.nombre || ''}
-                                   onChange={this.handleChange} autoComplete="nombre"/>
-                            <span className="error">{this.state.errors["nombre"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="apellido">Apellido</Label>
-                            <Input type="text" name="apellido" id="apellido" value={item.apellido || ''}
-                                   onChange={this.handleChange} autoComplete="apellido"/>
-                            <span className="error">{this.state.errors["apellido"]}</span>
-                        </FormGroup>
-                    </div>
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="telefono">Teléfono</Label>
-                            <Input type="text" name="telefono" id="telefono" value={item.telefono || ''}
-                                   onChange={this.handleChange} autoComplete="telefono"/>
-                            <span className="error">{this.state.errors["telefono"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="mail">Mail</Label>
-                            <Input type="text" name="mail" id="mail" value={item.mail || ''}
-                                   onChange={this.handleChange} autoComplete="mail"/>
-                            <span className="error">{this.state.errors["mail"]}</span>
-                        </FormGroup>
-                    </div>
+                <Form onSubmit={this.handleSubmit} noValidate>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Nombre"
+                                margin="normal"
+                                variant="outlined"
+                                name="nombre"
+                                id="nombre"
+                                fullWidth
+                                required
+                                value={item.nombre || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["nombre"]}
+                                helperText={this.state.errors["nombre"]}
+                                autoComplete="nombre"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField id="outlined-basic"
+                                // className={classes.textField}
+                                       label="Apellido"
+                                       margin="normal"
+                                       variant="outlined"
+                                       name="apellido"
+                                       id="apellido"
+                                       required
+                                       fullWidth
+                                       value={item.apellido || ''}
+                                       onChange={this.handleChange}
+                                       error={this.state.errors["apellido"]}
+                                       helperText={this.state.errors["apellido"]}
+                                       autoComplete="apellido"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField id="outlined-basic"
+                                // className={classes.textField}
+                                       label="Teléfono"
+                                       margin="normal"
+                                       variant="outlined"
+                                       name="telefono"
+                                       id="telefono"
+                                       required
+                                       fullWidth
+                                       value={item.telefono || ''}
+                                       onChange={this.handleChange}
+                                       error={this.state.errors["telefono"]}
+                                       helperText={this.state.errors["telefono"]}
+                                       autoComplete="telefono"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField id="outlined-basic"
+                                // className={classes.textField}
+                                       label="Mail"
+                                       margin="normal"
+                                       variant="outlined"
+                                       name="mail"
+                                       id="mail"
+                                       required
+                                       fullWidth
+                                       value={item.mail || ''}
+                                       onChange={this.handleChange}
+                                       error={this.state.errors["mail"]}
+                                       helperText={this.state.errors["mail"]}
+                                       autoComplete="mail"
+                            />
+                        </Grid>
+                    </Grid>
                     {this.props.match.params.id !== 'new' &&
                     <Typography variant="h4">
                         Reparaciones Asignadas

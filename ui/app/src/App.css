@@ -34,6 +34,10 @@
     margin-top: -20px;
 }
 
+.link-menu-color{
+    color: #000000;
+}
+
 .container, .container-fluid {
   margin-top: 20px;
 }

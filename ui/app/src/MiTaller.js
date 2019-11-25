@@ -6,6 +6,8 @@ import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import Typography from "@material-ui/core/Typography"; // Import css
 import Button from '@material-ui/core/Button';
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
 
 class MiTaller extends Component {
 
@@ -281,56 +283,158 @@ class MiTaller extends Component {
                 <Typography variant="h4">
                     Editar Taller
                 </Typography>
-                <Form onSubmit={this.handleSubmit}>
-                    <div className="row">
-                        <FormGroup className="col-md-4 mb-3">
-                            <Label for="nombre">Nombre</Label>
-                            <Input type="text" name="nombre" id="nombre" value={item.nombre || ''}
-                                   onChange={this.handleChange} autoComplete="nombre"/>
-                            <span className="error">{this.state.errors["nombre"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-4 mb-3">
-                            <Label for="barrio">Barrio</Label>
-                            <Input type="text" name="barrio" id="barrio" value={item.barrio || ''}
-                                   onChange={this.handleChange} autoComplete="barrio"/>
-                            <span className="error">{this.state.errors["barrio"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-4 mb-3">
-                            <Label for="telefono">Teléfono</Label>
-                            <Input type="text" name="telefono" id="telefono" value={item.telefono || ''}
-                                   onChange={this.handleChange} autoComplete="telefono"/>
-                            <span className="error">{this.state.errors["telefono"]}</span>
-                        </FormGroup>
-                    </div>
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="mail">Mail</Label>
-                            <Input type="text" name="mail" id="mail" value={item.mail || ''}
-                                   onChange={this.handleChange} autoComplete="mail"/>
-                            <span className="error">{this.state.errors["mail"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="ubicacion">Ubicación</Label>
-                            <Input type="text" name="ubicacion" id="ubicacion" value={item.ubicacion || ''}
-                                   onChange={this.handleChange} autoComplete="ubicacion"/>
-                            <span className="error">{this.state.errors["ubicacion"]}</span>
-                        </FormGroup>
-                    </div>
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="password">Contraseña</Label>
-                            <Input type="password" name="password" id="password" value={item.password || ''}
-                                   onChange={this.handleChange} autoComplete="password"/>
-                            <span className="error">{this.state.errors["password"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="repeatPassword">Repetir Contraseña</Label>
-                            <Input type="password" name="repeatPassword" id="repeatPassword"
-                                   value={item.repeatPassword || ''}
-                                   onChange={this.handleChange} autoComplete="repeatPassword"/>
-                            <span className="error">{this.state.errors["repeatPassword"]}</span>
-                        </FormGroup>
-                    </div>
+                <Form onSubmit={this.handleSubmit} noValidate>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Nombre"
+                                margin="normal"
+                                variant="outlined"
+                                name="nombre"
+                                id="nombre"
+                                fullWidth
+                                required
+                                value={item.nombre || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["nombre"]}
+                                helperText={this.state.errors["nombre"]}
+                                autoComplete="nombre"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Barrio"
+                                margin="normal"
+                                variant="outlined"
+                                name="barrio"
+                                id="barrio"
+                                fullWidth
+                                required
+                                value={item.barrio || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["barrio"]}
+                                helperText={this.state.errors["barrio"]}
+                                autoComplete="barrio"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Teléfono"
+                                margin="normal"
+                                variant="outlined"
+                                name="telefono"
+                                id="telefono"
+                                fullWidth
+                                required
+                                value={item.telefono || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["telefono"]}
+                                helperText={this.state.errors["telefono"]}
+                                autoComplete="barrio"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Mail"
+                                margin="normal"
+                                variant="outlined"
+                                name="mail"
+                                id="mail"
+                                fullWidth
+                                required
+                                value={item.mail || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["mail"]}
+                                helperText={this.state.errors["mail"]}
+                                autoComplete="mail"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Ubicación"
+                                margin="normal"
+                                variant="outlined"
+                                name="ubicacion"
+                                id="ubicacion"
+                                fullWidth
+                                required
+                                value={item.ubicacion || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["ubicacion"]}
+                                helperText={this.state.errors["ubicacion"]}
+                                autoComplete="mail"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={12}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Breve Descripción del Taller"
+                                margin="normal"
+                                variant="outlined"
+                                name="descripcionTaller"
+                                id="descripcionTaller"
+                                fullWidth
+                                value={item.descripcionTaller || ''}
+                                onChange={this.handleChange}
+                                autoComplete="descripcionTaller"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Contraseña"
+                                margin="normal"
+                                variant="outlined"
+                                name="password"
+                                id="password"
+                                type="password"
+                                fullWidth
+                                required
+                                value={item.password || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["password"]}
+                                helperText={this.state.errors["password"]}
+                                autoComplete="password"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Repetir Contraseña"
+                                margin="normal"
+                                variant="outlined"
+                                name="repeatPassword"
+                                id="repeatPassword"
+                                type="password"
+                                fullWidth
+                                required
+                                value={item.repeatPassword || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["repeatPassword"]}
+                                helperText={this.state.errors["repeatPassword"]}
+                                autoComplete="repeatPassword"
+                            />
+                        </Grid>
+                    </Grid>
                     {item.idTaller && (
                         <FormGroup>
                             <Label for="marca">Marca</Label>
@@ -341,12 +445,10 @@ class MiTaller extends Component {
                                     {optionItemsMarcas}
                                 </select>
                             </div>
-                            &nbsp;&nbsp;
                         </FormGroup>
                     )}
                     {item.idTaller == null && (
                         <FormGroup>
-                            <Label for="marca">Marca</Label>
                             <br></br>
                             <div>
                                 <select required="required" className="select" name="marca" id="marca"
@@ -368,13 +470,10 @@ class MiTaller extends Component {
                                     {optionItemsClasifs}
                                 </select>
                             </div>
-                            &nbsp;&nbsp;
                         </FormGroup>
                     )}
                     {item.idTaller == null && (
                         <FormGroup>
-                            <Label for="clasificacion">Especialización</Label>
-                            <br></br>
                             <div>
                                 <select required="required" className="select" name="clasificacion" id="clasificacion"
                                         onChange={this.handleChange} autoComplete="clasificacion">
@@ -382,27 +481,47 @@ class MiTaller extends Component {
                                     {newOptionsClasifs}
                                 </select>
                             </div>
-                            &nbsp;&nbsp;
                         </FormGroup>
                     )}
-
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="maximosVehiculos">Capacidad Maxima de Vehículos</Label>
-                            <Input type="text" name="maximosVehiculos" id="maximosVehiculos"
-                                   value={item.maximosVehiculos || ''}
-                                   onChange={this.handleChange} autoComplete="maximosVehiculos"/>
-                            <span className="error">{this.state.errors["maximosVehiculos"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="retrasosContemplados">Espacios Reservados por Precaución</Label>
-                            <Input type="text" name="retrasosContemplados" id="retrasosContemplados"
-                                   value={item.retrasosContemplados || ''}
-                                   onChange={this.handleChange} autoComplete="retrasosContemplados"/>
-                            <span className="error">{this.state.errors["retrasosContemplados"]}</span>
-                        </FormGroup>
-                    </div>
-
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Capacidad Maxima de Vehículos"
+                                margin="normal"
+                                variant="outlined"
+                                name="maximosVehiculos"
+                                id="maximosVehiculos"
+                                fullWidth
+                                required
+                                value={item.maximosVehiculos || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["maximosVehiculos"]}
+                                helperText={this.state.errors["maximosVehiculos"]}
+                                autoComplete="maximosVehiculos"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Espacios Reservados por Precaución"
+                                margin="normal"
+                                variant="outlined"
+                                name="retrasosContemplados"
+                                id="retrasosContemplados"
+                                fullWidth
+                                required
+                                value={item.retrasosContemplados || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["retrasosContemplados"]}
+                                helperText={this.state.errors["retrasosContemplados"]}
+                                autoComplete="retrasosContemplados"
+                            />
+                        </Grid>
+                    </Grid>
+                    <br></br>
                     <FormGroup>
                         <Button variant="contained" color="primary" type="submit">
                             Guardar
