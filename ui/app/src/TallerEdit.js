@@ -12,6 +12,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 class TallerEdit extends Component {
 
@@ -180,6 +181,18 @@ class TallerEdit extends Component {
             errors["repeatPassword"] = "Debe ser igual a la contraseña";
         }
 
+        //Marca
+        if (!fields["marca"]){
+            this.setState({formIsValid: false});
+            errors["marca"] = "No puede estar vacio";
+        }
+
+        //Clasificacion
+        if (!fields["clasificacion"]){
+            this.setState({formIsValid: false});
+            errors["clasificacion"] = "No puede estar vacio";
+        }
+
         this.setState({errors: errors});
 
 
@@ -252,7 +265,7 @@ class TallerEdit extends Component {
 
         const classes = {
             formControl: {
-                minWidth: 120,
+                width: 1000,
             },
             selectEmpty: {
                 marginTop: 100,
@@ -439,6 +452,52 @@ class TallerEdit extends Component {
                                 helperText={this.state.errors["repeatPassword"]}
                                 autoComplete="repeatPassword"
                             />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl variant="outlined" required className={classes.formControl} error={this.state.errors["marca"]}>
+                                <InputLabel id="demo-simple-select-outlined-label">
+                                    Marca
+                                </InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-outlined-label"
+                                    id="marca"
+                                    name="marca"
+                                    value={item.marca}
+                                    onChange={this.handleChange}
+                                    className="select-material-ui"
+                                >
+                                    {marcas.map(marca => (
+                                        <MenuItem key={marca.idMarca} value={JSON.stringify(marca)}>
+                                            {marca.descripcion}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {this.state.errors["marca"] && <FormHelperText>{this.state.errors["marca"]}</FormHelperText>}
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl variant="outlined" required className={classes.formControl} error={this.state.errors["clasificacion"]}>
+                                <InputLabel id="demo-simple-select-outlined-label">
+                                    Especialización
+                                </InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-outlined-label"
+                                    id="clasificacion"
+                                    name="clasificacion"
+                                    value={item.clasificacion}
+                                    onChange={this.handleChange}
+                                    className="select-material-ui"
+                                >
+                                    {clasificaciones.map(clasificacion => (
+                                        <MenuItem key={clasificacion.idClasificacion} value={JSON.stringify(clasificacion)}>
+                                            {clasificacion.descripcion}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            {this.state.errors["clasificacion"] && <FormHelperText>{this.state.errors["clasificacion"]}</FormHelperText>}
+                            </FormControl>
                         </Grid>
                     </Grid>
                     {item.idTaller && (

@@ -58,6 +58,10 @@
     border-radius: .25rem;
 }
 
+.select-material-ui{
+    width: 547px;
+}
+
 .input-big-readOnly{
     height: calc(7rem + 2px);
     width: 100%;
