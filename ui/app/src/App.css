@@ -38,6 +38,12 @@
     color: #000000;
 }
 
+.div-logo{
+    width: 15%;
+    margin: 0 auto;
+    vertical-align: middle;
+}
+
 .container, .container-fluid {
   margin-top: 20px;
 }

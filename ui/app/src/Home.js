@@ -5,6 +5,8 @@ import {Link, withRouter} from 'react-router-dom';
 import {Button, Container} from 'reactstrap';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
+import Logo from "./logo.png";
+import Typography from "@material-ui/core/Typography";
 
 
 class Home extends Component {
@@ -22,13 +24,15 @@ class Home extends Component {
         return (
             <div>
                 <AppNavbar/>
-                <Container fluid>
-                    {/*    <Button color="link"><Link to="/proveedores">Manage Suppliers</Link></Button>*/}
-                    {/*          <div className="container">*/}
-                    {/*  <button onClick={this.submit}>Confirm dialog</button>*/}
-                    {/*  <p>My name is: {this.props.mssg}</p>*/}
-                    {/*</div>*/}
-                </Container>
+                <Container fluid style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}>
+                <div className="div-logo">
+                    <img src={Logo} />
+                </div>
+                <Typography variant="h4" align="center">¡Bienvenido a TodoTalleres!</Typography>
+            </Container>
             </div>
         );
     }

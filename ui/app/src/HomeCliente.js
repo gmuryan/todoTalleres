@@ -5,7 +5,8 @@ import {Link, withRouter} from 'react-router-dom';
 import { Button, Container } from 'reactstrap';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
-
+import Logo from "./logo.png";
+import Typography from "@material-ui/core/Typography";
 
 class HomeCliente extends Component {
 
@@ -61,7 +62,14 @@ class HomeCliente extends Component {
         return (
             <div>
                 <ClientesNavbar/>
-                <Container fluid>
+                <Container fluid style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                    <div className="div-logo">
+                        <img src={Logo} />
+                    </div>
+                    <Typography variant="h4" align="center">¡Bienvenido a TodoTalleres!</Typography>
                 </Container>
             </div>
         );
