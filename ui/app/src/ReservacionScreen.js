@@ -3,13 +3,17 @@ import {Link, withRouter} from 'react-router-dom';
 import {ButtonGroup, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
-import DatePicker from "react-datepicker";
+import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment'
 import ClientesNavbar from "./ClientesNavbar";
 import TalleresNavbar from "./TalleresNavbar";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import es from "date-fns/locale/es";
+registerLocale("es", es);
 
 class ReservacionScreen extends Component {
 
@@ -478,64 +482,188 @@ class ReservacionScreen extends Component {
                 }
                 <Form onSubmit={this.handleSubmit}>
                     {clienteAux !== null &&
-                    <div className="row">
-                        <FormGroup className="col-md-4 mb-3">
-                            <Label for="nombre">Nombre</Label>
-                            <Input readOnly type="text" name="nombre" id="nombre" value={item.nombre || ''}
-                                   onChange={this.handleChange} autoComplete="nombre"/>
-                        </FormGroup>
-                        <FormGroup className="col-md-4 mb-3">
-                            <Label for="barrio">Barrio</Label>
-                            <Input readOnly type="text" name="barrio" id="barrio" value={item.barrio || ''}
-                                   onChange={this.handleChange} autoComplete="barrio"/>
-                        </FormGroup>
-                        <FormGroup className="col-md-4 mb-3">
-                            <Label for="telefono">Teléfono</Label>
-                            <Input readOnly type="text" name="telefono" id="telefono" value={item.telefono || ''}
-                                   onChange={this.handleChange} autoComplete="telefono"/>
-                        </FormGroup>
-                    </div>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Nombre"
+                                margin="normal"
+                                variant="outlined"
+                                name="nombre"
+                                id="nombre"
+                                fullWidth
+                                style={{
+                                    backgroundColor: "#e9ecef"
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.nombre || ''}
+                                onChange={this.handleChange}
+                                autoComplete="nombre"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Barrio"
+                                margin="normal"
+                                variant="outlined"
+                                name="barrio"
+                                id="barrio"
+                                fullWidth
+                                style={{
+                                    backgroundColor: "#e9ecef"
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.barrio || ''}
+                                onChange={this.handleChange}
+                                autoComplete="barrio"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Teléfono"
+                                margin="normal"
+                                variant="outlined"
+                                name="telefono"
+                                id="telefono"
+                                fullWidth
+                                style={{
+                                    backgroundColor: "#e9ecef"
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.telefono || ''}
+                                onChange={this.handleChange}
+                                autoComplete="barrio"
+                            />
+                        </Grid>
+                    </Grid>
                     }
                     {clienteAux !== null &&
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="mail">Mail</Label>
-                            <Input readOnly type="text" name="mail" id="mail" value={item.mail || ''}
-                                   onChange={this.handleChange} autoComplete="mail"/>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="ubicacion">Ubicación</Label>
-                            <Input readOnly type="text" name="ubicacion" id="ubicacion" value={item.ubicacion || ''}
-                                   onChange={this.handleChange} autoComplete="ubicacion"/>
-                        </FormGroup>
-                    </div>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Mail"
+                                margin="normal"
+                                variant="outlined"
+                                name="mail"
+                                id="mail"
+                                fullWidth
+                                style={{
+                                    backgroundColor: "#e9ecef"
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.mail || ''}
+                                onChange={this.handleChange}
+                                autoComplete="mail"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Ubicación"
+                                margin="normal"
+                                variant="outlined"
+                                name="ubicacion"
+                                id="ubicacion"
+                                fullWidth
+                                style={{
+                                    backgroundColor: "#e9ecef"
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.ubicacion || ''}
+                                onChange={this.handleChange}
+                                autoComplete="mail"
+                            />
+                        </Grid>
+                    </Grid>
                     }
                     {clienteAux !== null &&
-                    <div>
-                        <div className="row">
-                            <FormGroup className="col-md-12 mb-3">
-                                <Label for="descripcionTaller">Descripción del Taller</Label>
-                                <Input readOnly type="text" name="descripcionTaller" id="descripcionTaller"
-                                       value={item.descripcionTaller || ''}
-                                       onChange={this.handleChange} autoComplete="descripcionTaller"/>
-                            </FormGroup>
-                        </div>
-                    </div>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={12}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Breve Descripción del Taller"
+                                margin="normal"
+                                variant="outlined"
+                                name="descripcionTaller"
+                                id="descripcionTaller"
+                                fullWidth
+                                style={{
+                                    backgroundColor: "#e9ecef"
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.descripcionTaller || ''}
+                                onChange={this.handleChange}
+                                autoComplete="descripcionTaller"
+                            />
+                        </Grid>
+                    </Grid>
                     }
                     {clienteAux !== null &&
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="marca">Marca</Label>
-                            <Input readOnly type="text" name="marca" id="marca" value={item.marca.descripcion || ''}
-                                   onChange={this.handleChange} autoComplete="mail"/>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="clasificacion">Especialización</Label>
-                            <Input readOnly type="text" name="clasificacion" id="clasificacion"
-                                   value={item.clasificacion.descripcion || ''}
-                                   onChange={this.handleChange} autoComplete="clasificacion"/>
-                        </FormGroup>
-                    </div>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Marca"
+                                margin="normal"
+                                variant="outlined"
+                                name="marca"
+                                id="marca"
+                                fullWidth
+                                style={{
+                                    backgroundColor: "#e9ecef"
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.marca.descripcion || ''}
+                                onChange={this.handleChange}
+                                autoComplete="marca"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                // className={classes.textField}
+                                label="Especialización"
+                                margin="normal"
+                                variant="outlined"
+                                name="clasificacion"
+                                id="clasificacion"
+                                fullWidth
+                                style={{
+                                    backgroundColor: "#e9ecef"
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.clasificacion.descripcion || ''}
+                                onChange={this.handleChange}
+                                autoComplete="clasificacion"
+                            />
+                        </Grid>
+                    </Grid>
                     }
                     {clienteAux !== null &&
                     <Typography variant="h4">Fecha de Reservación</Typography>
@@ -563,6 +691,7 @@ class ReservacionScreen extends Component {
                                 maxTime={new Date(new Date().setHours(17, 0, 0))}
                                 filterDate={this.isWeekday}
                                 minDate={new Date()}
+                                locale="es"
                                 dateFormat="MMMM d, yyyy h:mm aa"
                                 timeCaption="Horario"
                             />
@@ -584,6 +713,7 @@ class ReservacionScreen extends Component {
                                 maxTime={new Date(new Date().setHours(17, 0, 0))}
                                 filterDate={this.isWeekday}
                                 minDate={new Date()}
+                                locale="es"
                                 dateFormat="MMMM d, yyyy h:mm aa"
                                 timeCaption="Horario"
                             />
@@ -592,13 +722,21 @@ class ReservacionScreen extends Component {
                         </FormGroup>
                         }
                         {clienteAux !== null &&
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="descripcionProblemaCliente">Descripción del Problema</Label>
-                            <textarea className="input-big" type="text" name="descripcionProblemaCliente"
-                                      id="descripcionProblemaCliente"
-                                      value={itemReparacion.descripcionProblemaCliente || ''}
-                                      onChange={this.handleChange} autoComplete="descripcionProblemaCliente"/>
-                        </FormGroup>
+                        <Grid item xs={12} sm={6}>
+                        <TextField
+                            id="descripcionProblemaCliente"
+                            name="descripcionProblemaCliente"
+                            autoComplete="comentario"
+                            label="Descripción del Problema"
+                            multiline
+                            fullWidth
+                            rows="4"
+                            value={itemReparacion.descripcionProblemaCliente || ''}
+                            margin="normal"
+                            variant="outlined"
+                            onChange={this.handleChange}
+                        />
+                        </Grid>
                         }
                     </div>
                     {tallerAux !== null &&

@@ -3,7 +3,7 @@ import {Link, withRouter} from 'react-router-dom';
 import {ButtonGroup, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {confirmAlert} from "react-confirm-alert";
-import DatePicker from "react-datepicker";
+import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment'
 import TalleresNavbar from "./TalleresNavbar";
@@ -11,6 +11,8 @@ import ClientesNavbar from "./ClientesNavbar";
 import Typography from "@material-ui/core/Typography";
 import MecanicosEnhancedTable from "./MecanicosSortableTable";
 import Button from '@material-ui/core/Button';
+import es from "date-fns/locale/es";
+registerLocale("es", es);
 
 class ReparacionEdit extends Component {
 
@@ -485,6 +487,7 @@ class ReparacionEdit extends Component {
                                 maxTime={new Date(new Date().setHours(17, 0, 0))}
                                 filterDate={this.isWeekday}
                                 minDate={new Date()}
+                                locale="es"
                                 dateFormat="MMMM d, yyyy h:mm aa"
                                 timeCaption="Horario"
                             />
