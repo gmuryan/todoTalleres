@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 
 const MenuAppBar = ({logout, clienteUser, tallerUser, adminUser}) => {
     const classes = useStyles();
-    const [auth, setAuth] = React.useState(true);
+    const [auth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [anchorSM, setAnchorSM] = React.useState(null);
     const [state, setState] = React.useState({
@@ -53,20 +53,12 @@ const MenuAppBar = ({logout, clienteUser, tallerUser, adminUser}) => {
     const open = Boolean(anchorEl);
     const openMainMenu = Boolean(anchorSM);
 
-    const handleChange = event => {
-        setAuth(event.target.checked);
-    };
-
     const handleMenu = event => {
         setAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
         setAnchorEl(null);
-    };
-
-    const handleMainMenu = event =>{
-        setAnchorSM(event.currentTarget);
     };
 
     const handleCloseMainMenu = () =>{

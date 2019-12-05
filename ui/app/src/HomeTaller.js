@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import './App.css';
 import TalleresNavbar from './TalleresNavbar';
-import {Link, withRouter} from 'react-router-dom';
-import {Button, Container, Label, Form, FormGroup} from 'reactstrap';
-import {confirmAlert} from 'react-confirm-alert'; // Import
+import {withRouter} from 'react-router-dom';
+import {Container, Form, FormGroup} from 'reactstrap';
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import {Bar} from 'react-chartjs-2';
 import {Pie} from 'react-chartjs-2';
@@ -33,7 +32,6 @@ class HomeTaller extends Component {
     async handleChange(event) {
         const target = event.target;
         const value = target.value;
-        const name = target.name;
         if (value !== null) {
             const taller = JSON.parse(localStorage.getItem("tallerUser"));
             const reps = await (await fetch(`/api/analyticsMecanicosReparaciones?id=${encodeURIComponent(taller.idTaller)}&mesString=${encodeURIComponent(value)}`)).json();

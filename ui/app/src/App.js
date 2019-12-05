@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Home from './Home';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {Route, Switch } from 'react-router-dom';
 import ClienteList from './ClienteList';
 import ClienteEdit from './ClienteEdit';
 import TallerList from './TallerList';

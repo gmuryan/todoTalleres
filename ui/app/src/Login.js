@@ -1,17 +1,14 @@
 import React, {Component} from "react";
-import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import './App.css';
-import {Link, Redirect} from "react-router-dom";
-import {useState} from "react";
 import SignInSide from "./SignInSide";
 
-const imgTaller = require('./taller.jpg');
-const divStyle = {
-    width: '100%',
-    height: '800px',
-    backgroundImage: `url(${imgTaller})`,
-    backgroundSize: 'cover'
-};
+// const imgTaller = require('./taller.jpg');
+// const divStyle = {
+//     width: '100%',
+//     height: '800px',
+//     backgroundImage: `url(${imgTaller})`,
+//     backgroundSize: 'cover'
+// };
 
 class Login extends Component {
     constructor(props) {
@@ -37,7 +34,7 @@ class Login extends Component {
         event.preventDefault();
         let errors = {};
         const {email, password} = this.state;
-        if (email == 'admin' && password == 'admin') {
+        if (email === 'admin' && password === 'admin') {
             localStorage.clear();
             localStorage.setItem("adminUser", JSON.stringify(this.state));
             this.props.history.push('/home');

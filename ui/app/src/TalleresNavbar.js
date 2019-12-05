@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import {Button, Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from 'reactstrap';
-import { Link } from 'react-router-dom';
 import MenuAppBar from "./AppBar";
 
 export default class TalleresNavbar extends Component {

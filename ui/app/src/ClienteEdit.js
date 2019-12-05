@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Container, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Container, Form, FormGroup} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {confirmAlert} from "react-confirm-alert";
 import Typography from "@material-ui/core/Typography";
@@ -143,7 +143,7 @@ class ClienteEdit extends Component {
         } else if (typeof fields["mail"] !== "undefined") {
             let lastAtPos = fields["mail"].lastIndexOf('@');
             let lastDotPos = fields["mail"].lastIndexOf('.');
-            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["mail"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["mail"].length - lastDotPos) > 2)) {
+            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["mail"].indexOf('@@') === -1 && lastDotPos > 2 && (fields["mail"].length - lastDotPos) > 2)) {
                 this.setState({formIsValid: false});
                 errors["mail"] = "Mail invalido";
                 this.setState({errors: errors});
@@ -202,7 +202,7 @@ class ClienteEdit extends Component {
     render() {
         const {item, flag} = this.state;
 
-        if (flag == false && item.idCliente) {
+        if (flag === false && item.idCliente) {
             item.repeatPassword = item.password;
             this.setState({flag: !this.state.flag});
         }
@@ -227,7 +227,6 @@ class ClienteEdit extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="nombre"
-                                id="nombre"
                                 fullWidth
                                 required
                                 value={item.nombre || ''}
@@ -244,7 +243,6 @@ class ClienteEdit extends Component {
                                        margin="normal"
                                        variant="outlined"
                                        name="apellido"
-                                       id="apellido"
                                        required
                                        fullWidth
                                        value={item.apellido || ''}
@@ -263,7 +261,6 @@ class ClienteEdit extends Component {
                                        margin="normal"
                                        variant="outlined"
                                        name="telefono"
-                                       id="telefono"
                                        required
                                        fullWidth
                                        value={item.telefono || ''}
@@ -280,7 +277,6 @@ class ClienteEdit extends Component {
                                        margin="normal"
                                        variant="outlined"
                                        name="mail"
-                                       id="mail"
                                        required
                                        fullWidth
                                        value={item.mail || ''}
@@ -299,7 +295,6 @@ class ClienteEdit extends Component {
                                        margin="normal"
                                        variant="outlined"
                                        name="password"
-                                       id="password"
                                        type="password"
                                        required
                                        fullWidth
@@ -317,7 +312,6 @@ class ClienteEdit extends Component {
                                        margin="normal"
                                        variant="outlined"
                                        name="repeatPassword"
-                                       id="repeatPassword"
                                        type="password"
                                        required
                                        fullWidth

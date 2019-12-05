@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-import {Container, Label, Table} from 'reactstrap';
+import {Container} from 'reactstrap';
 import TalleresNavbar from "./TalleresNavbar";
-import {Link} from 'react-router-dom';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import './App.css';
 import ClientesNavbar from "./ClientesNavbar";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ClipLoader from 'react-spinners/ClipLoader';
 import {css} from "@emotion/core";
@@ -14,7 +12,6 @@ import TextField from "@material-ui/core/TextField";
 import DateFnsUtils from '@date-io/date-fns';
 import {
     MuiPickersUtilsProvider,
-    KeyboardTimePicker,
     KeyboardDatePicker,
 } from '@material-ui/pickers';
 import Typography from "@material-ui/core/Typography";
@@ -201,7 +198,7 @@ class ReparacionList extends Component {
     }
 
     render() {
-        const {reparaciones, isLoading, fechaDevolucion, horaDevolucion, fechaReserva, horaReserva, importeTotal, estadoReparacion, descripcionProblema, descripcionReparacion, taller, cliente, estado} = this.state;
+        const {isLoading, estado} = this.state;
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         const classes = {

@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import './App.css';
 import AppNavbar from './AppNavbar';
-import {Link, withRouter} from 'react-router-dom';
-import {Button, Container} from 'reactstrap';
-import {confirmAlert} from 'react-confirm-alert'; // Import
+import {withRouter} from 'react-router-dom';
+import {Container} from 'reactstrap';
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import Logo from "./logo.png";
 import Typography from "@material-ui/core/Typography";
@@ -29,7 +28,7 @@ class Home extends Component {
                 alignItems: 'center',
             }}>
                 <div className="div-logo">
-                    <img src={Logo} />
+                    <img src={Logo} alt="logo"/>
                 </div>
                 <Typography variant="h4" align="center">¡Bienvenido a TodoTalleres!</Typography>
             </Container>

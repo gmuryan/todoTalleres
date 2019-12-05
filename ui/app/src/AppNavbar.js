@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, Button } from 'reactstrap';
-import {Link, withRouter} from 'react-router-dom';
-import {confirmAlert} from "react-confirm-alert";
+import {withRouter} from 'react-router-dom';
 import MenuAppBar from "./AppBar";
 
 class AppNavbar extends Component {

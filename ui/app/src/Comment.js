@@ -1,21 +1,13 @@
 import React, {Component} from 'react';
-import {Link, withRouter} from 'react-router-dom';
-import {Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
+import {withRouter} from 'react-router-dom';
+import {Container, Form, Label} from 'reactstrap';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import moment from 'moment'
-import ClientesNavbar from "./ClientesNavbar";
-import TalleresNavbar from "./TalleresNavbar";
 import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField";
 
 class Comment extends Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     dialog(idReseña) {
         confirmAlert({

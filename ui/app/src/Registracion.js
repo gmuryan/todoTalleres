@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-import AppNavbar from './AppNavbar';
+import {withRouter } from 'react-router-dom';
 import {confirmAlert} from "react-confirm-alert";
-import SignInSide from "./SignInSide";
 import SignUp from "./SignUp";
 
 class Registracion extends Component {
@@ -133,7 +130,7 @@ class Registracion extends Component {
         } else if (typeof fields["mail"] !== "undefined") {
             let lastAtPos = fields["mail"].lastIndexOf('@');
             let lastDotPos = fields["mail"].lastIndexOf('.');
-            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["mail"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["mail"].length - lastDotPos) > 2)) {
+            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["mail"].indexOf('@@') === -1 && lastDotPos > 2 && (fields["mail"].length - lastDotPos) > 2)) {
                 this.setState({formIsValid: false});
                 errors["mail"] = "Mail invalido";
                 this.setState({errors: errors});

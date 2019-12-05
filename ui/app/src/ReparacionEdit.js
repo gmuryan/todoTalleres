@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {ButtonGroup, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
-import AppNavbar from './AppNavbar';
+import {ButtonGroup, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import {confirmAlert} from "react-confirm-alert";
 import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import moment from 'moment'
 import TalleresNavbar from "./TalleresNavbar";
 import ClientesNavbar from "./ClientesNavbar";
 import Typography from "@material-ui/core/Typography";
@@ -258,10 +256,9 @@ class ReparacionEdit extends Component {
     }
 
     render() {
-        const {item, flagImporte, mecanicosTaller} = this.state;
+        const {item, mecanicosTaller} = this.state;
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
-        const title = <h2>Detalles de la Reparación</h2>;
         const descEstado = item.estadoReparacion.descripcion;
         var mecanicoList;
         if (tallerUser !== null && descEstado !== "En diagnostico" && descEstado !== "En reparacion") {

@@ -1,18 +1,15 @@
 import React, {Component} from 'react';
-import {Container, Label, Table} from 'reactstrap';
+import {Container} from 'reactstrap';
 import AppNavbar from './AppNavbar';
-import {Link} from 'react-router-dom';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import './App.css';
 import ClipLoader from 'react-spinners/ClipLoader';
-import {withStyles} from '@material-ui/core/styles';
 import {css} from '@emotion/core';
 import TextField from "@material-ui/core/TextField";
 import ClientesEnhancedTable from "./ClientesSortableTable";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
-import MenuAppBar from "./AppBar";
 
 const override = css`
     display: block;
@@ -164,7 +161,7 @@ class ClienteList extends Component {
     }
 
     render() {
-        const {clientes, isLoading, nombre, apellido, mail} = this.state;
+        const {isLoading, nombre, apellido, mail} = this.state;
         const classes = {
             textField: {
                 width: 200,

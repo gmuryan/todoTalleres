@@ -1,16 +1,13 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
+import {Container, Form, FormGroup} from 'reactstrap';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import moment from 'moment'
 import ClientesNavbar from "./ClientesNavbar";
 import TalleresNavbar from "./TalleresNavbar";
 import Comment from "./Comment";
 import AppNavbar from "./AppNavbar";
-import App from "./App";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField";
@@ -169,7 +166,6 @@ class ReseñaScreen extends Component {
                                     margin="normal"
                                     variant="outlined"
                                     name="nombre"
-                                    id="nombre"
                                     fullWidth
                                     style={{
                                         backgroundColor: "#e9ecef"
@@ -190,7 +186,6 @@ class ReseñaScreen extends Component {
                                     margin="normal"
                                     variant="outlined"
                                     name="barrio"
-                                    id="barrio"
                                     fullWidth
                                     style={{
                                         backgroundColor: "#e9ecef"
@@ -211,7 +206,6 @@ class ReseñaScreen extends Component {
                                     margin="normal"
                                     variant="outlined"
                                     name="telefono"
-                                    id="telefono"
                                     fullWidth
                                     style={{
                                         backgroundColor: "#e9ecef"
@@ -236,7 +230,6 @@ class ReseñaScreen extends Component {
                                     margin="normal"
                                     variant="outlined"
                                     name="mail"
-                                    id="mail"
                                     fullWidth
                                     style={{
                                         backgroundColor: "#e9ecef"
@@ -257,7 +250,6 @@ class ReseñaScreen extends Component {
                                     margin="normal"
                                     variant="outlined"
                                     name="ubicacion"
-                                    id="ubicacion"
                                     fullWidth
                                     style={{
                                         backgroundColor: "#e9ecef"
@@ -282,7 +274,6 @@ class ReseñaScreen extends Component {
                                     margin="normal"
                                     variant="outlined"
                                     name="descripcionTaller"
-                                    id="descripcionTaller"
                                     fullWidth
                                     style={{
                                         backgroundColor: "#e9ecef"
@@ -307,7 +298,6 @@ class ReseñaScreen extends Component {
                                     margin="normal"
                                     variant="outlined"
                                     name="marca"
-                                    id="marca"
                                     fullWidth
                                     style={{
                                         backgroundColor: "#e9ecef"
@@ -328,7 +318,6 @@ class ReseñaScreen extends Component {
                                     margin="normal"
                                     variant="outlined"
                                     name="clasificacion"
-                                    id="clasificacion"
                                     fullWidth
                                     style={{
                                         backgroundColor: "#e9ecef"

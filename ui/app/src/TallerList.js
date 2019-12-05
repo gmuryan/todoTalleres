@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {Container, Label, Table} from 'reactstrap';
+import {Container} from 'reactstrap';
 import AppNavbar from './AppNavbar';
-import {Link} from 'react-router-dom';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import './App.css';
@@ -178,7 +177,7 @@ class TallerList extends Component {
     }
 
     render() {
-        const {talleres, isLoading, nombre, barrio, clasificacion, marca} = this.state;
+        const  {isLoading, nombre, barrio, clasificacion, marca} = this.state;
         const adminUser = JSON.parse(localStorage.getItem("adminUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         const classes = {

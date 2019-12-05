@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Container, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Container, Form, FormGroup, Label} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'
@@ -204,7 +204,7 @@ class TallerEdit extends Component {
         } else if (typeof fields["mail"] !== "undefined") {
             let lastAtPos = fields["mail"].lastIndexOf('@');
             let lastDotPos = fields["mail"].lastIndexOf('.');
-            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["mail"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["mail"].length - lastDotPos) > 2)) {
+            if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["mail"].indexOf('@@') === -1 && lastDotPos > 2 && (fields["mail"].length - lastDotPos) > 2)) {
                 this.setState({formIsValid: false});
                 errors["mail"] = "Mail invalido";
                 this.setState({errors: errors});
@@ -272,21 +272,21 @@ class TallerEdit extends Component {
             },
         };
 
-        if (flag == false && item.idTaller) {
+        if (flag === false && item.idTaller) {
             console.log(item);
             item.repeatPassword = item.password;
             this.setState({flag: !this.state.flag});
         }
 
         let optionItemsMarcas = marcas.map((marca) =>
-            <option key={marca.idMarca} selected={item.marca.idMarca == marca.idMarca}
+            <option key={marca.idMarca} selected={item.marca.idMarca === marca.idMarca}
                     value={JSON.stringify(marca)}>{marca.descripcion}</option>
         );
         let newOptionsMarcas = marcas.map((marca) =>
             <option key={marca.idMarca} value={JSON.stringify(marca)}>{marca.descripcion}</option>
         );
         let optionItemsClasifs = clasificaciones.map((clasif) =>
-            <option key={clasif.idClasificacion} selected={item.clasificacion.idClasificacion == clasif.idClasificacion}
+            <option key={clasif.idClasificacion} selected={item.clasificacion.idClasificacion === clasif.idClasificacion}
                     value={JSON.stringify(clasif)}>{clasif.descripcion}</option>
         );
         let newOptionsClasifs = clasificaciones.map((clasif) =>
@@ -312,7 +312,6 @@ class TallerEdit extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="nombre"
-                                id="nombre"
                                 fullWidth
                                 required
                                 value={item.nombre || ''}
@@ -330,7 +329,6 @@ class TallerEdit extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="barrio"
-                                id="barrio"
                                 fullWidth
                                 required
                                 value={item.barrio || ''}
@@ -348,7 +346,6 @@ class TallerEdit extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="telefono"
-                                id="telefono"
                                 fullWidth
                                 required
                                 value={item.telefono || ''}
@@ -368,7 +365,6 @@ class TallerEdit extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="mail"
-                                id="mail"
                                 fullWidth
                                 required
                                 value={item.mail || ''}
@@ -386,7 +382,6 @@ class TallerEdit extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="ubicacion"
-                                id="ubicacion"
                                 fullWidth
                                 required
                                 value={item.ubicacion || ''}
@@ -406,7 +401,6 @@ class TallerEdit extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="descripcionTaller"
-                                id="descripcionTaller"
                                 fullWidth
                                 value={item.descripcionTaller || ''}
                                 onChange={this.handleChange}
@@ -423,7 +417,6 @@ class TallerEdit extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="password"
-                                id="password"
                                 type="password"
                                 fullWidth
                                 required
@@ -442,7 +435,6 @@ class TallerEdit extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="repeatPassword"
-                                id="repeatPassword"
                                 type="password"
                                 fullWidth
                                 required
@@ -558,7 +550,6 @@ class TallerEdit extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="maximosVehiculos"
-                                id="maximosVehiculos"
                                 fullWidth
                                 required
                                 value={item.maximosVehiculos || ''}
@@ -576,7 +567,6 @@ class TallerEdit extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="retrasosContemplados"
-                                id="retrasosContemplados"
                                 fullWidth
                                 required
                                 value={item.retrasosContemplados || ''}

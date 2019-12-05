@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import ClientesNavbar from './ClientesNavbar';
-import {Link, withRouter} from 'react-router-dom';
-import { Button, Container } from 'reactstrap';
+import {withRouter} from 'react-router-dom';
+import {Container } from 'reactstrap';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import Logo from "./logo.png";
@@ -28,7 +28,7 @@ class HomeCliente extends Component {
             const nuevosPresups = await (await fetch(`/api/nuevoPresupuesto/${cliente.idCliente}`)).json();
             this.setState({nuevosPresupuestos: nuevosPresups});
             if (this.state.nuevosPresupuestos.length > 0){
-                for (const [index, value] of this.state.nuevosPresupuestos.entries()) {
+                for (const [value] of this.state.nuevosPresupuestos.entries()) {
                     this.dialogNuevoPresupuesto(value);
                 }
             }
@@ -67,7 +67,7 @@ class HomeCliente extends Component {
                     alignItems: 'center',
                 }}>
                     <div className="div-logo">
-                        <img src={Logo} />
+                        <img src={Logo} alt="logo"/>
                     </div>
                     <Typography variant="h4" align="center">¡Bienvenido a TodoTalleres!</Typography>
                 </Container>

@@ -5,7 +5,6 @@ import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import moment from 'moment'
 import ClientesNavbar from "./ClientesNavbar";
 import TalleresNavbar from "./TalleresNavbar";
 import Typography from "@material-ui/core/Typography";
@@ -201,7 +200,6 @@ class ReservacionScreen extends Component {
         let errors = {};
         let diaActual = new Date();
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
-        const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         this.setState({formIsValid: true});
         if (this.state.startDate != null) {
             if (diaActual.getDate() === this.state.startDate.getDate() && diaActual.getMonth() === this.state.startDate.getMonth() && diaActual.getTime() > this.state.startDate.getTime()) {
@@ -217,9 +215,9 @@ class ReservacionScreen extends Component {
         }
         if (this.state.startDate != null && this.state.endDate != null) {
             if ((this.state.endDate.getFullYear() < this.state.startDate.getFullYear())
-                || (this.state.endDate.getFullYear() == this.state.startDate.getFullYear() && this.state.endDate.getMonth() < this.state.startDate.getMonth())
-                || (this.state.endDate.getFullYear() == this.state.startDate.getFullYear() && this.state.endDate.getMonth() == this.state.startDate.getMonth() && this.state.endDate.getDate() < this.state.startDate.getDate())
-                || (this.state.endDate.getFullYear() == this.state.startDate.getFullYear() && this.state.endDate.getMonth() == this.state.startDate.getMonth() && this.state.endDate.getDate() == this.state.startDate.getDate() && this.state.endDate.getTime() <= this.state.startDate.getTime())) {
+                || (this.state.endDate.getFullYear() === this.state.startDate.getFullYear() && this.state.endDate.getMonth() < this.state.startDate.getMonth())
+                || (this.state.endDate.getFullYear() === this.state.startDate.getFullYear() && this.state.endDate.getMonth() === this.state.startDate.getMonth() && this.state.endDate.getDate() < this.state.startDate.getDate())
+                || (this.state.endDate.getFullYear() === this.state.startDate.getFullYear() && this.state.endDate.getMonth() === this.state.startDate.getMonth() && this.state.endDate.getDate() === this.state.startDate.getDate() && this.state.endDate.getTime() <= this.state.startDate.getTime())) {
                 this.setState({formIsValid: false});
                 errors["hora"] = "La fecha de devolución debe ser menor a la fecha de reservación";
             }
@@ -491,7 +489,6 @@ class ReservacionScreen extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="nombre"
-                                id="nombre"
                                 fullWidth
                                 style={{
                                     backgroundColor: "#e9ecef"
@@ -512,7 +509,6 @@ class ReservacionScreen extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="barrio"
-                                id="barrio"
                                 fullWidth
                                 style={{
                                     backgroundColor: "#e9ecef"
@@ -533,7 +529,6 @@ class ReservacionScreen extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="telefono"
-                                id="telefono"
                                 fullWidth
                                 style={{
                                     backgroundColor: "#e9ecef"
@@ -558,7 +553,6 @@ class ReservacionScreen extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="mail"
-                                id="mail"
                                 fullWidth
                                 style={{
                                     backgroundColor: "#e9ecef"
@@ -579,7 +573,6 @@ class ReservacionScreen extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="ubicacion"
-                                id="ubicacion"
                                 fullWidth
                                 style={{
                                     backgroundColor: "#e9ecef"
@@ -604,7 +597,6 @@ class ReservacionScreen extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="descripcionTaller"
-                                id="descripcionTaller"
                                 fullWidth
                                 style={{
                                     backgroundColor: "#e9ecef"
@@ -629,7 +621,6 @@ class ReservacionScreen extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="marca"
-                                id="marca"
                                 fullWidth
                                 style={{
                                     backgroundColor: "#e9ecef"
@@ -650,7 +641,6 @@ class ReservacionScreen extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="clasificacion"
-                                id="clasificacion"
                                 fullWidth
                                 style={{
                                     backgroundColor: "#e9ecef"

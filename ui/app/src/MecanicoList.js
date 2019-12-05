@@ -1,14 +1,12 @@
 import React, {Component} from 'react';
 import TalleresNavbar from './TalleresNavbar';
-import {Link} from 'react-router-dom';
-import {Container, Label, Table} from 'reactstrap';
+import {Container} from 'reactstrap';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import './App.css';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { css } from '@emotion/core';
 import TextField from "@material-ui/core/TextField";
-import ClientesEnhancedTable from "./ClientesSortableTable";
 import MecanicosEnhancedTable from "./MecanicosSortableTable";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
@@ -162,7 +160,7 @@ class MecanicoList extends Component {
     }
 
     render() {
-        const {mecanicos, isLoading, nombre, apellido, mail} = this.state;
+        const {isLoading, nombre, apellido, mail} = this.state;
         const classes = {
             textField: {
                 width: 200,
