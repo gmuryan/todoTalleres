@@ -13,6 +13,7 @@ import AppNavbar from "./AppNavbar";
 import App from "./App";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
+import TextField from "@material-ui/core/TextField";
 
 class ReseñaScreen extends Component {
 
@@ -227,27 +228,23 @@ class ReseñaScreen extends Component {
                         No hay reseñas disponibles
                     </Typography>
                     }
-                    {reseñasList.length > 0 &&
-                    <br></br>
-                    }
-                    {reseñasList.length > 0 &&
-                    <br></br>
-                    }
                     <Form onSubmit={this.handleSubmit}>
                         {clienteAux !== null &&
-                        <textarea className="input-big" type="text" placeholder="Deje su comentario aquí..."
-                                  name="comentario" id="comentario" value={item.comentario || ''}
-                                  onChange={this.handleChange} autoComplete="comentario"/>
-
-                        }
-                        {clienteAux !== null &&
-                        <span className="error">{this.state.errors["comentario"]}</span>
-                        }
-                        {clienteAux !== null &&
-                        <br></br>
-                        }
-                        {clienteAux !== null &&
-                        <br></br>
+                        <TextField
+                            id="comentario"
+                            name="comentario"
+                            autoComplete="comentario"
+                            multiline
+                            fullWidth
+                            error={this.state.errors["comentario"]}
+                            helperText={this.state.errors["comentario"]}
+                            rows="4"
+                            value={item.comentario || ''}
+                            margin="normal"
+                            variant="outlined"
+                            placeholder="Deje su comentario aquí..."
+                            onChange={this.handleChange}
+                            />
                         }
                         <FormGroup>
                             {clienteAux !== null &&
@@ -264,6 +261,9 @@ class ReseñaScreen extends Component {
                                     Cancelar
                                 </Button>
                             </Link>
+                            }
+                            {adminAux !== null &&
+                            <br></br>
                             }
                             {(tallerAux !== null || adminAux !== null) &&
                             <Link to={tallerAux !== null ? "/homeTaller" : "/talleres"} style={{ textDecoration: 'none' }}>
