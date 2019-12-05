@@ -14,6 +14,7 @@ import App from "./App";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
 
 class ReseñaScreen extends Component {
 
@@ -159,65 +160,188 @@ class ReseñaScreen extends Component {
                     }
                     <Form>
                         {clienteAux !== null &&
-                        <div className="row">
-                            <FormGroup className="col-md-4 mb-3">
-                                <Label for="nombre">Nombre</Label>
-                                <Input readOnly type="text" name="nombre" id="nombre" value={taller.nombre || ''}
-                                       onChange={this.handleChange} autoComplete="nombre"/>
-                            </FormGroup>
-                            <FormGroup className="col-md-4 mb-3">
-                                <Label for="barrio">Barrio</Label>
-                                <Input readOnly type="text" name="barrio" id="barrio" value={taller.barrio || ''}
-                                       onChange={this.handleChange} autoComplete="barrio"/>
-                            </FormGroup>
-                            <FormGroup className="col-md-4 mb-3">
-                                <Label for="telefono">Teléfono</Label>
-                                <Input readOnly type="text" name="telefono" id="telefono" value={taller.telefono || ''}
-                                       onChange={this.handleChange} autoComplete="telefono"/>
-                            </FormGroup>
-                        </div>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    id="outlined-basic"
+                                    // className={classes.textField}
+                                    label="Nombre"
+                                    margin="normal"
+                                    variant="outlined"
+                                    name="nombre"
+                                    id="nombre"
+                                    fullWidth
+                                    style={{
+                                        backgroundColor: "#e9ecef"
+                                    }}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    value={taller.nombre || ''}
+                                    onChange={this.handleChange}
+                                    autoComplete="nombre"
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
+                                <TextField
+                                    id="outlined-basic"
+                                    // className={classes.textField}
+                                    label="Barrio"
+                                    margin="normal"
+                                    variant="outlined"
+                                    name="barrio"
+                                    id="barrio"
+                                    fullWidth
+                                    style={{
+                                        backgroundColor: "#e9ecef"
+                                    }}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    value={taller.barrio || ''}
+                                    onChange={this.handleChange}
+                                    autoComplete="barrio"
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
+                                <TextField
+                                    id="outlined-basic"
+                                    // className={classes.textField}
+                                    label="Teléfono"
+                                    margin="normal"
+                                    variant="outlined"
+                                    name="telefono"
+                                    id="telefono"
+                                    fullWidth
+                                    style={{
+                                        backgroundColor: "#e9ecef"
+                                    }}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    value={taller.telefono || ''}
+                                    onChange={this.handleChange}
+                                    autoComplete="barrio"
+                                />
+                            </Grid>
+                        </Grid>
                         }
                         {clienteAux !== null &&
-                        <div className="row">
-                            <FormGroup className="col-md-6 mb-3">
-                                <Label for="mail">Mail</Label>
-                                <Input readOnly type="text" name="mail" id="mail" value={taller.mail || ''}
-                                       onChange={this.handleChange} autoComplete="mail"/>
-                            </FormGroup>
-                            <FormGroup className="col-md-6 mb-3">
-                                <Label for="ubicacion">Ubicación</Label>
-                                <Input readOnly type="text" name="ubicacion" id="ubicacion"
-                                       value={taller.ubicacion || ''}
-                                       onChange={this.handleChange} autoComplete="ubicacion"/>
-                            </FormGroup>
-                        </div>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    id="outlined-basic"
+                                    // className={classes.textField}
+                                    label="Mail"
+                                    margin="normal"
+                                    variant="outlined"
+                                    name="mail"
+                                    id="mail"
+                                    fullWidth
+                                    style={{
+                                        backgroundColor: "#e9ecef"
+                                    }}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    value={taller.mail || ''}
+                                    onChange={this.handleChange}
+                                    autoComplete="mail"
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    id="outlined-basic"
+                                    // className={classes.textField}
+                                    label="Ubicación"
+                                    margin="normal"
+                                    variant="outlined"
+                                    name="ubicacion"
+                                    id="ubicacion"
+                                    fullWidth
+                                    style={{
+                                        backgroundColor: "#e9ecef"
+                                    }}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    value={taller.ubicacion || ''}
+                                    onChange={this.handleChange}
+                                    autoComplete="mail"
+                                />
+                            </Grid>
+                        </Grid>
                         }
                         {clienteAux !== null &&
-                        <div>
-                            <div className="row">
-                                <FormGroup className="col-md-12 mb-3">
-                                    <Label for="descripcionTaller">Descripción del Taller</Label>
-                                    <Input readOnly type="text" name="descripcionTaller" id="descripcionTaller"
-                                           value={taller.descripcionTaller || ''}
-                                           onChange={this.handleChange} autoComplete="descripcionTaller"/>
-                                </FormGroup>
-                            </div>
-                        </div>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={12}>
+                                <TextField
+                                    id="outlined-basic"
+                                    // className={classes.textField}
+                                    label="Breve Descripción del Taller"
+                                    margin="normal"
+                                    variant="outlined"
+                                    name="descripcionTaller"
+                                    id="descripcionTaller"
+                                    fullWidth
+                                    style={{
+                                        backgroundColor: "#e9ecef"
+                                    }}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    value={taller.descripcionTaller || ''}
+                                    onChange={this.handleChange}
+                                    autoComplete="descripcionTaller"
+                                />
+                            </Grid>
+                        </Grid>
                         }
                         {clienteAux !== null &&
-                        <div className="row">
-                            <FormGroup className="col-md-6 mb-3">
-                                <Label for="marca">Marca</Label>
-                                <Input readOnly type="text" name="marca" id="marca" value={taller.marca.descripcion}
-                                       onChange={this.handleChange} autoComplete="marca"/>
-                            </FormGroup>
-                            <FormGroup className="col-md-6 mb-3">
-                                <Label for="clasificacion">Especialización</Label>
-                                <Input readOnly type="text" name="clasificacion" id="clasificacion"
-                                       value={taller.clasificacion.descripcion || ''}
-                                       onChange={this.handleChange} autoComplete="clasificacion"/>
-                            </FormGroup>
-                        </div>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    id="outlined-basic"
+                                    // className={classes.textField}
+                                    label="Marca"
+                                    margin="normal"
+                                    variant="outlined"
+                                    name="marca"
+                                    id="marca"
+                                    fullWidth
+                                    style={{
+                                        backgroundColor: "#e9ecef"
+                                    }}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    value={taller.marca.descripcion || ''}
+                                    onChange={this.handleChange}
+                                    autoComplete="marca"
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    id="outlined-basic"
+                                    // className={classes.textField}
+                                    label="Especialización"
+                                    margin="normal"
+                                    variant="outlined"
+                                    name="clasificacion"
+                                    id="clasificacion"
+                                    fullWidth
+                                    style={{
+                                        backgroundColor: "#e9ecef"
+                                    }}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    value={taller.clasificacion.descripcion || ''}
+                                    onChange={this.handleChange}
+                                    autoComplete="clasificacion"
+                                />
+                            </Grid>
+                        </Grid>
                         }
                     </Form>
                     <br></br>

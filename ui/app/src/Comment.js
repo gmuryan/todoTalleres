@@ -79,7 +79,6 @@ class Comment extends Component {
                             style={{
                                 backgroundColor: "#e9ecef"
                             }}
-                            color="secondary"
                             InputProps={{
                                 readOnly: true,
                             }}
