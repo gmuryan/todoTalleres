@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {ButtonGroup, Container, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import {confirmAlert} from "react-confirm-alert";
 import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -10,6 +10,12 @@ import Typography from "@material-ui/core/Typography";
 import MecanicosEnhancedTable from "./MecanicosSortableTable";
 import Button from '@material-ui/core/Button';
 import es from "date-fns/locale/es";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import InputAdornment from "@material-ui/core/InputAdornment";
+
 registerLocale("es", es);
 
 class ReparacionEdit extends Component {
@@ -260,61 +266,11 @@ class ReparacionEdit extends Component {
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         const descEstado = item.estadoReparacion.descripcion;
-        var mecanicoList;
-        if (tallerUser !== null && descEstado !== "En diagnostico" && descEstado !== "En reparacion") {
-            mecanicoList = item.mecanicos.map(mecanico => {
-                return <tr key={mecanico.idMecanico}>
-                    <td>{mecanico.idMecanico}</td>
-                    <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
-                    <td>{mecanico.apellido}</td>
-                    <td>{mecanico.telefono}</td>
-                    <td>{mecanico.mail}</td>
-                    <td>{mecanico.activo ? "Si" : "No"}</td>
-                    {tallerUser !== null && (descEstado === "En diagnostico" || descEstado === "En reparacion") &&
-                    <td>
-                        <ButtonGroup>
-                            {!item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
-                            <Button size="sm" color="success"
-                                    onClick={() => this.asignarMecanico(mecanico)}>Asignar</Button>
-                            }
-                            &nbsp;&nbsp;
-                            {item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
-                            <Button size="sm" color="danger"
-                                    onClick={() => this.desasignarMecanico(mecanico)}>Desasignar</Button>
-                            }
-                        </ButtonGroup>
-                    </td>
-                    }
-                </tr>
-            });
-        } else {
-            mecanicoList = mecanicosTaller.map(mecanico => {
-                if (mecanico.activo || item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico))) {
-                    return <tr key={mecanico.idMecanico}>
-                        <td>{mecanico.idMecanico}</td>
-                        <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
-                        <td>{mecanico.apellido}</td>
-                        <td>{mecanico.telefono}</td>
-                        <td>{mecanico.mail}</td>
-                        <td>{mecanico.activo ? "Si" : "No"}</td>
-                        {tallerUser !== null && (descEstado === "En diagnostico" || descEstado === "En reparacion") &&
-                        <td>
-                            <ButtonGroup>
-                                {!item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) && mecanico.activo &&
-                                <Button size="sm" color="success"
-                                        onClick={() => this.asignarMecanico(mecanico)}>Asignar</Button>
-                                }
-                                {item.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
-                                <Button size="sm" color="danger"
-                                        onClick={() => this.desasignarMecanico(mecanico)}>Desasignar</Button>
-                                }
-                            </ButtonGroup>
-                        </td>
-                        }
-                    </tr>
-                }
-            });
-        }
+        const classes = {
+            label: {
+                top: "20px",
+            },
+        };
         return <div>
             {tallerUser !== null &&
             <TalleresNavbar/>
@@ -326,148 +282,298 @@ class ReparacionEdit extends Component {
                 <Typography variant="h4">
                     Detalles de la Reparación
                 </Typography>
-                <Form onSubmit={this.handleSubmit}>
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="modeloAuto">Modelo Auto</Label>
-                            <Input
-                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En diagnostico" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
-                                type="text" name="modeloAuto"
-                                id="modeloAuto"
+                <Form onSubmit={this.handleSubmit} noValidate>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Marca y Modelo del Auto"
+                                margin="normal"
+                                variant="outlined"
+                                name="modeloAuto"
+                                fullWidth
+                                style={{
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En diagnostico" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ""
+                                }}
+                                InputProps={{
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En diagnostico" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                }}
                                 value={item.modeloAuto || ''}
-                                onChange={this.handleChange} autoComplete="modeloAuto"/>
-                            <span className="error">{this.state.errors["modeloAuto"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="patenteAuto">Patente Auto</Label>
-                            <Input
-                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En diagnostico" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
-                                type="text" name="patenteAuto"
-                                id="patenteAuto"
+                                onChange={this.handleChange}
+                                error={this.state.errors["modeloAuto"]}
+                                helperText={this.state.errors["modeloAuto"]}
+                                autoComplete="modeloAuto"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Patente Auto"
+                                margin="normal"
+                                variant="outlined"
+                                name="patenteAuto"
+                                fullWidth
+                                style={{
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En diagnostico" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ""
+                                }}
+                                InputProps={{
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En diagnostico" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                }}
                                 value={item.patenteAuto || ''}
-                                onChange={this.handleChange} autoComplete="patenteAuto"/>
-                            <span className="error">{this.state.errors["patenteAuto"]}</span>
-                        </FormGroup>
-                    </div>
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="fechaReserva">Fecha Reserva</Label>
-                            <Input readOnly type="text" name="fechaReserva" id="fechaReserva"
-                                   value={item.fechaReserva || ''}
-                                   onChange={this.handleChange} autoComplete="fechaReserva"/>
-                            <span className="error">{this.state.errors["fechaReserva"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="horaReserva">Hora Reserva</Label>
-                            <Input readOnly type="text" name="horaReserva" id="horaReserva"
-                                   value={item.horaReserva || ''}
-                                   onChange={this.handleChange} autoComplete="horaReserva"/>
-                            <span className="error">{this.state.errors["horaReserva"]}</span>
-                        </FormGroup>
-                    </div>
+                                onChange={this.handleChange}
+                                error={this.state.errors["patenteAuto"]}
+                                helperText={this.state.errors["patenteAuto"]}
+                                autoComplete="patenteAuto"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Fecha Reserva"
+                                margin="normal"
+                                variant="outlined"
+                                name="fechaReserva"
+                                fullWidth
+                                style={{
+                                    backgroundColor: "#e9ecef",
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.fechaReserva || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["fechaReserva"]}
+                                helperText={this.state.errors["fechaReserva"]}
+                                autoComplete="fechaReserva"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Hora Reserva"
+                                margin="normal"
+                                variant="outlined"
+                                name="horaReserva"
+                                fullWidth
+                                style={{
+                                    backgroundColor: "#e9ecef",
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.horaReserva || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["horaReserva"]}
+                                helperText={this.state.errors["horaReserva"]}
+                                autoComplete="horaReserva"
+                            />
+                        </Grid>
+                    </Grid>
                     {(clienteUser !== null || tallerUser !== null) && item.fechaDevolucion !== null && item.horaDevolucion !== null &&
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="fechaDevolucion">Fecha Devolución</Label>
-                            <Input
-                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
-                                type="text"
-                                name="fechaDevolucion" id="fechaDevolucion"
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Fecha Devolución"
+                                margin="normal"
+                                variant="outlined"
+                                name="fechaDevolucion"
+                                fullWidth
+                                style={{
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : "",
+                                }}
+                                InputProps={{
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                }}
                                 value={item.fechaDevolucion || ''}
-                                onChange={this.handleChange} autoComplete="fechaDevolucion"/>
-                            <span className="error">{this.state.errors["fechaDevolucion"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="horaDevolucion">Hora Devolución</Label>
-                            <Input
-                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
-                                type="text"
-                                name="horaDevolucion" id="horaDevolucion"
+                                onChange={this.handleChange}
+                                error={this.state.errors["fechaDevolucion"]}
+                                helperText={this.state.errors["fechaDevolucion"]}
+                                autoComplete="fechaDevolucion"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Hora Devolución"
+                                margin="normal"
+                                variant="outlined"
+                                name="horaDevolucion"
+                                fullWidth
+                                style={{
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : "",
+                                }}
+                                InputProps={{
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                }}
                                 value={item.horaDevolucion || ''}
-                                onChange={this.handleChange} autoComplete="horaDevolucion"/>
-                            <span className="error">{this.state.errors["horaDevolucion"]}</span>
-                        </FormGroup>
-                    </div>
+                                onChange={this.handleChange}
+                                error={this.state.errors["horaDevolucion"]}
+                                helperText={this.state.errors["horaDevolucion"]}
+                                autoComplete="horaDevolucion"
+                            />
+                        </Grid>
+                    </Grid>
                     }
-                    <div className="row">
+                    <Grid container spacing={2}>
                         {this.state.flagImporte && !this.state.flagMostrarPresupuesto &&
-                        <FormGroup
-                            className={descEstado === "En reparacion" && tallerUser !== null ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
-                            <Label for="importeTotal">Importe</Label>
-                            <Input
-                                readOnly={!this.state.flagMostrarPresupuesto}
-                                type="text" name="importeTotal" id="importeTotal"
+                        <Grid item xs={12} sm={descEstado === "En reparacion" && tallerUser !== null ? 4 : 6}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Importe"
+                                margin="normal"
+                                variant="outlined"
+                                name="importeTotal"
+                                fullWidth
+                                style={{
+                                    backgroundColor: !this.state.flagMostrarPresupuesto ? "#e9ecef" : "",
+                                }}
+                                InputProps={{
+                                    readOnly: !this.state.flagMostrarPresupuesto,
+                                }}
                                 value={item.importeTotal ? "$" + this.toCurrency(item.importeTotal) : ''}
-                                onChange={this.handleChange} autoComplete="importeTotal"/>
-                            <span className="error">{this.state.errors["importeTotal"]}</span>
-                        </FormGroup>
+                                onChange={this.handleChange}
+                                error={this.state.errors["importeTotal"]}
+                                helperText={this.state.errors["importeTotal"]}
+                                autoComplete="importeTotal"
+                            />
+                        </Grid>
                         }
                         {(!this.state.flagImporte || this.state.flagMostrarPresupuesto) &&
-                        <FormGroup
-                            className={descEstado === "En reparacion" && tallerUser !== null ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
-                            <Label for="importeTotal">Importe</Label>
-                            <Input
-                                readOnly={!this.state.flagMostrarPresupuesto}
-                                type="text" name="importeTotal" id="importeTotal"
+                        <Grid item xs={12} sm={descEstado === "En reparacion" && tallerUser !== null ? 4 : 6}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Importe"
+                                margin="normal"
+                                variant="outlined"
+                                name="importeTotal"
+                                fullWidth
+                                style={{
+                                    backgroundColor: !this.state.flagMostrarPresupuesto ? "#e9ecef" : "",
+                                }}
+                                InputProps={{
+                                    readOnly: !this.state.flagMostrarPresupuesto,
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                }}
                                 value={item.importeTotal || ''}
-                                onChange={this.handleChange} autoComplete="importeTotal"/>
-                            <span className="error">{this.state.errors["importeTotal"]}</span>
-                        </FormGroup>
+                                onChange={this.handleChange}
+                                error={this.state.errors["importeTotal"]}
+                                helperText={this.state.errors["importeTotal"]}
+                                autoComplete="importeTotal"
+                            />
+                        </Grid>
                         }
                         {descEstado === "En reparacion" && tallerUser !== null &&
-                        <FormGroup className="col-md-4 mb-3">
-                            <Label for="nuevoPresupuesto">Nuevo Presupuesto</Label>
-                            <br></br>
-                            <Input type="checkbox" className="input-big" name="nuevoPresupuesto" id="nuevoPresupuesto"
-                                   checked={this.state.flagNuevoPresupuesto} value={this.state.flagNuevoPresupuesto}
-                                   onChange={this.handleChange}/>
-                        </FormGroup>
+                            <Grid item xs={12} sm={descEstado === "En reparacion" && tallerUser !== null ? 4 : 6}>
+                            <FormControlLabel
+                            control={
+                            <Checkbox
+                                name="nuevoPresupuesto"
+                                checked={this.state.flagNuevoPresupuesto}
+                                onChange={this.handleChange}
+                                value={this.state.flagNuevoPresupuesto}
+                                className={classes.label}
+                                color="primary"
+                            />
                         }
-                        <FormGroup
-                            className={descEstado === "En reparacion" && tallerUser !== null ? "col-md-4 mb-3" : "col-md-6 mb-3"}>
-                            <Label for="estadoReparacion">Estado</Label>
-                            <Input readOnly type="text" name="estadoReparacion" id="estadoReparacion"
-                                   value={item.estadoReparacion.descripcion || ''}
-                                   onChange={this.handleChange} autoComplete="estadoReparacion"/>
-                            <span className="error">{this.state.errors["estadoReparacion"]}</span>
-                        </FormGroup>
-                    </div>
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="descripcionProblemaCliente">Descripción del problema del cliente</Label>
-                            <textarea readOnly className="input-big-readOnly" type="text"
-                                      name="descripcionProblemaCliente"
-                                      id="descripcionProblemaCliente"
-                                      value={item.descripcionProblemaCliente || ''}
-                                      onChange={this.handleChange} autoComplete="descripcionProblemaCliente"/>
-                            <span className="error">{this.state.errors["descripcionProblemaCliente"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="descripcionProblemaTaller">Diagnostico del Taller</Label>
-                            <textarea
-                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
-                                className={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "input-big-readOnly" : "input-big"}
-                                type="text"
+                            label="Nuevo Presupuesto"
+                            />
+                            </Grid>
+                        }
+                        <Grid item xs={12} sm={descEstado === "En reparacion" && tallerUser !== null ? 4 : 6}>
+                        <TextField
+                            id="outlined-basic"
+                            label="Estado"
+                            margin="normal"
+                            variant="outlined"
+                            name="estadoReparacion"
+                            fullWidth
+                            style={{
+                                backgroundColor: "#e9ecef",
+                            }}
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            value={item.estadoReparacion.descripcion || ''}
+                            onChange={this.handleChange}
+                            error={this.state.errors["estadoReparacion"]}
+                            helperText={this.state.errors["estadoReparacion"]}
+                            autoComplete="estadoReparacion"
+                        />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-multiline-static"
+                                name="descripcionProblemaCliente"
+                                multiline
+                                fullWidth
+                                rows="4"
+                                label="Descripción del problema del cliente"
+                                style={{
+                                    backgroundColor: "#e9ecef"
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.descripcionProblemaCliente || ''}
+                                error={this.state.errors["descripcionProblemaCliente"]}
+                                helperText={this.state.errors["descripcionProblemaCliente"]}
+                                margin="normal"
+                                variant="outlined"
+                                onChange={this.handleChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-multiline-static"
                                 name="descripcionProblemaTaller"
-                                id="descripcionProblemaTaller"
+                                multiline
+                                fullWidth
+                                rows="4"
+                                label="Diagnostico del Taller"
+                                style={{
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ''
+                                }}
+                                InputProps={{
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                }}
+                                error={this.state.errors["descripcionProblemaTaller"]}
+                                helperText={this.state.errors["descripcionProblemaTaller"]}
                                 value={item.descripcionProblemaTaller || ''}
-                                onChange={this.handleChange} autoComplete="descripcionProblemaTaller"/>
-                            <span className="error">{this.state.errors["descripcionProblemaTaller"]}</span>
-                        </FormGroup>
-                    </div>
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="descripcionReparacion">Reparaciones Realizadas</Label>
-                            <textarea
-                                readOnly={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "En diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado"}
-                                className={clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "En diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "input-big-readOnly" : "input-big"}
-                                type="text"
+                                margin="normal"
+                                variant="outlined"
+                                onChange={this.handleChange}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-multiline-static"
                                 name="descripcionReparacion"
-                                id="descripcionReparacion"
+                                multiline
+                                fullWidth
+                                rows="4"
+                                label="Reparaciones Realizadas"
+                                style={{
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "En diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ''
+                                }}
+                                InputProps={{
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "En diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                }}
+                                error={this.state.errors["descripcionReparacion"]}
+                                helperText={this.state.errors["descripcionReparacion"]}
                                 value={item.descripcionReparacion || ''}
-                                onChange={this.handleChange} autoComplete="descripcionReparacion"/>
-                            <span className="error">{this.state.errors["descripcionReparacion"]}</span>
-                        </FormGroup>
+                                margin="normal"
+                                variant="outlined"
+                                onChange={this.handleChange}
+                            />
+                        </Grid>
+
                         {tallerUser !== null && item.fechaDevolucion === null && item.horaDevolucion === null && descEstado !== "Cancelado" && descEstado !== "Pendiente Diagnostico" &&
                         <FormGroup className="col-md-6 mb-3">
                             <div>
@@ -492,7 +598,7 @@ class ReparacionEdit extends Component {
                             <span className="error">{this.state.errors["hora"]}</span>
                         </FormGroup>
                         }
-                    </div>
+                    </Grid>
                     {tallerUser !== null && descEstado !== "En diagnostico" &&
                     <Typography variant="h4">
                         Mecanicos Asignados
@@ -504,10 +610,13 @@ class ReparacionEdit extends Component {
                     </Typography>
                     }
                     {tallerUser !== null && descEstado !== "En diagnostico" && descEstado !== "En reparacion" &&
-                        <MecanicosEnhancedTable rows={item.mecanicos} acciones={false} dense={true}/>
+                    <MecanicosEnhancedTable rows={item.mecanicos} acciones={false} dense={true}/>
                     }
                     {(tallerUser !== null && (descEstado === "En diagnostico" || descEstado === "En reparacion")) &&
-                        <MecanicosEnhancedTable rows={mecanicosTaller} acciones={true} mecanicosEnReparacion={item.mecanicos} enReparacion={true} asignarMecanico={this.asignarMecanico} desasignarMecanico={this.desasignarMecanico} dense={true}/>
+                    <MecanicosEnhancedTable rows={mecanicosTaller} acciones={true}
+                                            mecanicosEnReparacion={item.mecanicos} enReparacion={true}
+                                            asignarMecanico={this.asignarMecanico}
+                                            desasignarMecanico={this.desasignarMecanico} dense={true}/>
                     }
                     {tallerUser !== null &&
                     <span className="error">{this.state.errors["mecanicos"]}</span>
@@ -529,7 +638,7 @@ class ReparacionEdit extends Component {
                             Guardar
                         </Button>
                         }{' '}
-                        <Link to='/reparaciones' style={{ textDecoration: 'none' }}>
+                        <Link to='/reparaciones' style={{textDecoration: 'none'}}>
                             <Button variant="contained" color="secondary">
                                 Volver
                             </Button>
