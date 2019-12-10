@@ -66,6 +66,9 @@ public class Reparacion {
     private String modeloAuto;
 
     @Column
+    private String marcaAuto;
+
+    @Column
     private boolean nuevoPresupuesto;
 
     @OneToOne
@@ -80,7 +83,7 @@ public class Reparacion {
 
     }
 
-    public Reparacion(Long idReparacion, Taller taller, Cliente cliente, List<Mecanico> mecanicos, Date fechaDevolucion, LocalTime horaDevolucion, Date fechaReserva, LocalTime horaReserva, BigDecimal importeTotal, Estado estadoReparacion, String descripcionProblemaCliente, String descripcionProblemaTaller, String descripcionReparacion, boolean nuevoPresupuesto, String modeloAuto, String patenteAuto) {
+    public Reparacion(Long idReparacion, Taller taller, Cliente cliente, List<Mecanico> mecanicos, Date fechaDevolucion, LocalTime horaDevolucion, Date fechaReserva, LocalTime horaReserva, BigDecimal importeTotal, Estado estadoReparacion, String descripcionProblemaCliente, String descripcionProblemaTaller, String descripcionReparacion, boolean nuevoPresupuesto, String modeloAuto, String patenteAuto, String marcaAuto) {
         this.idReparacion = idReparacion;
         this.mecanicos = mecanicos;
         this.fechaDevolucion = fechaDevolucion;
@@ -97,6 +100,7 @@ public class Reparacion {
         this.cliente = cliente;
         this.modeloAuto = modeloAuto;
         this.patenteAuto = patenteAuto;
+        this.marcaAuto = marcaAuto;
     }
 
     public Long getIdReparacion() {
@@ -225,5 +229,13 @@ public class Reparacion {
 
     public void setModeloAuto(String modeloAuto) {
         this.modeloAuto = modeloAuto;
+    }
+
+    public String getMarcaAuto() {
+        return marcaAuto;
+    }
+
+    public void setMarcaAuto(String marcaAuto) {
+        this.marcaAuto = marcaAuto;
     }
 }

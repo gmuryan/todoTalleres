@@ -12,6 +12,13 @@ import Button from '@material-ui/core/Button';
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import es from "date-fns/locale/es";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import MecanicosEnhancedTable from "./MecanicosSortableTable";
 registerLocale("es", es);
 
 class ReservacionScreen extends Component {
@@ -48,7 +55,8 @@ class ReservacionScreen extends Component {
         descripcionProblemaTaller: '',
         descripcionReparacion: '',
         patenteAuto: '',
-        modeloAuto: ''
+        modeloAuto: '',
+        marcaAuto: ''
     };
 
 
@@ -72,6 +80,8 @@ class ReservacionScreen extends Component {
         this.handleDate = this.handleDate.bind(this);
         this.handleEndDate = this.handleEndDate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.asignarMecanico = this.asignarMecanico.bind(this);
+        this.desasignarMecanico = this.desasignarMecanico.bind(this);
         this.validateReservacion = this.validateReservacion.bind(this);
         const taller = JSON.parse(localStorage.getItem("tallerUser"));
         const cliente = JSON.parse(localStorage.getItem("clienteUser"));
@@ -145,7 +155,7 @@ class ReservacionScreen extends Component {
         }
         if (event.target.name === "estadoReparacion") {
             let estado = JSON.parse(event.target.value);
-            if (estado.descripcion !== "Pendiente Diagnostico") {
+            if (estado.descripcion !== "Pendiente Diagnóstico") {
                 this.setState({flagMecanicos: true});
             } else {
                 this.setState({flagMecanicos: false});
@@ -204,7 +214,7 @@ class ReservacionScreen extends Component {
         if (this.state.startDate != null) {
             if (diaActual.getDate() === this.state.startDate.getDate() && diaActual.getMonth() === this.state.startDate.getMonth() && diaActual.getTime() > this.state.startDate.getTime()) {
                 this.setState({formIsValid: false});
-                errors["hora"] = "Horario Invalido";
+                errors["hora"] = "Horario Inválido";
             } else if (this.state.startDate.getHours() === 0) {
                 this.setState({formIsValid: false});
                 errors["hora"] = "Debe seleccionar una hora";
@@ -223,33 +233,37 @@ class ReservacionScreen extends Component {
             }
         }
         if (tallerUser !== null) {
-            if (fields["estadoReparacion"] !== null) {
+            if (fields["estadoReparacion"]) {
                 let estado = JSON.parse(fields["estadoReparacion"]);
                 if (estado.descripcion === "Finalizado" || estado.descripcion === "Listo para retirar") {
                     if (fields["modeloAuto"].length === 0) {
                         this.setState({formIsValid: false});
-                        errors["modeloAuto"] = "Debe ingresar un modelo de auto para el estado de reparacion seleccionado";
+                        errors["modeloAuto"] = "No puede estra vacío para el estado seleccionado";
+                    }
+                    if (fields["marcaAuto"].length === 0){
+                        this.setState({formIsValid: false});
+                        errors["marcaAuto"] = "No puede estra vacío para el estado seleccionado";
                     }
                     if (fields["patenteAuto"].length === 0) {
                         this.setState({formIsValid: false});
-                        errors["patenteAuto"] = "Debe ingresar una patente de auto para el estado de reparacion seleccionado";
+                        errors["patenteAuto"] = "No puede estra vacío para el estado seleccionado";
                     }
                     if (fields["descripcionProblemaTaller"].length === 0) {
                         this.setState({formIsValid: false});
-                        errors["descripcionProblemaTaller"] = "Debe ingresar un diagnostico para el estado de reparacion seleccionado";
+                        errors["descripcionProblemaTaller"] = "No puede estra vacío para el estado seleccionado";
                     }
                     if (fields["descripcionReparacion"].length === 0) {
                         this.setState({formIsValid: false});
-                        errors["descripcionReparacion"] = "Debe ingresar una descripcion para el estado de reparacion seleccionado";
+                        errors["descripcionReparacion"] = "No puede estra vacío para el estado seleccionado";
                     }
                     if (fields["importeTotal"].length === 0) {
                         this.setState({formIsValid: false});
-                        errors["importeTotal"] = "Debe ingresar un importe para el estado de reparacion seleccionado";
+                        errors["importeTotal"] = "No puede estra vacío para el estado seleccionado";
                     }
                     if (this.state.endDate != null) {
                         if (diaActual.getDate() === this.state.endDate.getDate() && diaActual.getMonth() === this.state.endDate.getMonth() && diaActual.getTime() > this.state.endDate.getTime()) {
                             this.setState({formIsValid: false});
-                            errors["horaEnd"] = "Horario Invalido";
+                            errors["horaEnd"] = "Horario Inválido";
                         } else if (this.state.endDate.getHours() === 0) {
                             this.setState({formIsValid: false});
                             errors["horaEnd"] = "Debe seleccionar una hora";
@@ -260,29 +274,33 @@ class ReservacionScreen extends Component {
                     }
                     if(fields["mecanicos"].length === 0){
                         this.setState({formIsValid: false});
-                        errors["mecanicos"] = "Debe asignarse al menos un mecanico";
+                        errors["mecanicos"] = "Debe asignarse al menos un mecánico";
                     }
-                } else if (estado.descripcion === "En reparacion" || estado.descripcion === "Pendiente Confirmacion") {
+                } else if (estado.descripcion === "En reparación" || estado.descripcion === "Pendiente Confirmación") {
                     if (fields["modeloAuto"].length === 0) {
                         this.setState({formIsValid: false});
-                        errors["modeloAuto"] = "Debe ingresar un modelo de auto para el estado de reparacion seleccionado";
+                        errors["modeloAuto"] = "No puede estra vacío para el estado seleccionado";
+                    }
+                    if (fields["marcaAuto"].length === 0){
+                        this.setState({formIsValid: false});
+                        errors["marcaAuto"] = "No puede estra vacío para el estado seleccionado";
                     }
                     if (fields["patenteAuto"].length === 0) {
                         this.setState({formIsValid: false});
-                        errors["patenteAuto"] = "Debe ingresar una patente de auto para el estado de reparacion seleccionado";
+                        errors["patenteAuto"] = "No puede estra vacío para el estado seleccionado";
                     }
                     if (fields["descripcionProblemaTaller"].length === 0) {
                         this.setState({formIsValid: false});
-                        errors["descripcionProblemaTaller"] = "Debe ingresar un diagnostico para el estado de reparacion seleccionado";
+                        errors["descripcionProblemaTaller"] = "No puede estra vacío para el estado seleccionado";
                     }
                     if (fields["importeTotal"].length === 0) {
                         this.setState({formIsValid: false});
-                        errors["importeTotal"] = "Debe ingresar un importe para el estado de reparacion seleccionado";
+                        errors["importeTotal"] = "No puede estra vacío para el estado seleccionado";
                     }
                     if (this.state.endDate != null) {
                         if (diaActual.getDate() === this.state.endDate.getDate() && diaActual.getMonth() === this.state.endDate.getMonth() && diaActual.getTime() > this.state.endDate.getTime()) {
                             this.setState({formIsValid: false});
-                            errors["horaEnd"] = "Horario Invalido";
+                            errors["horaEnd"] = "Horario Inválido";
                         } else if (this.state.endDate.getHours() === 0) {
                             this.setState({formIsValid: false});
                             errors["horaEnd"] = "Debe seleccionar una hora";
@@ -293,22 +311,29 @@ class ReservacionScreen extends Component {
                     }
                     if(fields["mecanicos"].length === 0){
                         this.setState({formIsValid: false});
-                        errors["mecanicos"] = "Debe asignarse al menos un mecanico";
+                        errors["mecanicos"] = "Debe asignarse al menos un mecánico";
                     }
-                } else if (estado.descripcion === "En diagnostico") {
+                } else if (estado.descripcion === "En diagnóstico") {
                     if (fields["modeloAuto"].length === 0) {
                         this.setState({formIsValid: false});
-                        errors["modeloAuto"] = "Debe ingresar un modelo de auto para el estado de reparacion seleccionado";
+                        errors["modeloAuto"] = "No puede estra vacío para el estado seleccionado";
+                    }
+                    if (fields["marcaAuto"].length === 0){
+                        this.setState({formIsValid: false});
+                        errors["marcaAuto"] = "No puede estra vacío para el estado seleccionado";
                     }
                     if (fields["patenteAuto"].length === 0) {
                         this.setState({formIsValid: false});
-                        errors["patenteAuto"] = "Debe ingresar una patente de auto para el estado de reparacion seleccionado";
+                        errors["patenteAuto"] = "No puede estra vacío para el estado seleccionado";
                     }
                     if(fields["mecanicos"].length === 0){
                         this.setState({formIsValid: false});
-                        errors["mecanicos"] = "Debe asignarse al menos un mecanico";
+                        errors["mecanicos"] = "Debe asignarse al menos un mecánico";
                     }
                 }
+            }else{
+                this.setState({formIsValid: false});
+                errors["estadoReparacion"] = "Debe seleccionar algún estado";
             }
         }
         this.setState({errors: errors});
@@ -334,7 +359,7 @@ class ReservacionScreen extends Component {
                     let fechaSeparada = data.split("-");
                     let soloFecha = fechaSeparada[0] + "/" + fechaSeparada[1] + "/" + fechaSeparada[2];
                     let soloHora = fechaSeparada[3];
-                    errors["proximoHorario"] = "La proxima fecha libre es el " + soloFecha + " a las " + soloHora;
+                    errors["proximoHorario"] = "La próxima fecha libre es el " + soloFecha + " a las " + soloHora;
                     this.setState({errors: errors});
                 });
             }
@@ -344,7 +369,7 @@ class ReservacionScreen extends Component {
 
     dialogCreado() {
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             buttons: [
                 {
                     label: 'Aceptar',
@@ -356,7 +381,7 @@ class ReservacionScreen extends Component {
 
     dialogCreadoTaller() {
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             buttons: [
                 {
                     label: 'Aceptar',
@@ -478,7 +503,7 @@ class ReservacionScreen extends Component {
                 {clienteAux !== null &&
                 <Typography variant="h4">Información del Taller</Typography>
                 }
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmit} noValidate>
                     {clienteAux !== null &&
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
@@ -668,8 +693,8 @@ class ReservacionScreen extends Component {
                         </FormGroup>
                     </div>
                     }
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
                             <DatePicker
                                 inline
                                 selected={this.state.startDate}
@@ -689,9 +714,9 @@ class ReservacionScreen extends Component {
                             <span className="error">{this.state.errors["hora"]}</span>
                             <br></br>
                             <span className="error">{this.state.errors["proximoHorario"]}</span>
-                        </FormGroup>
+                        </Grid>
                         {tallerAux !== null &&
-                        <FormGroup className="col-md-6 mb-3">
+                        <Grid item xs={12} sm={6}>
                             <DatePicker
                                 inline
                                 selected={this.state.endDate}
@@ -709,7 +734,7 @@ class ReservacionScreen extends Component {
                             />
                             <br></br>
                             <span className="error">{this.state.errors["horaEnd"]}</span>
-                        </FormGroup>
+                        </Grid>
                         }
                         {clienteAux !== null &&
                         <Grid item xs={12} sm={6}>
@@ -728,111 +753,179 @@ class ReservacionScreen extends Component {
                         />
                         </Grid>
                         }
-                    </div>
+                    </Grid>
                     {tallerAux !== null &&
                     <Typography variant="h4">Datos del Auto</Typography>
                     }
                     {tallerAux !== null &&
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="modeloAuto">Marca y Modelo del Auto</Label>
-                            <Input type="text" name="modeloAuto" id="modeloAuto"
-                                   value={itemReparacionTaller.modeloAuto || ''}
-                                   onChange={this.handleChange} autoComplete="mail"/>
-                            <span className="error">{this.state.errors["modeloAuto"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="patenteAuto">Patente del Auto</Label>
-                            <Input type="text" name="patenteAuto" id="patenteAuto"
-                                   value={itemReparacionTaller.patenteAuto || ''}
-                                   onChange={this.handleChange} autoComplete="patenteAuto"/>
-                            <span className="error">{this.state.errors["patenteAuto"]}</span>
-                        </FormGroup>
-                    </div>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={4}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Modelo del Auto"
+                                margin="normal"
+                                variant="outlined"
+                                name="modeloAuto"
+                                fullWidth
+                                value={itemReparacionTaller.modeloAuto || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["modeloAuto"]}
+                                helperText={this.state.errors["modeloAuto"]}
+                                autoComplete="modeloAuto"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Marca del Auto"
+                                margin="normal"
+                                variant="outlined"
+                                name="marcaAuto"
+                                fullWidth
+                                value={itemReparacionTaller.marcaAuto || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["marcaAuto"]}
+                                helperText={this.state.errors["marcaAuto"]}
+                                autoComplete="marcaAuto"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Patente Auto"
+                                margin="normal"
+                                variant="outlined"
+                                name="patenteAuto"
+                                fullWidth
+                                value={itemReparacionTaller.patenteAuto || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["patenteAuto"]}
+                                helperText={this.state.errors["patenteAuto"]}
+                                autoComplete="patenteAuto"
+                            />
+                        </Grid>
+                    </Grid>
                     }
                     {tallerAux !== null &&
                     <Typography variant="h4">Información de la Reparación</Typography>
                     }
                     {tallerAux !== null &&
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="descripcionProblemaTaller">Diagnostico del Taller</Label>
-                            <textarea className="input-big" type="text" name="descripcionProblemaTaller"
-                                      id="descripcionProblemaTaller"
-                                      value={itemReparacionTaller.descripcionProblemaTaller || ''}
-                                      onChange={this.handleChange} autoComplete="descripcionProblemaTaller"/>
-                            <span className="error">{this.state.errors["descripcionProblemaTaller"]}</span>
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="descripcionReparacion">Descripción de la Reparación</Label>
-                            <textarea className="input-big" type="text" name="descripcionReparacion"
-                                      id="descripcionReparacion"
-                                      value={itemReparacionTaller.descripcionReparacion || ''}
-                                      onChange={this.handleChange} autoComplete="descripcionReparacion"/>
-                            <span className="error">{this.state.errors["descripcionReparacion"]}</span>
-                        </FormGroup>
-                    </div>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-multiline-static"
+                                name="descripcionProblemaTaller"
+                                multiline
+                                fullWidth
+                                rows="4"
+                                label="Diagnostico del Taller"
+                                error={this.state.errors["descripcionProblemaTaller"]}
+                                helperText={this.state.errors["descripcionProblemaTaller"]}
+                                value={itemReparacionTaller.descripcionProblemaTaller || ''}
+                                margin="normal"
+                                variant="outlined"
+                                onChange={this.handleChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-multiline-static"
+                                name="descripcionReparacion"
+                                multiline
+                                fullWidth
+                                rows="4"
+                                label="Reparaciones Realizadas"
+                                error={this.state.errors["descripcionReparacion"]}
+                                helperText={this.state.errors["descripcionReparacion"]}
+                                value={itemReparacionTaller.descripcionReparacion || ''}
+                                margin="normal"
+                                variant="outlined"
+                                onChange={this.handleChange}
+                            />
+                        </Grid>
+                    </Grid>
                     }
                     {tallerAux !== null &&
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="estado">Estado</Label>
-                            <br></br>
-                            <div>
-                                <select required="required" className="select" name="estadoReparacion"
-                                        id="estadoReparacion"
-                                        onChange={this.handleChange} autoComplete="estadoReparacion">
-                                    <option value="" default>Seleccionar Estado...</option>
-                                    {newOptionsEstados}
-                                </select>
-                            </div>
-                            &nbsp;&nbsp;
-                        </FormGroup>
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="importeTotal">Importe Total</Label>
-                            <Input type="text" name="importeTotal" id="importeTotal"
-                                   value={itemReparacionTaller.importeTotal || ''}
-                                   onChange={this.handleChange} autoComplete="importeTotal"/>
-                            <span className="error">{this.state.errors["importeTotal"]}</span>
-                        </FormGroup>
-                    </div>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Importe"
+                                margin="normal"
+                                variant="outlined"
+                                name="importeTotal"
+                                fullWidth
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                }}
+                                value={itemReparacionTaller.importeTotal || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["importeTotal"]}
+                                helperText={this.state.errors["importeTotal"]}
+                                autoComplete="importeTotal"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Cliente"
+                                margin="normal"
+                                variant="outlined"
+                                name="cliente"
+                                fullWidth
+                                style={{
+                                    backgroundColor: "#e9ecef"
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value='Cliente Externo'
+                                onChange={this.handleChange}
+                                autoComplete="patenteAuto"
+                            />
+                        </Grid>
+                    </Grid>
                     }
                     {tallerAux !== null &&
-                    <div className="row">
-                        <FormGroup className="col-md-6 mb-3">
-                            <Label for="cliente">Cliente</Label>
-                            <Input readOnly type="text" name="cliente" id="cliente" value='Cliente Externo'
-                                   onChange={this.handleChange} autoComplete="cliente"/>
-                        </FormGroup>
-                        <br></br>
-                        <br></br>
-                    </div>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl variant="outlined" required error={this.state.errors["estadoReparacion"]}>
+                                <InputLabel id="demo-simple-select-outlined-label">
+                                    Estado
+                                </InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-outlined-label"
+                                    id="estadoReparacion"
+                                    name="estadoReparacion"
+                                    value={itemReparacionTaller.estadoReparacion}
+                                    onChange={this.handleChange}
+                                    className="select-material-ui"
+                                >
+                                    {estados.map(estado => (
+                                        <MenuItem key={estado.idEstado} value={JSON.stringify(estado)}>
+                                            {estado.descripcion}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {this.state.errors["estadoReparacion"] && <FormHelperText>{this.state.errors["estadoReparacion"]}</FormHelperText>}
+                            </FormControl>
+                        </Grid>
+                    </Grid>
                     }
-                    {tallerAux !== null && this.state.flagMecanicos &&
+                    {tallerAux !== null &&
                     <br></br>
                     }
                     {tallerAux !== null && this.state.flagMecanicos &&
                     <br></br>
                     }
                     {tallerAux !== null && this.state.flagMecanicos &&
-                    <h3> Asignacion de mecanicos</h3>
+                    <Typography variant="h4"> Asignación de mecanicos</Typography>
                     }
                     {tallerAux !== null && this.state.flagMecanicos &&
-                    <Table className="mt-4">
-                        <thead>
-                        <tr>
-                            <th width="20%">ID</th>
-                            <th width="20%">Nombre</th>
-                            <th width="20%">Apellido</th>
-                            <th width="20%">Telefono</th>
-                            <th width="20%">Mail</th>
-                            <th width="10%">Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {mecanicoList}
-                        </tbody>
-                    </Table>
+                    <MecanicosEnhancedTable rows={mecanicos} acciones={true}
+                                            mecanicosEnReparacion={itemReparacionTaller.mecanicos} enReservacion={true}
+                                            asignarMecanico={this.asignarMecanico}
+                                            desasignarMecanico={this.desasignarMecanico} dense={true}/>
                     }
                     {tallerAux !== null && this.state.flagMecanicos &&
                     <span className="error">{this.state.errors["mecanicos"]}</span>

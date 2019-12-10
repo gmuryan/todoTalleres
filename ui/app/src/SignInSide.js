@@ -69,7 +69,7 @@ const SignInSide = ({handleSubmit, handleChange, errores}) => {
                             required
                             fullWidth
                             id="email"
-                            label="Email"
+                            label="Mail"
                             name="email"
                             autoComplete="email"
                             autoFocus

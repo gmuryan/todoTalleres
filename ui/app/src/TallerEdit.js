@@ -109,14 +109,14 @@ class TallerEdit extends Component {
         //Name
         if (fields["nombre"].length === 0) {
             this.setState({formIsValid: false});
-            errors["nombre"] = "No puede estar vacio";
+            errors["nombre"] = "No puede estar vacío";
         }
 
         //Barrio
         if (fields["barrio"].length === 0) {
             this.setState({formIsValid: false});
-            errors["barrio"] = "No puede estar vacio";
-        } else if (typeof fields["barrio"] !== "undefined") {
+            errors["barrio"] = "No puede estar vacío";
+        } else if (typeof fields["barrio"] !== undefined) {
             if (!fields["barrio"].match(/^[a-zA-Z ]+$/)) {
                 this.setState({formIsValid: false});
                 errors["barrio"] = "Solo letras";
@@ -126,31 +126,31 @@ class TallerEdit extends Component {
         //Telefono
         if (fields["telefono"].length === 0) {
             this.setState({formIsValid: false});
-            errors["telefono"] = "No puede estar vacio";
-        } else if (typeof fields["telefono"] !== "undefined") {
+            errors["telefono"] = "No puede estar vacío";
+        } else if (typeof fields["telefono"] !== undefined) {
             if (!fields["telefono"].match(/^[0-9]+$/)) {
                 this.setState({formIsValid: false});
-                errors["telefono"] = "Solo numeros";
+                errors["telefono"] = "Solo números";
             }
         }
 
         //Ubicacion
         if (!fields["ubicacion"]) {
             this.setState({formIsValid: false});
-            errors["ubicacion"] = "No puede estar vacio";
+            errors["ubicacion"] = "No puede estar vacío";
         }
 
         //MaximosVehiculos
         if (fields["maximosVehiculos"].length === 0) {
             this.setState({formIsValid: false});
-            errors["maximosVehiculos"] = "No puede estar vacio";
-        } else if (typeof fields["maximosVehiculos"] !== "undefined") {
+            errors["maximosVehiculos"] = "No puede estar vacío";
+        } else if (typeof fields["maximosVehiculos"] !== undefined) {
             if (!fields["maximosVehiculos"].toString().match(/^[0-9]+$/)) {
                 this.setState({formIsValid: false});
-                errors["maximosVehiculos"] = "Solo numeros";
+                errors["maximosVehiculos"] = "Solo números";
             } else if (parseFloat(fields["retrasosContemplados"]) > parseFloat(fields["maximosVehiculos"])) {
                 this.setState({formIsValid: false});
-                errors["maximosVehiculos"] = "La cantidad de vehiculos debe ser mayor a los retrasos contemplados"
+                errors["maximosVehiculos"] = "La cantidad de vehículos debe ser mayor a los retrasos contemplados"
             }
         }
 
@@ -158,24 +158,24 @@ class TallerEdit extends Component {
         //RetrasosContemplados
         if (fields["retrasosContemplados"].length === 0) {
             this.setState({formIsValid: false});
-            errors["retrasosContemplados"] = "No puede estar vacio";
-        } else if (typeof fields["retrasosContemplados"] !== "undefined") {
+            errors["retrasosContemplados"] = "No puede estar vacío";
+        } else if (typeof fields["retrasosContemplados"] !== undefined) {
             if (!fields["retrasosContemplados"].toString().match(/^[0-9]+$/)) {
                 this.setState({formIsValid: false});
-                errors["retrasosContemplados"] = "Solo numeros";
+                errors["retrasosContemplados"] = "Solo números";
             }
         }
 
         //Contraseña
         if (!fields["password"]) {
             this.setState({formIsValid: false});
-            errors["password"] = "No puede estar vacio";
+            errors["password"] = "No puede estar vacío";
         }
 
         //RepetirContraseña
         if (!fields["repeatPassword"]) {
             this.setState({formIsValid: false});
-            errors["repeatPassword"] = "No puede estar vacio";
+            errors["repeatPassword"] = "No puede estar vacío";
         } else if (fields["password"] !== fields["repeatPassword"]) {
             this.setState({formIsValid: false});
             errors["repeatPassword"] = "Debe ser igual a la contraseña";
@@ -184,13 +184,13 @@ class TallerEdit extends Component {
         //Marca
         if (!fields["marca"]){
             this.setState({formIsValid: false});
-            errors["marca"] = "No puede estar vacio";
+            errors["marca"] = "No puede estar vacío";
         }
 
         //Clasificacion
         if (!fields["clasificacion"]){
             this.setState({formIsValid: false});
-            errors["clasificacion"] = "No puede estar vacio";
+            errors["clasificacion"] = "No puede estar vacío";
         }
 
         this.setState({errors: errors});
@@ -199,14 +199,14 @@ class TallerEdit extends Component {
         //Email
         if (!fields["mail"]) {
             this.setState({formIsValid: false});
-            errors["mail"] = "No puede estar vacio";
+            errors["mail"] = "No puede estar vacío";
             this.setState({errors: errors});
-        } else if (typeof fields["mail"] !== "undefined") {
+        } else if (typeof fields["mail"] !== undefined) {
             let lastAtPos = fields["mail"].lastIndexOf('@');
             let lastDotPos = fields["mail"].lastIndexOf('.');
             if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["mail"].indexOf('@@') === -1 && lastDotPos > 2 && (fields["mail"].length - lastDotPos) > 2)) {
                 this.setState({formIsValid: false});
-                errors["mail"] = "Mail invalido";
+                errors["mail"] = "Mail inválido";
                 this.setState({errors: errors});
             }
         }
@@ -230,7 +230,7 @@ class TallerEdit extends Component {
 
     dialogCreado() {
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             buttons: [
                 {
                     label: 'Aceptar',

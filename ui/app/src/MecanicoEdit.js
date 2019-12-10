@@ -66,9 +66,9 @@ class MecanicoEdit extends Component {
         //Name
         if(fields["nombre"].length === 0){
             formIsValid = false;
-            errors["nombre"] = "No puede estar vacio";
+            errors["nombre"] = "No puede estar vacío";
         }
-        else if(typeof fields["nombre"] !== "undefined"){
+        else if(typeof fields["nombre"] !== undefined){
             if(!fields["nombre"].match(/^[a-zA-Z]+$/)){
                 formIsValid = false;
                 errors["nombre"] = "Solo letras";
@@ -78,9 +78,9 @@ class MecanicoEdit extends Component {
         //Apellido
         if(fields["apellido"].length === 0){
             formIsValid = false;
-            errors["apellido"] = "No puede estar vacio";
+            errors["apellido"] = "No puede estar vacío";
         }
-        else if(typeof fields["apellido"] !== "undefined"){
+        else if(typeof fields["apellido"] !== undefined){
             if(!fields["apellido"].match(/^[a-zA-Z]+$/)){
                 formIsValid = false;
                 errors["apellido"] = "Solo letras";
@@ -90,9 +90,9 @@ class MecanicoEdit extends Component {
         //Telefono
         if(fields["telefono"].length === 0){
             formIsValid = false;
-            errors["telefono"] = "No puede estar vacio";
+            errors["telefono"] = "No puede estar vacío";
         }
-        else if(typeof fields["telefono"] !== "undefined"){
+        else if(typeof fields["telefono"] !== undefined){
             if(!fields["telefono"].match(/^[0-9]+$/)){
                 formIsValid = false;
                 errors["telefono"] = "Solo numeros";
@@ -102,15 +102,15 @@ class MecanicoEdit extends Component {
         //Email
         if(!fields["mail"]){
             formIsValid = false;
-            errors["mail"] = "No puede estar vacio";
+            errors["mail"] = "No puede estar vacío";
         }
-        else if(typeof fields["mail"] !== "undefined"){
+        else if(typeof fields["mail"] !== undefined){
             let lastAtPos = fields["mail"].lastIndexOf('@');
             let lastDotPos = fields["mail"].lastIndexOf('.');
 
             if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["mail"].indexOf('@@') === -1 && lastDotPos > 2 && (fields["mail"].length - lastDotPos) > 2)) {
                 formIsValid = false;
-                errors["mail"] = "Mail invalido";
+                errors["mail"] = "Mail inválido";
             }
         }
 
@@ -120,7 +120,7 @@ class MecanicoEdit extends Component {
 
     dialogCreado(){
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             buttons: [
                 {
                     label: 'Aceptar'
@@ -157,10 +157,10 @@ class MecanicoEdit extends Component {
             <TalleresNavbar/>
             <Container>
                 {this.props.match.params.id !== 'new' &&
-                <Typography variant="h4">Editar Mecanico</Typography>
+                <Typography variant="h4">Editar Mecánico</Typography>
                 }
                 {this.props.match.params.id === 'new' &&
-                <Typography variant="h4">Crear Mecanico</Typography>
+                <Typography variant="h4">Crear Mecánico</Typography>
                 }
                 <Form onSubmit={this.handleSubmit} noValidate>
                     <Grid container spacing={2}>
@@ -240,12 +240,7 @@ class MecanicoEdit extends Component {
                     {this.props.match.params.id !== 'new' &&
                     <ReparacionesEnhancedTable rows={reparaciones} tallerUser={tallerAux} dense={true}  acciones={false}/>
                     }
-                    {this.props.match.params.id !== 'new' &&
                     <br></br>
-                    }
-                    {this.props.match.params.id !== 'new' &&
-                    <br></br>
-                    }
                     <FormGroup>
                         <Button variant="contained" color="primary" type="submit">
                             Guardar

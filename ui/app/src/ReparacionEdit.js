@@ -68,7 +68,7 @@ class ReparacionEdit extends Component {
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const reparacion = await (await fetch(`/api/reparacion/${this.props.match.params.id}`)).json();
         this.setState({item: reparacion});
-        if (this.state.item.estadoReparacion.descripcion === "En diagnostico" && tallerUser !== null) {
+        if (this.state.item.estadoReparacion.descripcion === "En diagnóstico" && tallerUser !== null) {
             this.setState({flagMostrarPresupuesto: true});
         }
         if (this.state.item.importeTotal !== null)
@@ -141,34 +141,38 @@ class ReparacionEdit extends Component {
         let formIsValid = true;
         let diaActual = new Date();
 
-        if (fields["estadoReparacion"].descripcion === "Pendiente Diagnostico") {
+        if (fields["estadoReparacion"].descripcion === "Pendiente Diagnóstico") {
             if (fields["modeloAuto"] === null || fields["modeloAuto"] === '') {
                 formIsValid = false;
-                errors["modeloAuto"] = "No puede estar vacio";
+                errors["modeloAuto"] = "No puede estar vacío";
+            }
+            if (fields["marcaAuto"] === null || fields["marcaAuto"] === ''){
+                this.setState({formIsValid: false});
+                errors["marcaAuto"] = "No puede estar vacío";
             }
             if (fields["patenteAuto"] === null || fields["patenteAuto"] === '') {
                 formIsValid = false;
-                errors["patenteAuto"] = "No puede estar vacio";
+                errors["patenteAuto"] = "No puede estar vacío";
             }
         }
 
-        if (fields["estadoReparacion"].descripcion === "En diagnostico") {
+        if (fields["estadoReparacion"].descripcion === "En diagnóstico") {
             if (fields["importeTotal"] === null || fields["importeTotal"] === '') {
                 formIsValid = false;
-                errors["importeTotal"] = "No puede estar vacio";
+                errors["importeTotal"] = "No puede estar vacío";
             }
             if (fields["descripcionProblemaTaller"] === null || fields["descripcionProblemaTaller"] === '') {
                 formIsValid = false;
-                errors["descripcionProblemaTaller"] = "No puede estar vacio";
+                errors["descripcionProblemaTaller"] = "No puede estar vacío";
             }
             if (fields["mecanicos"].length === 0) {
                 formIsValid = false;
-                errors["mecanicos"] = "Debe asignarse al menos un mecanico";
+                errors["mecanicos"] = "Debe asignarse al menos un mecánico";
             }
             if (this.state.endDate != null) {
                 if (diaActual.getDate() === this.state.endDate.getDate() && diaActual.getMonth() === this.state.endDate.getMonth() && diaActual.getTime() > this.state.endDate.getTime()) {
                     formIsValid = false;
-                    errors["hora"] = "Horario Invalido";
+                    errors["hora"] = "Horario Inválido";
                 } else if (this.state.endDate.getHours() === 0) {
                     formIsValid = false;
                     errors["hora"] = "Debe seleccionar una hora";
@@ -185,18 +189,18 @@ class ReparacionEdit extends Component {
             }
         }
 
-        if (fields["estadoReparacion"].descripcion === "En reparacion") {
+        if (fields["estadoReparacion"].descripcion === "En reparación") {
             if (fields["descripcionProblemaTaller"] === null || fields["descripcionProblemaTaller"] === '') {
                 formIsValid = false;
-                errors["descripcionProblemaTaller"] = "No puede estar vacio";
+                errors["descripcionProblemaTaller"] = "No puede estar vacío";
             }
             if (fields["descripcionReparacion"] === null || fields["descripcionReparacion"] === '') {
                 formIsValid = false;
-                errors["descripcionReparacion"] = "No puede estar vacio";
+                errors["descripcionReparacion"] = "No puede estar vacío";
             }
             if (fields["mecanicos"].length === 0) {
                 formIsValid = false;
-                errors["mecanicos"] = "Debe asignarse al menos un mecanico";
+                errors["mecanicos"] = "Debe asignarse al menos un mecánico";
             }
         }
 
@@ -227,7 +231,7 @@ class ReparacionEdit extends Component {
 
     dialogCreado() {
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             buttons: [
                 {
                     label: 'Aceptar',
@@ -284,28 +288,49 @@ class ReparacionEdit extends Component {
                 </Typography>
                 <Form onSubmit={this.handleSubmit} noValidate>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={4}>
+                        <TextField
+                            id="outlined-basic"
+                            label="Modelo del Auto"
+                            margin="normal"
+                            variant="outlined"
+                            name="modeloAuto"
+                            fullWidth
+                            style={{
+                                backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ""
+                            }}
+                            InputProps={{
+                                readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                            }}
+                            value={item.modeloAuto || ''}
+                            onChange={this.handleChange}
+                            error={this.state.errors["modeloAuto"]}
+                            helperText={this.state.errors["modeloAuto"]}
+                            autoComplete="modeloAuto"
+                        />
+                    </Grid>
+                        <Grid item xs={12} sm={4}>
                             <TextField
                                 id="outlined-basic"
-                                label="Marca y Modelo del Auto"
+                                label="Marca del Auto"
                                 margin="normal"
                                 variant="outlined"
-                                name="modeloAuto"
+                                name="marcaAuto"
                                 fullWidth
                                 style={{
-                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En diagnostico" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ""
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ""
                                 }}
                                 InputProps={{
-                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En diagnostico" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
                                 }}
-                                value={item.modeloAuto || ''}
+                                value={item.marcaAuto || ''}
                                 onChange={this.handleChange}
-                                error={this.state.errors["modeloAuto"]}
-                                helperText={this.state.errors["modeloAuto"]}
-                                autoComplete="modeloAuto"
+                                error={this.state.errors["marcaAuto"]}
+                                helperText={this.state.errors["marcaAuto"]}
+                                autoComplete="marcaAuto"
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={4}>
                             <TextField
                                 id="outlined-basic"
                                 label="Patente Auto"
@@ -314,10 +339,10 @@ class ReparacionEdit extends Component {
                                 name="patenteAuto"
                                 fullWidth
                                 style={{
-                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En diagnostico" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ""
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ""
                                 }}
                                 InputProps={{
-                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En diagnostico" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
                                 }}
                                 value={item.patenteAuto || ''}
                                 onChange={this.handleChange}
@@ -382,10 +407,10 @@ class ReparacionEdit extends Component {
                                 name="fechaDevolucion"
                                 fullWidth
                                 style={{
-                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : "",
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : "",
                                 }}
                                 InputProps={{
-                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
                                 }}
                                 value={item.fechaDevolucion || ''}
                                 onChange={this.handleChange}
@@ -403,10 +428,10 @@ class ReparacionEdit extends Component {
                                 name="horaDevolucion"
                                 fullWidth
                                 style={{
-                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : "",
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : "",
                                 }}
                                 InputProps={{
-                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmacion" || descEstado === "En reparacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
                                 }}
                                 value={item.horaDevolucion || ''}
                                 onChange={this.handleChange}
@@ -419,7 +444,7 @@ class ReparacionEdit extends Component {
                     }
                     <Grid container spacing={2}>
                         {this.state.flagImporte && !this.state.flagMostrarPresupuesto &&
-                        <Grid item xs={12} sm={descEstado === "En reparacion" && tallerUser !== null ? 4 : 6}>
+                        <Grid item xs={12} sm={descEstado === "En reparación" && tallerUser !== null ? 4 : 6}>
                             <TextField
                                 id="outlined-basic"
                                 label="Importe"
@@ -442,7 +467,7 @@ class ReparacionEdit extends Component {
                         </Grid>
                         }
                         {(!this.state.flagImporte || this.state.flagMostrarPresupuesto) &&
-                        <Grid item xs={12} sm={descEstado === "En reparacion" && tallerUser !== null ? 4 : 6}>
+                        <Grid item xs={12} sm={descEstado === "En reparación" && tallerUser !== null ? 4 : 6}>
                             <TextField
                                 id="outlined-basic"
                                 label="Importe"
@@ -465,8 +490,8 @@ class ReparacionEdit extends Component {
                             />
                         </Grid>
                         }
-                        {descEstado === "En reparacion" && tallerUser !== null &&
-                            <Grid item xs={12} sm={descEstado === "En reparacion" && tallerUser !== null ? 4 : 6}>
+                        {descEstado === "En reparación" && tallerUser !== null &&
+                            <Grid item xs={12} sm={descEstado === "En reparación" && tallerUser !== null ? 4 : 6}>
                             <FormControlLabel
                             control={
                             <Checkbox
@@ -482,7 +507,7 @@ class ReparacionEdit extends Component {
                             />
                             </Grid>
                         }
-                        <Grid item xs={12} sm={descEstado === "En reparacion" && tallerUser !== null ? 4 : 6}>
+                        <Grid item xs={12} sm={descEstado === "En reparación" && tallerUser !== null ? 4 : 6}>
                         <TextField
                             id="outlined-basic"
                             label="Estado"
@@ -536,10 +561,10 @@ class ReparacionEdit extends Component {
                                 rows="4"
                                 label="Diagnostico del Taller"
                                 style={{
-                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ''
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnóstico" || descEstado === "Pendiente Confirmación" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ''
                                 }}
                                 InputProps={{
-                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnóstico" || descEstado === "Pendiente Confirmación" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
                                 }}
                                 error={this.state.errors["descripcionProblemaTaller"]}
                                 helperText={this.state.errors["descripcionProblemaTaller"]}
@@ -560,10 +585,10 @@ class ReparacionEdit extends Component {
                                 rows="4"
                                 label="Reparaciones Realizadas"
                                 style={{
-                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "En diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ''
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnóstico" || descEstado === "En diagnóstico" || descEstado === "Pendiente Confirmación" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ''
                                 }}
                                 InputProps={{
-                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnostico" || descEstado === "En diagnostico" || descEstado === "Pendiente Confirmacion" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Diagnóstico" || descEstado === "En diagnóstico" || descEstado === "Pendiente Confirmación" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
                                 }}
                                 error={this.state.errors["descripcionReparacion"]}
                                 helperText={this.state.errors["descripcionReparacion"]}
@@ -574,7 +599,7 @@ class ReparacionEdit extends Component {
                             />
                         </Grid>
 
-                        {tallerUser !== null && item.fechaDevolucion === null && item.horaDevolucion === null && descEstado !== "Cancelado" && descEstado !== "Pendiente Diagnostico" &&
+                        {tallerUser !== null && item.fechaDevolucion === null && item.horaDevolucion === null && descEstado !== "Cancelado" && descEstado !== "Pendiente Diagnóstico" &&
                         <FormGroup className="col-md-6 mb-3">
                             <div>
                                 <Label for="fechaHoraDevolucion">Fecha y hora de devolución</Label>
@@ -599,20 +624,20 @@ class ReparacionEdit extends Component {
                         </FormGroup>
                         }
                     </Grid>
-                    {tallerUser !== null && descEstado !== "En diagnostico" &&
+                    {tallerUser !== null && descEstado !== "En diagnóstico" &&
                     <Typography variant="h4">
                         Mecanicos Asignados
                     </Typography>
                     }
-                    {tallerUser !== null && descEstado === "En diagnostico" &&
+                    {tallerUser !== null && descEstado === "En diagnóstico" &&
                     <Typography variant="h4">
                         Asignación de Mecanicos
                     </Typography>
                     }
-                    {tallerUser !== null && descEstado !== "En diagnostico" && descEstado !== "En reparacion" &&
+                    {tallerUser !== null && descEstado !== "En diagnóstico" && descEstado !== "En reparación" &&
                     <MecanicosEnhancedTable rows={item.mecanicos} acciones={false} dense={true}/>
                     }
-                    {(tallerUser !== null && (descEstado === "En diagnostico" || descEstado === "En reparacion")) &&
+                    {(tallerUser !== null && (descEstado === "En diagnóstico" || descEstado === "En reparación")) &&
                     <MecanicosEnhancedTable rows={mecanicosTaller} acciones={true}
                                             mecanicosEnReparacion={item.mecanicos} enReparacion={true}
                                             asignarMecanico={this.asignarMecanico}
@@ -628,12 +653,12 @@ class ReparacionEdit extends Component {
                     <br></br>
                     }
                     <FormGroup>
-                        {((tallerUser !== null && descEstado !== "Pendiente Confirmacion" && descEstado !== "Finalizado" && descEstado !== "Cancelado") || (clienteUser !== null && descEstado === "Pendiente Confirmacion")) &&
+                        {((tallerUser !== null && descEstado !== "Pendiente Confirmación" && descEstado !== "Finalizado" && descEstado !== "Cancelado") || (clienteUser !== null && descEstado === "Pendiente Confirmación")) &&
                         <Button variant="contained" color="primary" type="submit">
                             Confirmar
                         </Button>
                         }{' '}
-                        {tallerUser !== null && descEstado === "En reparacion" &&
+                        {tallerUser !== null && descEstado === "En reparación" &&
                         <Button onClick={this.guardarReparacion} variant="contained" color="default">
                             Guardar
                         </Button>

@@ -141,7 +141,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const MecanicosEnhancedTable = ({rows, habilitarMecanico, deshabilitarMecanico, editar, acciones, mecanicosEnReparacion, enReparacion, asignarMecanico, desasignarMecanico, dense}) => {
+const MecanicosEnhancedTable = ({rows, habilitarMecanico, deshabilitarMecanico, editar, acciones, mecanicosEnReparacion, enReparacion, asignarMecanico, desasignarMecanico, dense, enReservacion}) => {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -293,7 +293,37 @@ const MecanicosEnhancedTable = ({rows, habilitarMecanico, deshabilitarMecanico, 
                                                 </TableRow>
                                             );
                                         }
-                                    } else {
+                                    } else if (enReservacion){
+                                        if (row.activo){
+                                            return (
+                                                <TableRow
+                                                    hover
+                                                    onClick={event => handleClick(event, row.idMecanico)}
+                                                    key={row.idMecanico}
+                                                    selected={isItemSelected}
+                                                >
+                                                    <TableCell component="th" id={labelId} scope="row" align="right">
+                                                        {row.idMecanico}
+                                                    </TableCell>
+                                                    <TableCell align="left">{row.nombre}</TableCell>
+                                                    <TableCell align="left">{row.apellido}</TableCell>
+                                                    <TableCell align="right">{row.telefono}</TableCell>
+                                                    <TableCell align="left">{row.mail}</TableCell>
+                                                    <TableCell align="left">{row.activo ? "Si" : "No"}</TableCell>
+                                                    {acciones &&
+                                                    <TableCell component="th" scope="row">
+                                                        {!mecanicosEnReparacion.some(mec => (mec.idMecanico === row.idMecanico)) &&
+                                                        assignIcon(row)
+                                                        }
+                                                        {mecanicosEnReparacion.some(mec => (mec.idMecanico === row.idMecanico)) &&
+                                                        unassignIcon(row)
+                                                        }
+                                                    </TableCell>
+                                                    }
+                                                </TableRow>
+                                            );
+                                        }
+                                    }else {
                                         return (
                                             <TableRow
                                                 hover
@@ -337,6 +367,8 @@ const MecanicosEnhancedTable = ({rows, habilitarMecanico, deshabilitarMecanico, 
                     component="div"
                     count={rows.length}
                     rowsPerPage={rowsPerPage}
+                    labelRowsPerPage="Filas por página"
+                    labelDisplayedRows={({ from, to, count }) => `Página ${page+1} de ${Math.ceil(count/rowsPerPage)}`}
                     page={page}
                     backIconButtonProps={{
                         'aria-label': 'previous page',

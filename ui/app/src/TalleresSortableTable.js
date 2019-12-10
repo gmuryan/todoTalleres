@@ -317,6 +317,8 @@ const TalleresEnhancedTable = ({rows, habilitarTaller, deshabilitarTaller, edita
                     component="div"
                     count={rows.length}
                     rowsPerPage={rowsPerPage}
+                    labelRowsPerPage="Filas por página"
+                    labelDisplayedRows={({ from, to, count }) => `Página ${page+1} de ${Math.ceil(count/rowsPerPage)}`}
                     page={page}
                     backIconButtonProps={{
                         'aria-label': 'previous page',

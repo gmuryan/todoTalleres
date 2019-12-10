@@ -195,11 +195,11 @@ class MecanicoList extends Component {
                 <Container fluid>
                     <div className="float-right">
                         <Button type="button" variant="contained" color="primary" className={classes.button} onClick={() => this.props.history.push('/mecanicos/new')}>
-                            Crear Mecanico
+                            Crear Mecánico
                         </Button>
                     </div>
                     <Typography variant="h4">
-                        Mecanicos
+                        Mecánicos
                     </Typography>
                     <TextField
                         id="standard-basic"

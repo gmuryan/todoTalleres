@@ -94,8 +94,8 @@ class MisDatos extends Component {
         //Name
         if (fields["nombre"].length === 0) {
             this.setState({formIsValid: false});
-            errors["nombre"] = "No puede estar vacio";
-        } else if (typeof fields["nombre"] !== "undefined") {
+            errors["nombre"] = "No puede estar vacío";
+        } else if (typeof fields["nombre"] !== undefined) {
             if (!fields["nombre"].match(/^[a-zA-Z]+$/)) {
                 this.setState({formIsValid: false});
                 errors["nombre"] = "Solo letras";
@@ -105,8 +105,8 @@ class MisDatos extends Component {
         //Apellido
         if (fields["apellido"].length === 0) {
             this.setState({formIsValid: false});
-            errors["apellido"] = "No puede estar vacio";
-        } else if (typeof fields["apellido"] !== "undefined") {
+            errors["apellido"] = "No puede estar vacío";
+        } else if (typeof fields["apellido"] !== undefined) {
             if (!fields["apellido"].match(/^[a-zA-Z]+$/)) {
                 this.setState({formIsValid: false});
                 errors["apellido"] = "Solo letras";
@@ -116,24 +116,24 @@ class MisDatos extends Component {
         //Telefono
         if (fields["telefono"].length === 0) {
             this.setState({formIsValid: false});
-            errors["telefono"] = "No puede estar vacio";
-        } else if (typeof fields["telefono"] !== "undefined") {
+            errors["telefono"] = "No puede estar vacío";
+        } else if (typeof fields["telefono"] !== undefined) {
             if (!fields["telefono"].match(/^[0-9]+$/)) {
                 this.setState({formIsValid: false});
-                errors["telefono"] = "Solo numeros";
+                errors["telefono"] = "Solo números";
             }
         }
 
         //Contraseña
         if (!fields["password"]) {
             this.setState({formIsValid: false});
-            errors["password"] = "No puede estar vacio";
+            errors["password"] = "No puede estar vacío";
         }
 
         //RepetirContraseña
         if (!fields["repeatPassword"]) {
             this.setState({formIsValid: false});
-            errors["repeatPassword"] = "No puede estar vacio";
+            errors["repeatPassword"] = "No puede estar vacío";
         } else if (fields["password"] !== fields["repeatPassword"]) {
             this.setState({formIsValid: false});
             errors["repeatPassword"] = "Debe ser igual a la contraseña";
@@ -144,14 +144,14 @@ class MisDatos extends Component {
         //Email
         if (!fields["mail"]) {
             this.setState({formIsValid: false});
-            errors["mail"] = "No puede estar vacio";
+            errors["mail"] = "No puede estar vacío";
             this.setState({errors: errors});
-        } else if (typeof fields["mail"] !== "undefined") {
+        } else if (typeof fields["mail"] !== undefined) {
             let lastAtPos = fields["mail"].lastIndexOf('@');
             let lastDotPos = fields["mail"].lastIndexOf('.');
             if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["mail"].indexOf('@@') === -1 && lastDotPos > 2 && (fields["mail"].length - lastDotPos) > 2)) {
                 this.setState({formIsValid: false});
-                errors["mail"] = "Mail invalido";
+                errors["mail"] = "Mail inválido";
                 this.setState({errors: errors});
             }
         }
@@ -175,7 +175,7 @@ class MisDatos extends Component {
 
     dialogCreado() {
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             buttons: [
                 {
                     label: 'Aceptar',

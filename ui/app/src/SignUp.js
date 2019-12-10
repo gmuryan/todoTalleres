@@ -86,7 +86,7 @@ const SignUp = ({handleSubmit, handleChange, errores}) => {
                                 required
                                 fullWidth
                                 id="mail"
-                                label="Email"
+                                label="Mail"
                                 name="mail"
                                 autoComplete="mail"
                                 error={errores["mail"]}

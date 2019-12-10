@@ -78,7 +78,7 @@ class ReseñaScreen extends Component {
 
         if (fields["comentario"] === null || fields["comentario"] === '') {
             formIsValid = false;
-            errors["comentario"] = "No puede estar vacio";
+            errors["comentario"] = "No puede estar vacío";
         }
 
         this.setState({errors: errors});
@@ -87,7 +87,7 @@ class ReseñaScreen extends Component {
 
     dialogCreado() {
         confirmAlert({
-            title: 'Operacion Exitosa',
+            title: 'Operación Exitosa',
             buttons: [
                 {
                     label: 'Aceptar'
