@@ -333,7 +333,7 @@ class ReparacionEdit extends Component {
                         <Grid item xs={12} sm={4}>
                             <TextField
                                 id="outlined-basic"
-                                label="Patente Auto"
+                                label="Patente del Auto"
                                 margin="normal"
                                 variant="outlined"
                                 name="patenteAuto"
