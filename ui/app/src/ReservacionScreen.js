@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {ButtonGroup, Container, Form, FormGroup} from 'reactstrap';
+import {ButtonGroup, Container, Form, FormGroup, Input, Label, Table} from 'reactstrap';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import DatePicker, {registerLocale} from "react-datepicker";
@@ -792,7 +792,7 @@ class ReservacionScreen extends Component {
                         <Grid item xs={12} sm={4}>
                             <TextField
                                 id="outlined-basic"
-                                label="Patente del RepaAuto"
+                                label="Patente del Auto"
                                 margin="normal"
                                 variant="outlined"
                                 name="patenteAuto"
