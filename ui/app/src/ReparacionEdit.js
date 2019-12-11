@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Container, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Container, Form, FormGroup, Label} from 'reactstrap';
 import {confirmAlert} from "react-confirm-alert";
 import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -333,7 +333,7 @@ class ReparacionEdit extends Component {
                         <Grid item xs={12} sm={4}>
                             <TextField
                                 id="outlined-basic"
-                                label="Patente Auto"
+                                label="Patente del Auto"
                                 margin="normal"
                                 variant="outlined"
                                 name="patenteAuto"
