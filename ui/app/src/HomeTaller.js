@@ -2,11 +2,16 @@ import React, {Component} from 'react';
 import './App.css';
 import TalleresNavbar from './TalleresNavbar';
 import {withRouter} from 'react-router-dom';
-import {Container, Form, FormGroup} from 'reactstrap';
+import {Container, Form} from 'reactstrap';
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import {Bar} from 'react-chartjs-2';
 import {Pie} from 'react-chartjs-2';
 import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 
 class HomeTaller extends Component {
@@ -18,7 +23,8 @@ class HomeTaller extends Component {
             totalesReparaciones: [],
             nombresMecanicos: [],
             reparacionesMes: [],
-            flagGrafico: false
+            flagGrafico: false,
+            mes: ''
         };
         this.handleChange = this.handleChange.bind(this);
         const taller = JSON.parse(localStorage.getItem("tallerUser"));
@@ -31,7 +37,11 @@ class HomeTaller extends Component {
 
     async handleChange(event) {
         const target = event.target;
+        const name = target.name;
         const value = target.value;
+        if (name === "mes"){
+            this.setState({mes: value});
+        }
         if (value !== null) {
             const taller = JSON.parse(localStorage.getItem("tallerUser"));
             const reps = await (await fetch(`/api/analyticsMecanicosReparaciones?id=${encodeURIComponent(taller.idTaller)}&mesString=${encodeURIComponent(value)}`)).json();
@@ -139,29 +149,40 @@ class HomeTaller extends Component {
                         <br></br>
                         <div style={{height: '300px'}}>
                             <Typography variant="h4">
-                                Asignación de mecánicos
+                                Asignación de mecánicos mensual
                             </Typography>
                             <Form>
-                                <div className="row">
-                                    <FormGroup className="col-md-6 mb-3">
-                                        <select className="select" name="mes" id="mes" onChange={this.handleChange}
-                                                autoComplete="mes">
-                                            <option default value="">Seleccione mes...</option>
-                                            <option value="Enero">Enero</option>
-                                            <option value="Febrero">Febrero</option>
-                                            <option value="Marzo">Marzo</option>
-                                            <option value="Abril">Abril</option>
-                                            <option value="Mayo">Mayo</option>
-                                            <option value="Junio">Junio</option>
-                                            <option value="Julio">Julio</option>
-                                            <option value="Agosto">Agosto</option>
-                                            <option value="Septiembre">Septiembre</option>
-                                            <option value="Octubre">Octubre</option>
-                                            <option value="Noviembre">Noviembre</option>
-                                            <option value="Diciembre">Diciembre</option>
-                                        </select>
-                                    </FormGroup>
-                                </div>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <FormControl variant="outlined">
+                                            <InputLabel id="demo-simple-select-outlined-label">
+                                                Mes
+                                            </InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-outlined-label"
+                                                id="mes"
+                                                name="mes"
+                                                value={this.state.mes}
+                                                displayEmpty
+                                                onChange={this.handleChange}
+                                                className="select-material-ui"
+                                            >
+                                                <MenuItem value="Enero">Enero</MenuItem>
+                                                <MenuItem value="Febrero">Febrero</MenuItem>
+                                                <MenuItem value="Marzo">Marzo</MenuItem>
+                                                <MenuItem value="Abril">Abril</MenuItem>
+                                                <MenuItem value="Mayo">Mayo</MenuItem>
+                                                <MenuItem value="Junio">Junio</MenuItem>
+                                                <MenuItem value="Julio">Julio</MenuItem>
+                                                <MenuItem value="Agosto">Agosto</MenuItem>
+                                                <MenuItem value="Septiembre">Septiembre</MenuItem>
+                                                <MenuItem value="Octubre">Octubre</MenuItem>
+                                                <MenuItem value="Noviembre">Noviembre</MenuItem>
+                                                <MenuItem value="Diciembre">Diciembre</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                </Grid>
                             </Form>
                             {this.state.flagGrafico &&
                             <Pie

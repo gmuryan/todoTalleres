@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Container, Form, FormGroup} from 'reactstrap';
+import {Container, Form, FormGroup, Label} from 'reactstrap';
 import {confirmAlert} from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import "react-datepicker/dist/react-datepicker.css";
@@ -12,6 +12,9 @@ import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
+import Rating from "@material-ui/lab/Rating";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
 
 class ReseñaScreen extends Component {
 
@@ -31,7 +34,8 @@ class ReseñaScreen extends Component {
         cliente: '',
         taller: '',
         comentario: '',
-        fechaReseña: ''
+        fechaReseña: '',
+        puntuacion: ''
     }
 
     constructor(props) {
@@ -81,6 +85,11 @@ class ReseñaScreen extends Component {
             errors["comentario"] = "No puede estar vacío";
         }
 
+        if (fields["puntuacion"] === null || fields["puntuacion"] === '') {
+            formIsValid = false;
+            errors["puntuacion"] = "Debe puntuar el taller para poder dejar una reseña";
+        }
+
         this.setState({errors: errors});
         return formIsValid;
     }
@@ -113,11 +122,7 @@ class ReseñaScreen extends Component {
             this.dialogCreado();
             const reseñasList = await (await fetch(`/api/reseñas/${this.props.match.params.id}`)).json();
             this.setState({reseñas: reseñasList});
-            // this.setState(prevState => ({
-            //     reseñas : [...prevState.reseñas, this.state.item]
-            // }))
             this.setState({item: this.emptyItem});
-            // this.forceUpdate();
         }
     }
 
@@ -136,7 +141,7 @@ class ReseñaScreen extends Component {
         const reseñasList = reseñas.map(reseña => {
             return (
                 <Comment idReseña={reseña.idReseña} fecha={reseña.fechaReseña} nombre={reseña.cliente.nombre}
-                         apellido={reseña.cliente.apellido}
+                         apellido={reseña.cliente.apellido} puntuacion={reseña.puntuacion}
                          comentario={reseña.comentario} adminAux={adminAux}/>
             );
         });
@@ -341,23 +346,46 @@ class ReseñaScreen extends Component {
                         No hay reseñas disponibles
                     </Typography>
                     }
+                    <br></br>
                     <Form onSubmit={this.handleSubmit}>
                         {clienteAux !== null &&
-                        <TextField
-                            id="comentario"
-                            name="comentario"
-                            autoComplete="comentario"
-                            multiline
-                            fullWidth
-                            error={this.state.errors["comentario"]}
-                            helperText={this.state.errors["comentario"]}
-                            rows="4"
-                            value={item.comentario || ''}
-                            margin="normal"
-                            variant="outlined"
-                            placeholder="Deje su comentario aquí..."
-                            onChange={this.handleChange}
-                            />
+                        <FormControl error={this.state.errors["puntuacion"]}>
+                            <div>
+                                <Label>Puntuación: </Label>
+                                &nbsp;&nbsp;
+                                <Rating
+                                    name="puntuacion"
+                                    value={item.puntuacion}
+                                    onChange={this.handleChange}
+                                />
+                            </div>
+                            {clienteAux !== null && this.state.errors["puntuacion"] &&
+                            <FormHelperText>{this.state.errors["puntuacion"]}</FormHelperText>}
+                        </FormControl>
+                        }
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={12}>
+                                {clienteAux !== null &&
+                                <TextField
+                                    id="comentario"
+                                    name="comentario"
+                                    autoComplete="comentario"
+                                    multiline
+                                    fullWidth
+                                    error={this.state.errors["comentario"]}
+                                    helperText={this.state.errors["comentario"]}
+                                    rows="4"
+                                    value={item.comentario || ''}
+                                    margin="normal"
+                                    variant="outlined"
+                                    placeholder="Deje su comentario aquí..."
+                                    onChange={this.handleChange}
+                                />
+                                }
+                            </Grid>
+                        </Grid>
+                        {clienteAux !== null &&
+                        <br></br>
                         }
                         <FormGroup>
                             {clienteAux !== null &&
@@ -369,7 +397,7 @@ class ReseñaScreen extends Component {
                             ' '
                             }
                             {clienteAux !== null &&
-                            <Link to='/talleres' style={{ textDecoration: 'none' }}>
+                            <Link to='/talleres' style={{textDecoration: 'none'}}>
                                 <Button variant="contained" color="secondary">
                                     Cancelar
                                 </Button>
@@ -379,7 +407,8 @@ class ReseñaScreen extends Component {
                             <br></br>
                             }
                             {(tallerAux !== null || adminAux !== null) &&
-                            <Link to={tallerAux !== null ? "/homeTaller" : "/talleres"} style={{ textDecoration: 'none' }}>
+                            <Link to={tallerAux !== null ? "/homeTaller" : "/talleres"}
+                                  style={{textDecoration: 'none'}}>
                                 <Button variant="contained" color="primary">
                                     Volver
                                 </Button>

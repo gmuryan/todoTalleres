@@ -146,7 +146,7 @@ class ReparacionEdit extends Component {
                 formIsValid = false;
                 errors["modeloAuto"] = "No puede estar vacío";
             }
-            if (fields["marcaAuto"] === null || fields["marcaAuto"] === ''){
+            if (fields["marcaAuto"] === null || fields["marcaAuto"] === '') {
                 this.setState({formIsValid: false});
                 errors["marcaAuto"] = "No puede estar vacío";
             }
@@ -289,26 +289,26 @@ class ReparacionEdit extends Component {
                 <Form onSubmit={this.handleSubmit} noValidate>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={4}>
-                        <TextField
-                            id="outlined-basic"
-                            label="Modelo del Auto"
-                            margin="normal"
-                            variant="outlined"
-                            name="modeloAuto"
-                            fullWidth
-                            style={{
-                                backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ""
-                            }}
-                            InputProps={{
-                                readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
-                            }}
-                            value={item.modeloAuto || ''}
-                            onChange={this.handleChange}
-                            error={this.state.errors["modeloAuto"]}
-                            helperText={this.state.errors["modeloAuto"]}
-                            autoComplete="modeloAuto"
-                        />
-                    </Grid>
+                            <TextField
+                                id="outlined-basic"
+                                label="Modelo del Auto"
+                                margin="normal"
+                                variant="outlined"
+                                name="modeloAuto"
+                                fullWidth
+                                style={{
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ""
+                                }}
+                                InputProps={{
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                }}
+                                value={item.modeloAuto || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["modeloAuto"]}
+                                helperText={this.state.errors["modeloAuto"]}
+                                autoComplete="modeloAuto"
+                            />
+                        </Grid>
                         <Grid item xs={12} sm={4}>
                             <TextField
                                 id="outlined-basic"
@@ -444,7 +444,7 @@ class ReparacionEdit extends Component {
                     }
                     <Grid container spacing={2}>
                         {this.state.flagImporte && !this.state.flagMostrarPresupuesto &&
-                        <Grid item xs={12} sm={descEstado === "En reparación" && tallerUser !== null ? 4 : 6}>
+                        <Grid item xs={12} sm={descEstado === "En reparación" && tallerUser !== null ? 3 : 6}>
                             <TextField
                                 id="outlined-basic"
                                 label="Importe"
@@ -467,7 +467,7 @@ class ReparacionEdit extends Component {
                         </Grid>
                         }
                         {(!this.state.flagImporte || this.state.flagMostrarPresupuesto) &&
-                        <Grid item xs={12} sm={descEstado === "En reparación" && tallerUser !== null ? 4 : 6}>
+                        <Grid item xs={12} sm={descEstado === "En reparación" && tallerUser !== null ? 3 : 6}>
                             <TextField
                                 id="outlined-basic"
                                 label="Importe"
@@ -491,42 +491,46 @@ class ReparacionEdit extends Component {
                         </Grid>
                         }
                         {descEstado === "En reparación" && tallerUser !== null &&
-                            <Grid item xs={12} sm={descEstado === "En reparación" && tallerUser !== null ? 4 : 6}>
+                        <Grid item xs={12} sm={descEstado === "En reparación" && tallerUser !== null ? 3 : 6}>
                             <FormControlLabel
-                            control={
-                            <Checkbox
-                                name="nuevoPresupuesto"
-                                checked={this.state.flagNuevoPresupuesto}
+                                control={
+                                    <Checkbox
+                                        name="nuevoPresupuesto"
+                                        checked={this.state.flagNuevoPresupuesto}
+                                        onChange={this.handleChange}
+                                        value={this.state.flagNuevoPresupuesto}
+                                        className={classes.label}
+                                        ml={100}
+                                        color="primary"
+                                    />
+                                }
+                                ml={100}
+                                value="top"
+                                labelPlacement="top"
+                                label="Nuevo Presupuesto"
+                            />
+                        </Grid>
+                        }
+                        <Grid item xs={12}  sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Estado"
+                                margin="normal"
+                                variant="outlined"
+                                name="estadoReparacion"
+                                fullWidth
+                                style={{
+                                    backgroundColor: "#e9ecef",
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.estadoReparacion.descripcion || ''}
                                 onChange={this.handleChange}
-                                value={this.state.flagNuevoPresupuesto}
-                                className={classes.label}
-                                color="primary"
+                                error={this.state.errors["estadoReparacion"]}
+                                helperText={this.state.errors["estadoReparacion"]}
+                                autoComplete="estadoReparacion"
                             />
-                        }
-                            label="Nuevo Presupuesto"
-                            />
-                            </Grid>
-                        }
-                        <Grid item xs={12} sm={descEstado === "En reparación" && tallerUser !== null ? 4 : 6}>
-                        <TextField
-                            id="outlined-basic"
-                            label="Estado"
-                            margin="normal"
-                            variant="outlined"
-                            name="estadoReparacion"
-                            fullWidth
-                            style={{
-                                backgroundColor: "#e9ecef",
-                            }}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            value={item.estadoReparacion.descripcion || ''}
-                            onChange={this.handleChange}
-                            error={this.state.errors["estadoReparacion"]}
-                            helperText={this.state.errors["estadoReparacion"]}
-                            autoComplete="estadoReparacion"
-                        />
                         </Grid>
                     </Grid>
                     <Grid container spacing={2}>

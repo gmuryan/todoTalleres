@@ -7,6 +7,9 @@ import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 class MisDatos extends Component {
 
@@ -36,12 +39,15 @@ class MisDatos extends Component {
             errors: {},
             flag: false,
             formIsValid: true,
-            mailCargado: ''
+            mailCargado: '',
+            showPassword: false
         };
         this.validateMailTaller = this.validateMailTaller.bind(this);
         this.validateMailCliente = this.validateMailCliente.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
+        this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
     }
 
     async componentDidMount() {
@@ -62,6 +68,14 @@ class MisDatos extends Component {
         let item = {...this.state.item};
         item[name] = value;
         this.setState({item});
+    }
+
+    handleMouseDownPassword(event){
+        event.preventDefault();
+    }
+
+    handleClickShowPassword(event){
+        this.setState({showPassword: !this.state.showPassword});
     }
 
     validateMailTaller() {
@@ -299,7 +313,19 @@ class MisDatos extends Component {
                                        margin="normal"
                                        variant="outlined"
                                        name="password"
-                                       type="password"
+                                       type={this.state.showPassword ? 'text' : 'password'}
+                                       InputProps={{
+                                           endAdornment:
+                                               <InputAdornment position="end">
+                                                   <IconButton
+                                                       aria-label="toggle password visibility"
+                                                       onClick={this.handleClickShowPassword}
+                                                       onMouseDown={this.handleMouseDownPassword}
+                                                   >
+                                                       {this.state.showPassword ? <Visibility/> : <VisibilityOff/>}
+                                                   </IconButton>
+                                               </InputAdornment>
+                                       }}
                                        required
                                        fullWidth
                                        value={item.password || ''}
@@ -316,7 +342,19 @@ class MisDatos extends Component {
                                        margin="normal"
                                        variant="outlined"
                                        name="repeatPassword"
-                                       type="password"
+                                       type={this.state.showPassword ? 'text' : 'password'}
+                                       InputProps={{
+                                           endAdornment:
+                                               <InputAdornment position="end">
+                                                   <IconButton
+                                                       aria-label="toggle password visibility"
+                                                       onClick={this.handleClickShowPassword}
+                                                       onMouseDown={this.handleMouseDownPassword}
+                                                   >
+                                                       {this.state.showPassword ? <Visibility/> : <VisibilityOff/>}
+                                                   </IconButton>
+                                               </InputAdornment>
+                                       }}
                                        required
                                        fullWidth
                                        value={item.repeatPassword || ''}

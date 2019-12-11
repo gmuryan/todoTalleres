@@ -8,6 +8,14 @@ import Typography from "@material-ui/core/Typography"; // Import css
 import Button from '@material-ui/core/Button';
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 class MiTaller extends Component {
 
@@ -38,12 +46,15 @@ class MiTaller extends Component {
             clasificaciones: [],
             flag: false,
             formIsValid: true,
-            mailCargado: ''
+            mailCargado: '',
+            showPassword: false
         };
         this.validateMailTaller = this.validateMailTaller.bind(this);
         this.validateMailCliente = this.validateMailCliente.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
+        this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
         const taller = JSON.parse(localStorage.getItem("tallerUser"));
         console.log(taller);
         if (taller === null) {
@@ -80,6 +91,14 @@ class MiTaller extends Component {
         let item = {...this.state.item};
         item[name] = value;
         this.setState({item});
+    }
+
+    handleMouseDownPassword(event){
+        event.preventDefault();
+    }
+
+    handleClickShowPassword(event){
+        this.setState({showPassword: !this.state.showPassword});
     }
 
     validateMailTaller() {
@@ -183,6 +202,18 @@ class MiTaller extends Component {
         } else if (fields["password"] !== fields["repeatPassword"]) {
             this.setState({formIsValid: false});
             errors["repeatPassword"] = "Debe ser igual a la contraseña";
+        }
+
+        //Marca
+        if (!fields["marca"]){
+            this.setState({formIsValid: false});
+            errors["marca"] = "No puede estar vacío";
+        }
+
+        //Clasificacion
+        if (!fields["clasificacion"]){
+            this.setState({formIsValid: false});
+            errors["clasificacion"] = "No puede estar vacío";
         }
 
         this.setState({errors: errors});
@@ -397,7 +428,19 @@ class MiTaller extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="password"
-                                type="password"
+                                type={this.state.showPassword ? 'text' : 'password'}
+                                InputProps={{
+                                    endAdornment:
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={this.handleClickShowPassword}
+                                                onMouseDown={this.handleMouseDownPassword}
+                                            >
+                                                {this.state.showPassword ? <Visibility/> : <VisibilityOff/>}
+                                            </IconButton>
+                                        </InputAdornment>
+                                }}
                                 fullWidth
                                 required
                                 value={item.password || ''}
@@ -415,7 +458,19 @@ class MiTaller extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="repeatPassword"
-                                type="password"
+                                type={this.state.showPassword ? 'text' : 'password'}
+                                InputProps={{
+                                    endAdornment:
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={this.handleClickShowPassword}
+                                                onMouseDown={this.handleMouseDownPassword}
+                                            >
+                                                {this.state.showPassword ? <Visibility/> : <VisibilityOff/>}
+                                            </IconButton>
+                                        </InputAdornment>
+                                }}
                                 fullWidth
                                 required
                                 value={item.repeatPassword || ''}
@@ -424,6 +479,52 @@ class MiTaller extends Component {
                                 helperText={this.state.errors["repeatPassword"]}
                                 autoComplete="repeatPassword"
                             />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl variant="outlined" required error={this.state.errors["marca"]}>
+                                <InputLabel id="demo-simple-select-outlined-label">
+                                    Marca
+                                </InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-outlined-label"
+                                    id="marca"
+                                    name="marca"
+                                    value={item.marca}
+                                    onChange={this.handleChange}
+                                    className="select-material-ui"
+                                >
+                                    {marcas.map(marca => (
+                                        <MenuItem key={marca.idMarca} value={JSON.stringify(marca)}>
+                                            {marca.descripcion}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {this.state.errors["marca"] && <FormHelperText>{this.state.errors["marca"]}</FormHelperText>}
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl variant="outlined" required error={this.state.errors["clasificacion"]}>
+                                <InputLabel id="demo-simple-select-outlined-label">
+                                    Especialización
+                                </InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-outlined-label"
+                                    id="clasificacion"
+                                    name="clasificacion"
+                                    value={item.clasificacion}
+                                    onChange={this.handleChange}
+                                    className="select-material-ui"
+                                >
+                                    {clasificaciones.map(clasificacion => (
+                                        <MenuItem key={clasificacion.idClasificacion} value={JSON.stringify(clasificacion)}>
+                                            {clasificacion.descripcion}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {this.state.errors["clasificacion"] && <FormHelperText>{this.state.errors["clasificacion"]}</FormHelperText>}
+                            </FormControl>
                         </Grid>
                     </Grid>
                     {item.idTaller && (

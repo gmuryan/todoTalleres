@@ -10,6 +10,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {withRouter} from "react-router-dom";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -38,6 +41,16 @@ const useStyles = makeStyles(theme => ({
 
 const SignUp = ({handleSubmit, handleChange, errores}) => {
     const classes = useStyles();
+
+    const [showPassword, setShowPassword] = React.useState(false);
+
+    const handleClickShowPassword = event => {
+        setShowPassword(!showPassword);
+    }
+
+    const handleMouseDownPassword = event => {
+        event.preventDefault();
+    };
 
     return (
         <Container component="main" maxWidth="xs">
@@ -115,8 +128,20 @@ const SignUp = ({handleSubmit, handleChange, errores}) => {
                                 fullWidth
                                 name="password"
                                 label="Contraseña"
-                                type="password"
+                                type={showPassword ? 'text' : 'password'}
                                 id="password"
+                                InputProps={{
+                                    endAdornment:
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={handleClickShowPassword}
+                                                onMouseDown={handleMouseDownPassword}
+                                            >
+                                                {showPassword ? <Visibility/> : <VisibilityOff/>}
+                                            </IconButton>
+                                        </InputAdornment>
+                                }}
                                 autoComplete="password"
                                 error={errores["password"]}
                                 helperText={errores["password"]}
@@ -130,7 +155,19 @@ const SignUp = ({handleSubmit, handleChange, errores}) => {
                                 fullWidth
                                 name="repeatPassword"
                                 label="Repetir Contraseña"
-                                type="password"
+                                type={showPassword ? 'text' : 'password'}
+                                InputProps={{
+                                    endAdornment:
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={handleClickShowPassword}
+                                                onMouseDown={handleMouseDownPassword}
+                                            >
+                                                {showPassword ? <Visibility/> : <VisibilityOff/>}
+                                            </IconButton>
+                                        </InputAdornment>
+                                }}
                                 id="repeatPassword"
                                 autoComplete="repeatPassword"
                                 error={errores["repeatPassword"]}

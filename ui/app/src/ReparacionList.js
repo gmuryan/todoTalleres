@@ -53,7 +53,8 @@ class ReparacionList extends Component {
             descripcionReparacion: '',
             taller: '',
             cliente: '',
-            estado: ''
+            estado: '',
+            id: ''
         };
         this.handleClick = this.handleClick.bind(this);
         this.dialogCancelarTurno = this.dialogCancelarTurno.bind(this);
@@ -147,6 +148,10 @@ class ReparacionList extends Component {
         this.setState({estado: e.target.value});
     }
 
+    filterId = e => {
+        this.setState({id: e.target.value});
+    }
+
     filterFechaReservaDesde(date) {
         this.setState({filtroFechaReservaDesde: date});
 
@@ -198,7 +203,7 @@ class ReparacionList extends Component {
     }
 
     render() {
-        const {isLoading, estado} = this.state;
+        const {isLoading, estado, id} = this.state;
         const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const clienteUser = JSON.parse(localStorage.getItem("clienteUser"));
         const classes = {
@@ -223,6 +228,9 @@ class ReparacionList extends Component {
         }
         if (this.state.filtroFechaDevolucionHasta) {
             filterReparaciones = filterReparaciones.filter(reparacion => this.esFechaDevolucionMayor(reparacion.fechaDevolucion ? reparacion.fechaDevolucion : "0"));
+        }
+        if (this.state.id){
+            filterReparaciones = filterReparaciones.filter(reparacion => reparacion.idReparacion.toString().indexOf(id) !== -1);
         }
 
         if (isLoading) {
@@ -256,6 +264,15 @@ class ReparacionList extends Component {
                     <Typography variant="h4">
                         Reparaciones
                     </Typography>
+                    <TextField
+                        id="standard-basic"
+                        className={classes.textField}
+                        label="ID"
+                        margin="normal"
+                        onChange={this.filterId}
+                    />
+                    &nbsp;&nbsp;
+                    &nbsp;&nbsp;
                     <TextField
                         id="standard-basic"
                         className={classes.textField}

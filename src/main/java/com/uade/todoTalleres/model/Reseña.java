@@ -26,11 +26,13 @@ public class Reseña {
     @Column
     private String comentario;
 
+    private Integer puntuacion;
+
     public Reseña(){
 
     }
 
-    public Reseña(Long idReseña, Cliente cliente, Taller taller, String comentario) {
+    public Reseña(Long idReseña, Cliente cliente, Taller taller, String comentario, Integer puntuacion) {
         this.idReseña = idReseña;
         this.cliente = cliente;
         this.taller = taller;
@@ -75,5 +77,13 @@ public class Reseña {
 
     public void setFechaReseña(Date fechaReseña) {
         this.fechaReseña = fechaReseña;
+    }
+
+    public Integer getPuntuacion() {
+        return puntuacion;
+    }
+
+    public void setPuntuacion(Integer puntuacion) {
+        this.puntuacion = puntuacion;
     }
 }

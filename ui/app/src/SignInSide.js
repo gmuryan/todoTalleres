@@ -8,8 +8,11 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router-dom';
+import {makeStyles} from '@material-ui/core/styles';
+import {withRouter} from 'react-router-dom';
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 const imgTaller = require('./login.jpg');
 
@@ -40,7 +43,7 @@ const useStyles = makeStyles(theme => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
-    anchoBoton:{
+    anchoBoton: {
         clear: "both",
         width: "200px"
     },
@@ -49,15 +52,24 @@ const useStyles = makeStyles(theme => ({
 
 const SignInSide = ({handleSubmit, handleChange, errores}) => {
     const classes = useStyles();
+    const [showPassword, setShowPassword] = React.useState(false);
+
+    const handleClickShowPassword = event => {
+        setShowPassword(!showPassword);
+    }
+
+    const handleMouseDownPassword = event => {
+        event.preventDefault();
+    };
 
     return (
         <Grid container component="main" className={classes.root}>
-            <CssBaseline />
-            <Grid item xs={false} sm={4} md={7} className={classes.image} />
+            <CssBaseline/>
+            <Grid item xs={false} sm={4} md={7} className={classes.image}/>
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
+                        <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Ingreso al Sistema
@@ -83,7 +95,19 @@ const SignInSide = ({handleSubmit, handleChange, errores}) => {
                             fullWidth
                             name="password"
                             label="Contraseña"
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
+                            InputProps={{
+                                endAdornment:
+                                <InputAdornment position="end">
+                                <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                >
+                                {showPassword ? <Visibility/> : <VisibilityOff/>}
+                                </IconButton>
+                                </InputAdornment>
+                            }}
                             id="password"
                             error={errores["password"]}
                             helperText={errores["password"]}

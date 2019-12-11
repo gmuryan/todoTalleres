@@ -368,7 +368,7 @@ const MecanicosEnhancedTable = ({rows, habilitarMecanico, deshabilitarMecanico, 
                     count={rows.length}
                     rowsPerPage={rowsPerPage}
                     labelRowsPerPage="Filas por página"
-                    labelDisplayedRows={({ from, to, count }) => `Página ${page+1} de ${Math.ceil(count/rowsPerPage)}`}
+                    labelDisplayedRows={({ from, to, count }) => `Página ${count === 0 ? 0 : page+1} de ${Math.ceil(count/rowsPerPage)}`}
                     page={page}
                     backIconButtonProps={{
                         'aria-label': 'previous page',
