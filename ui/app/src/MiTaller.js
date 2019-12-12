@@ -587,6 +587,7 @@ class MiTaller extends Component {
                                 fullWidth
                                 required
                                 value={item.maximosVehiculos || ''}
+                                type="number"
                                 onChange={this.handleChange}
                                 error={this.state.errors["maximosVehiculos"]}
                                 helperText={this.state.errors["maximosVehiculos"]}
@@ -604,6 +605,7 @@ class MiTaller extends Component {
                                 fullWidth
                                 required
                                 value={item.retrasosContemplados || ''}
+                                type="number"
                                 onChange={this.handleChange}
                                 error={this.state.errors["retrasosContemplados"]}
                                 helperText={this.state.errors["retrasosContemplados"]}

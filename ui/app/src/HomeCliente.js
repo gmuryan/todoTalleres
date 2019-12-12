@@ -27,8 +27,9 @@ class HomeCliente extends Component {
         if (cliente !== null) {
             const nuevosPresups = await (await fetch(`/api/nuevoPresupuesto/${cliente.idCliente}`)).json();
             this.setState({nuevosPresupuestos: nuevosPresups});
+            console.log(this.state.nuevosPresupuestos);
             if (this.state.nuevosPresupuestos.length > 0){
-                for (const [value] of this.state.nuevosPresupuestos.entries()) {
+                for (const [index, value] of this.state.nuevosPresupuestos.entries()) {
                     this.dialogNuevoPresupuesto(value);
                 }
             }

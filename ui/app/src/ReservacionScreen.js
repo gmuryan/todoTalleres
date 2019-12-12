@@ -19,6 +19,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import MecanicosEnhancedTable from "./MecanicosSortableTable";
+
 registerLocale("es", es);
 
 class ReservacionScreen extends Component {
@@ -122,16 +123,16 @@ class ReservacionScreen extends Component {
         console.log(this.state.itemReparacionTaller);
     }
 
-    asignarMecanico(mecanico){
+    asignarMecanico(mecanico) {
         let itemReparacionTaller = {...this.state.itemReparacionTaller};
         itemReparacionTaller.mecanicos.push(mecanico);
-        this.setState({itemReparacionTaller : itemReparacionTaller});
+        this.setState({itemReparacionTaller: itemReparacionTaller});
     }
 
-    desasignarMecanico(mecanico){
+    desasignarMecanico(mecanico) {
         let itemReparacionTaller = {...this.state.itemReparacionTaller};
         itemReparacionTaller.mecanicos = itemReparacionTaller.mecanicos.filter(mec => mec.idMecanico !== mecanico.idMecanico);
-        this.setState({itemReparacionTaller : itemReparacionTaller});
+        this.setState({itemReparacionTaller: itemReparacionTaller});
     }
 
     handleChange(event) {
@@ -240,7 +241,7 @@ class ReservacionScreen extends Component {
                         this.setState({formIsValid: false});
                         errors["modeloAuto"] = "No puede estra vacío para el estado seleccionado";
                     }
-                    if (fields["marcaAuto"].length === 0){
+                    if (fields["marcaAuto"].length === 0) {
                         this.setState({formIsValid: false});
                         errors["marcaAuto"] = "No puede estra vacío para el estado seleccionado";
                     }
@@ -272,7 +273,7 @@ class ReservacionScreen extends Component {
                         this.setState({formIsValid: false});
                         errors["horaEnd"] = "Debe seleccionar una fecha y hora";
                     }
-                    if(fields["mecanicos"].length === 0){
+                    if (fields["mecanicos"].length === 0) {
                         this.setState({formIsValid: false});
                         errors["mecanicos"] = "Debe asignarse al menos un mecánico";
                     }
@@ -281,7 +282,7 @@ class ReservacionScreen extends Component {
                         this.setState({formIsValid: false});
                         errors["modeloAuto"] = "No puede estra vacío para el estado seleccionado";
                     }
-                    if (fields["marcaAuto"].length === 0){
+                    if (fields["marcaAuto"].length === 0) {
                         this.setState({formIsValid: false});
                         errors["marcaAuto"] = "No puede estra vacío para el estado seleccionado";
                     }
@@ -309,7 +310,7 @@ class ReservacionScreen extends Component {
                         this.setState({formIsValid: false});
                         errors["horaEnd"] = "Debe seleccionar una fecha y hora";
                     }
-                    if(fields["mecanicos"].length === 0){
+                    if (fields["mecanicos"].length === 0) {
                         this.setState({formIsValid: false});
                         errors["mecanicos"] = "Debe asignarse al menos un mecánico";
                     }
@@ -318,7 +319,7 @@ class ReservacionScreen extends Component {
                         this.setState({formIsValid: false});
                         errors["modeloAuto"] = "No puede estra vacío para el estado seleccionado";
                     }
-                    if (fields["marcaAuto"].length === 0){
+                    if (fields["marcaAuto"].length === 0) {
                         this.setState({formIsValid: false});
                         errors["marcaAuto"] = "No puede estra vacío para el estado seleccionado";
                     }
@@ -326,12 +327,12 @@ class ReservacionScreen extends Component {
                         this.setState({formIsValid: false});
                         errors["patenteAuto"] = "No puede estra vacío para el estado seleccionado";
                     }
-                    if(fields["mecanicos"].length === 0){
+                    if (fields["mecanicos"].length === 0) {
                         this.setState({formIsValid: false});
                         errors["mecanicos"] = "Debe asignarse al menos un mecánico";
                     }
                 }
-            }else{
+            } else {
                 this.setState({formIsValid: false});
                 errors["estadoReparacion"] = "Debe seleccionar algún estado";
             }
@@ -340,9 +341,9 @@ class ReservacionScreen extends Component {
         return this.validateReservacion().then(response => response.json()).then((data) => {
             if (!data) {
                 var idTaller;
-                if (tallerUser !== null){
+                if (tallerUser !== null) {
                     idTaller = tallerUser.idTaller;
-                }else{
+                } else {
                     idTaller = this.props.match.params.id;
                 }
                 this.setState({formIsValid: false});
@@ -458,26 +459,27 @@ class ReservacionScreen extends Component {
         var mecanicoList;
         if (tallerAux !== null) {
             mecanicoList = mecanicos.map(mecanico => {
-                if (mecanico.activo){
-                return <tr key={mecanico.idMecanico}>
-                    <td>{mecanico.idMecanico}</td>
-                    <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
-                    <td>{mecanico.apellido}</td>
-                    <td>{mecanico.telefono}</td>
-                    <td>{mecanico.mail}</td>
-                    <td>
-                        <ButtonGroup>
-                            {!itemReparacionTaller.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
-                            <Button size="sm" color="primary"
-                                    onClick={() => this.asignarMecanico(mecanico)}>Asignar</Button>
-                            }
-                            &nbsp;&nbsp;
-                            {itemReparacionTaller.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
-                            <Button size="sm" color="danger" onClick={() => this.desasignarMecanico(mecanico)}>Desasignar</Button>
-                            }
-                        </ButtonGroup>
-                    </td>
-                </tr>
+                if (mecanico.activo) {
+                    return <tr key={mecanico.idMecanico}>
+                        <td>{mecanico.idMecanico}</td>
+                        <td style={{whiteSpace: 'nowrap'}}>{mecanico.nombre}</td>
+                        <td>{mecanico.apellido}</td>
+                        <td>{mecanico.telefono}</td>
+                        <td>{mecanico.mail}</td>
+                        <td>
+                            <ButtonGroup>
+                                {!itemReparacionTaller.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
+                                <Button size="sm" color="primary"
+                                        onClick={() => this.asignarMecanico(mecanico)}>Asignar</Button>
+                                }
+                                &nbsp;&nbsp;
+                                {itemReparacionTaller.mecanicos.some(mec => (mec.idMecanico === mecanico.idMecanico)) &&
+                                <Button size="sm" color="danger"
+                                        onClick={() => this.desasignarMecanico(mecanico)}>Desasignar</Button>
+                                }
+                            </ButtonGroup>
+                        </td>
+                    </tr>
                 }
             });
         }
@@ -738,19 +740,19 @@ class ReservacionScreen extends Component {
                         }
                         {clienteAux !== null &&
                         <Grid item xs={12} sm={6}>
-                        <TextField
-                            id="descripcionProblemaCliente"
-                            name="descripcionProblemaCliente"
-                            autoComplete="comentario"
-                            label="Descripción del Problema"
-                            multiline
-                            fullWidth
-                            rows="4"
-                            value={itemReparacion.descripcionProblemaCliente || ''}
-                            margin="normal"
-                            variant="outlined"
-                            onChange={this.handleChange}
-                        />
+                            <TextField
+                                id="descripcionProblemaCliente"
+                                name="descripcionProblemaCliente"
+                                autoComplete="comentario"
+                                label="Descripción del Problema"
+                                multiline
+                                fullWidth
+                                rows="4"
+                                value={itemReparacion.descripcionProblemaCliente || ''}
+                                margin="normal"
+                                variant="outlined"
+                                onChange={this.handleChange}
+                            />
                         </Grid>
                         }
                     </Grid>
@@ -858,6 +860,7 @@ class ReservacionScreen extends Component {
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start">$</InputAdornment>
                                 }}
+                                type="number"
                                 value={itemReparacionTaller.importeTotal || ''}
                                 onChange={this.handleChange}
                                 error={this.state.errors["importeTotal"]}
@@ -907,7 +910,8 @@ class ReservacionScreen extends Component {
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {this.state.errors["estadoReparacion"] && <FormHelperText>{this.state.errors["estadoReparacion"]}</FormHelperText>}
+                                {this.state.errors["estadoReparacion"] &&
+                                <FormHelperText>{this.state.errors["estadoReparacion"]}</FormHelperText>}
                             </FormControl>
                         </Grid>
                     </Grid>
@@ -941,7 +945,7 @@ class ReservacionScreen extends Component {
                             Reservar
                         </Button>
                         {' '}
-                        <Link to={clienteAux ? '/talleres' : '/reparaciones'} style={{ textDecoration: 'none' }}>
+                        <Link to={clienteAux ? '/talleres' : '/reparaciones'} style={{textDecoration: 'none'}}>
                             <Button variant="contained" color="secondary">
                                 Cancelar
                             </Button>

@@ -49,7 +49,8 @@ class ReparacionEdit extends Component {
             flagImporte: false,
             endDate: null,
             flagMostrarPresupuesto: false,
-            flagNuevoPresupuesto: false
+            flagNuevoPresupuesto: false,
+            importeAux: ''
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -71,8 +72,10 @@ class ReparacionEdit extends Component {
         if (this.state.item.estadoReparacion.descripcion === "En diagnóstico" && tallerUser !== null) {
             this.setState({flagMostrarPresupuesto: true});
         }
-        if (this.state.item.importeTotal !== null)
-            this.setState({flagImporte: true});
+        if (this.state.item.importeTotal !== null) {
+            this.setState({flagImporte: true, importeAux: this.state.item.importeTotal});
+            console.log(this.state.importeAux);
+        }
         if (tallerUser !== null) {
             const mecs = await (await fetch(`/api/mecanicos/${tallerUser.idTaller}`)).json();
             this.setState({mecanicosTaller: mecs});
@@ -201,6 +204,14 @@ class ReparacionEdit extends Component {
             if (fields["mecanicos"].length === 0) {
                 formIsValid = false;
                 errors["mecanicos"] = "Debe asignarse al menos un mecánico";
+            }
+            if (fields["importeTotal"] === this.state.importeAux && this.state.flagNuevoPresupuesto) {
+                formIsValid = false;
+                errors["importeTotal"] = "Para utilizar la opción nuevo presupuesto debe ingresar un importe distinto al anterior";
+            }
+            if (!this.state.flagNuevoPresupuesto && fields["importeTotal"] !== this.state.importeAux){
+                formIsValid = false;
+                errors["importeTotal"] = "El importe debe mantenerse igual si no esta habilitada la opción de nuevo presupuesto";
             }
         }
 
@@ -480,8 +491,9 @@ class ReparacionEdit extends Component {
                                 }}
                                 InputProps={{
                                     readOnly: !this.state.flagMostrarPresupuesto,
-                                    startAdornment: <InputAdornment position="start">$</InputAdornment>
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
                                 }}
+                                type="number"
                                 value={item.importeTotal || ''}
                                 onChange={this.handleChange}
                                 error={this.state.errors["importeTotal"]}
@@ -511,7 +523,7 @@ class ReparacionEdit extends Component {
                             />
                         </Grid>
                         }
-                        <Grid item xs={12}  sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 id="outlined-basic"
                                 label="Estado"
@@ -657,12 +669,12 @@ class ReparacionEdit extends Component {
                     <br></br>
                     }
                     <FormGroup>
-                        {((tallerUser !== null && descEstado !== "Pendiente Confirmación" && descEstado !== "Finalizado" && descEstado !== "Cancelado") || (clienteUser !== null && descEstado === "Pendiente Confirmación")) &&
+                        {((tallerUser !== null && descEstado !== "Pendiente Confirmación" && descEstado !== "Finalizado" && descEstado !== "Cancelado") || (clienteUser !== null && descEstado === "Pendiente Confirmación")) && !this.state.flagNuevoPresupuesto &&
                         <Button variant="contained" color="primary" type="submit">
                             Confirmar
                         </Button>
                         }{' '}
-                        {tallerUser !== null && descEstado === "En reparación" &&
+                        {tallerUser !== null && descEstado === "En reparación" && this.state.flagNuevoPresupuesto &&
                         <Button onClick={this.guardarReparacion} variant="contained" color="default">
                             Guardar
                         </Button>
