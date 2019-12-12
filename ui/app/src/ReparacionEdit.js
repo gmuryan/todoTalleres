@@ -197,7 +197,7 @@ class ReparacionEdit extends Component {
                 formIsValid = false;
                 errors["descripcionProblemaTaller"] = "No puede estar vacío";
             }
-            if (fields["descripcionReparacion"] === null || fields["descripcionReparacion"] === '') {
+            if ((fields["descripcionReparacion"] === null || fields["descripcionReparacion"] === '') && !this.state.flagNuevoPresupuesto) {
                 formIsValid = false;
                 errors["descripcionReparacion"] = "No puede estar vacío";
             }
