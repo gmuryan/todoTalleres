@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import {withRouter } from 'react-router-dom';
 import {confirmAlert} from "react-confirm-alert";
 import SignUp from "./SignUp";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from "@material-ui/core/Button";
+import {Container} from "reactstrap";
 
 class Registracion extends Component {
 
@@ -23,10 +30,12 @@ class Registracion extends Component {
             errors: {},
             flag: false,
             formIsValid: true,
-            mailCargado: ''
+            mailCargado: '',
+            openDialogExito: false
         };
         this.validateMailTaller = this.validateMailTaller.bind(this);
         this.validateMailCliente = this.validateMailCliente.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -38,6 +47,12 @@ class Registracion extends Component {
         let item = {...this.state.item};
         item[name] = value;
         this.setState({item});
+    }
+
+    handleClose(event) {
+        this.setState({
+            openDialogExito: false
+        });
     }
 
     validateMailTaller() {
@@ -157,15 +172,7 @@ class Registracion extends Component {
     }
 
     dialogCreado(){
-        confirmAlert({
-            title: 'Operacion Exitosa',
-            buttons: [
-                {
-                    label: 'Aceptar',
-                    onClick: () =>  this.props.history.push('/')
-                }
-            ]
-        })
+        this.setState({openDialogExito: true});
     }
 
 
@@ -191,7 +198,27 @@ class Registracion extends Component {
 
     render() {
         return(
-            <SignUp errores={this.state.errors} handleSubmit={this.handleSubmit} handleChange={this.handleChange.bind(this)}/>
+            <div>
+                <Dialog
+                    open={this.state.openDialogExito}
+                    onClose={this.handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Usuario creado correctamente.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => this.props.history.push('/')} color="primary">
+                            Aceptar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <SignUp errores={this.state.errors} handleSubmit={this.handleSubmit} handleChange={this.handleChange.bind(this)}/>
+            </div>
         );
     }
 }

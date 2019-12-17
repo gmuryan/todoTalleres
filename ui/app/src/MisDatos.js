@@ -10,6 +10,11 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
 import {Visibility, VisibilityOff} from "@material-ui/icons";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
 
 class MisDatos extends Component {
 
@@ -40,12 +45,14 @@ class MisDatos extends Component {
             flag: false,
             formIsValid: true,
             mailCargado: '',
-            showPassword: false
+            showPassword: false,
+            openDialogExito: false
         };
         this.validateMailTaller = this.validateMailTaller.bind(this);
         this.validateMailCliente = this.validateMailCliente.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
         this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
     }
@@ -68,6 +75,12 @@ class MisDatos extends Component {
         let item = {...this.state.item};
         item[name] = value;
         this.setState({item});
+    }
+
+    handleClose(event) {
+        this.setState({
+            openDialogExito: false
+        });
     }
 
     handleMouseDownPassword(event){
@@ -188,15 +201,7 @@ class MisDatos extends Component {
     }
 
     dialogCreado() {
-        confirmAlert({
-            title: 'Operación Exitosa',
-            buttons: [
-                {
-                    label: 'Aceptar',
-                    onClick: () => this.props.history.push('/homeCliente')
-                }
-            ]
-        })
+        this.setState({openDialogExito: true});
     }
 
     async handleSubmit(event) {
@@ -234,6 +239,26 @@ class MisDatos extends Component {
         return <div>
             <ClientesNavbar/>
             <Container>
+                <div>
+                    <Dialog
+                        open={this.state.openDialogExito}
+                        onClose={this.handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Cambios guardados correctamente.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => this.props.history.push('/homeCliente')} color="primary">
+                                Aceptar
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
                 {title}
                 <Form onSubmit={this.handleSubmit} noValidate>
                     <Grid container spacing={2}>

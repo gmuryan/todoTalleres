@@ -2,11 +2,15 @@ import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Container, Form, FormGroup} from 'reactstrap';
 import AppNavbar from './AppNavbar';
-import {confirmAlert} from "react-confirm-alert";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 class ClienteEdit extends Component {
 
@@ -28,10 +32,12 @@ class ClienteEdit extends Component {
             errors: {},
             flag: false,
             formIsValid: true,
-            mailCargado: ''
+            mailCargado: '',
+            openDialogExito: false
         };
         this.validateMailTaller = this.validateMailTaller.bind(this);
         this.validateMailCliente = this.validateMailCliente.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         const admin = JSON.parse(localStorage.getItem("adminUser"));
@@ -77,6 +83,12 @@ class ClienteEdit extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
+        });
+    }
+
+    handleClose(event) {
+        this.setState({
+            openDialogExito: false
         });
     }
 
@@ -168,15 +180,7 @@ class ClienteEdit extends Component {
     }
 
     dialogCreado() {
-        confirmAlert({
-            title: 'Operacion Exitosa',
-            buttons: [
-                {
-                    label: 'Aceptar',
-                    onClick: () => this.props.history.push('/clientes')
-                }
-            ]
-        })
+        this.setState({openDialogExito: true});
     }
 
     async handleSubmit(event) {
@@ -211,6 +215,26 @@ class ClienteEdit extends Component {
         return <div>
             <AppNavbar/>
             <Container>
+                <div>
+                    <Dialog
+                        open={this.state.openDialogExito}
+                        onClose={this.handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Cambios guardados correctamente.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => this.props.history.push('/clientes')} color="primary">
+                                Aceptar
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
                 {this.props.match.params.id !== 'new' &&
                 <Typography variant="h4">Editar Cliente</Typography>
                 }

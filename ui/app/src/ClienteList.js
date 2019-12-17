@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {Container} from 'reactstrap';
 import AppNavbar from './AppNavbar';
-import {confirmAlert} from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import './App.css';
 import ClipLoader from 'react-spinners/ClipLoader';
 import {css} from '@emotion/core';
@@ -10,6 +8,11 @@ import TextField from "@material-ui/core/TextField";
 import ClientesEnhancedTable from "./ClientesSortableTable";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const override = css`
     display: block;
@@ -27,11 +30,19 @@ class ClienteList extends Component {
             isLoading: true,
             nombre: '',
             apellido: '',
-            mail: ''
+            mail: '',
+            activeId: '',
+            openDialogHabilitadoExito: false,
+            openDialogDeshabilitadoExito: false,
+            openDialogHabilitar: false,
+            openDialogDeshabilitar: false
         };
         this.handleClick = this.handleClick.bind(this);
         this.dialogHabilitar = this.dialogHabilitar.bind(this);
         this.dialogDeshabilitar = this.dialogDeshabilitar.bind(this);
+        this.dialogEliminado = this.dialogEliminado.bind(this);
+        this.dialogHabilitado = this.dialogHabilitado.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.edit = this.edit.bind(this);
         this.remove = this.remove.bind(this);
         const admin = JSON.parse(localStorage.getItem("adminUser"));
@@ -87,64 +98,33 @@ class ClienteList extends Component {
         });
     }
 
+    handleClose(event) {
+        this.setState({
+            openDialogHabilitadoExito: false,
+            openDialogDeshabilitadoExito: false,
+            openDialogDeshabilitar: false,
+            openDialogHabilitar: false
+        });
+    }
+
     dialogHabilitado() {
-        confirmAlert({
-            title: 'Operación Exitosa',
-            message: 'Cliente Habilitado',
-            buttons: [
-                {
-                    label: 'Aceptar'
-                }
-            ]
-        })
+        this.setState({openDialogHabilitar: false, openDialogHabilitadoExito: true});
     }
 
 
     dialogEliminado() {
-        confirmAlert({
-            title: 'Operación Exitosa',
-            message: 'Cliente Deshabilitado',
-            buttons: [
-                {
-                    label: 'Aceptar'
-                }
-            ]
-        })
+        this.setState({openDialogDeshabilitar: false, openDialogDeshabilitadoExito: true});
     }
 
-    dialogDeshabilitar(cliente) {
-        confirmAlert({
-            title: 'Confirmar',
-            message: '¿Esta seguro de realizar esta acción?',
-            buttons: [
-                {
-                    label: 'Si',
-                    onClick: () => this.remove(cliente.idCliente)
-                },
-                {
-                    label: 'No'
-                }
-            ]
-        })
-    };
+    dialogDeshabilitar = (cliente) => {
+        this.setState({openDialogDeshabilitar: true, activeId: cliente.idCliente});
+    }
 
     dialogHabilitar(cliente) {
-        confirmAlert({
-            title: 'Confirmar',
-            message: '¿Esta seguro de realizar esta acción?',
-            buttons: [
-                {
-                    label: 'Si',
-                    onClick: () => this.habilitar(cliente.idCliente)
-                },
-                {
-                    label: 'No'
-                }
-            ]
-        })
+        this.setState({openDialogHabilitar: true, activeId: cliente.idCliente});
     };
 
-    edit(idCliente){
+    edit(idCliente) {
         this.props.history.push('/clientes/' + idCliente);
     }
 
@@ -167,8 +147,6 @@ class ClienteList extends Component {
                 width: 200,
             },
         };
-
-
         let filterClientes = this.state.clientes.slice();
         if (this.state.nombre) {
             filterClientes = filterClientes.filter(cliente => cliente.nombre.toLowerCase().indexOf(nombre.toLowerCase()) !== -1);
@@ -198,8 +176,95 @@ class ClienteList extends Component {
             <div>
                 <AppNavbar/>
                 <Container fluid>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogHabilitadoExito}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Cliente habilitado correctamente.
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={this.handleClose} color="primary">
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogDeshabilitadoExito}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Cliente deshabilitado correctamente.
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={this.handleClose} color="primary">
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogDeshabilitar}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Confirmar"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    ¿Esta seguro de realizar esta acción?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => this.remove(this.state.activeId)} color="primary">
+                                    Si
+                                </Button>
+                                <Button onClick={this.handleClose} color="primary">
+                                    No
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogHabilitar}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Confirmar"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    ¿Esta seguro de realizar esta acción?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => this.habilitar(this.state.activeId)} color="primary">
+                                    Si
+                                </Button>
+                                <Button onClick={this.handleClose} color="primary">
+                                    No
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
                     <div className="float-right">
-                        <Button type="button" variant="contained" color="primary" className={classes.button} onClick={() => this.props.history.push('/clientes/new')}>
+                        <Button type="button" variant="contained" color="primary" className={classes.button}
+                                onClick={() => this.props.history.push('/clientes/new')}>
                             Crear Cliente
                         </Button>
                     </div>
@@ -231,7 +296,8 @@ class ClienteList extends Component {
                         margin="normal"
                         onChange={this.filterMail}
                     />
-                    <ClientesEnhancedTable rows={filterClientes} habilitarCliente={this.dialogHabilitar} deshabilitarCliente={this.dialogDeshabilitar} editar={this.edit}/>
+                    <ClientesEnhancedTable rows={filterClientes} habilitarCliente={this.dialogHabilitar}
+                                           deshabilitarCliente={this.dialogDeshabilitar} editar={this.edit}/>
                 </Container>
             </div>
         );

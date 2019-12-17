@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Container, Form, FormGroup, Label} from 'reactstrap';
 import AppNavbar from './AppNavbar';
-import {confirmAlert} from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'
 import Typography from "@material-ui/core/Typography"; // Import css
 import Button from '@material-ui/core/Button';
 import Grid from "@material-ui/core/Grid";
@@ -13,6 +11,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
 
 class TallerEdit extends Component {
 
@@ -42,11 +45,13 @@ class TallerEdit extends Component {
             clasificaciones: [],
             flag: false,
             formIsValid: true,
-            mailCargado: ''
+            mailCargado: '',
+            openDialogExito: false
         };
         this.validateMailTaller = this.validateMailTaller.bind(this);
         this.validateMailCliente = this.validateMailCliente.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         const admin = JSON.parse(localStorage.getItem("adminUser"));
         if (admin === null) {
@@ -76,6 +81,12 @@ class TallerEdit extends Component {
         let item = {...this.state.item};
         item[name] = value;
         this.setState({item});
+    }
+
+    handleClose(event) {
+        this.setState({
+            openDialogExito: false
+        });
     }
 
     validateMailTaller() {
@@ -229,15 +240,7 @@ class TallerEdit extends Component {
     }
 
     dialogCreado() {
-        confirmAlert({
-            title: 'Operación Exitosa',
-            buttons: [
-                {
-                    label: 'Aceptar',
-                    onClick: () => this.props.history.push('/talleres')
-                }
-            ]
-        })
+        this.setState({openDialogExito: true});
     }
 
     async handleSubmit(event) {
@@ -296,6 +299,26 @@ class TallerEdit extends Component {
         return <div>
             <AppNavbar/>
             <Container>
+                <div>
+                    <Dialog
+                        open={this.state.openDialogExito}
+                        onClose={this.handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Cambios guardados correctamente.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => this.props.history.push('/talleres')} color="primary">
+                                Aceptar
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
                 {this.props.match.params.id !== 'new' &&
                 <Typography variant="h4">Editar Taller</Typography>
                 }

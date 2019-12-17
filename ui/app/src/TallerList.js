@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {Container} from 'reactstrap';
 import AppNavbar from './AppNavbar';
-import {confirmAlert} from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import './App.css';
 import ClientesNavbar from "./ClientesNavbar";
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -11,6 +9,11 @@ import TextField from "@material-ui/core/TextField";
 import TalleresEnhancedTable from "./TalleresSortableTable";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
 
 const override = css`
     display: block;
@@ -29,11 +32,17 @@ class TallerList extends Component {
             nombre: '',
             barrio: '',
             clasificacion: '',
-            marca: ''
+            marca: '',
+            activeId: '',
+            openDialogHabilitadoExito: false,
+            openDialogDeshabilitadoExito: false,
+            openDialogHabilitar: false,
+            openDialogDeshabilitar: false
         };
         this.handleClick = this.handleClick.bind(this);
         this.dialogHabilitar = this.dialogHabilitar.bind(this);
         this.dialogDeshabilitar = this.dialogDeshabilitar.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.edit = this.edit.bind(this);
         this.reviews = this.reviews.bind(this);
         this.remove = this.remove.bind(this);
@@ -49,6 +58,15 @@ class TallerList extends Component {
     handleClick(event) {
         this.setState({
             currentPage: Number(event.target.id)
+        });
+    }
+
+    handleClose(event) {
+        this.setState({
+            openDialogHabilitadoExito: false,
+            openDialogDeshabilitadoExito: false,
+            openDialogDeshabilitar: false,
+            openDialogHabilitar: false
         });
     }
 
@@ -93,59 +111,19 @@ class TallerList extends Component {
 
 
     dialogHabilitado() {
-        confirmAlert({
-            title: 'Operación Exitosa',
-            message: 'Taller Habilitado',
-            buttons: [
-                {
-                    label: 'Aceptar'
-                }
-            ]
-        })
+        this.setState({openDialogHabilitar: false, openDialogHabilitadoExito: true});
     }
 
     dialogEliminado() {
-        confirmAlert({
-            title: 'Operación Exitosa',
-            message: 'Taller Deshabilitado',
-            buttons: [
-                {
-                    label: 'Aceptar'
-                }
-            ]
-        })
+        this.setState({openDialogDeshabilitar: false, openDialogDeshabilitadoExito: true});
     }
 
     dialogDeshabilitar(idTaller) {
-        confirmAlert({
-            title: 'Confirmar',
-            message: '¿Esta seguro de realizar esta acción?',
-            buttons: [
-                {
-                    label: 'Si',
-                    onClick: () => this.remove(idTaller)
-                },
-                {
-                    label: 'No'
-                }
-            ]
-        })
+        this.setState({openDialogDeshabilitar: true, activeId: idTaller});
     };
 
     dialogHabilitar(idTaller) {
-        confirmAlert({
-            title: 'Confirmar',
-            message: '¿Esta seguro de realizar esta acción?',
-            buttons: [
-                {
-                    label: 'Si',
-                    onClick: () => this.habilitar(idTaller)
-                },
-                {
-                    label: 'No'
-                }
-            ]
-        })
+        this.setState({openDialogHabilitar: true, activeId: idTaller});
     };
 
     edit(idTaller) {
@@ -220,6 +198,92 @@ class TallerList extends Component {
                 <ClientesNavbar/>
                 }
                 <Container fluid>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogHabilitadoExito}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Taller habilitado correctamente.
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={this.handleClose} color="primary">
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogDeshabilitadoExito}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Taller deshabilitado correctamente.
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={this.handleClose} color="primary">
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogDeshabilitar}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Confirmar"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    ¿Esta seguro de realizar esta acción?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => this.remove(this.state.activeId)} color="primary">
+                                    Si
+                                </Button>
+                                <Button onClick={this.handleClose} color="primary">
+                                    No
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogHabilitar}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Confirmar"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    ¿Esta seguro de realizar esta acción?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => this.habilitar(this.state.activeId)} color="primary">
+                                    Si
+                                </Button>
+                                <Button onClick={this.handleClose} color="primary">
+                                    No
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
                     {adminUser !== null &&
                     <div className="float-right">
                         <Button type="button" variant="contained" color="primary" className={classes.button} onClick={() => this.props.history.push('/talleres/new')}>
