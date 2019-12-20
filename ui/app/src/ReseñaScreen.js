@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Container, Form, FormGroup, Label} from 'reactstrap';
-import {confirmAlert} from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import "react-datepicker/dist/react-datepicker.css";
 import ClientesNavbar from "./ClientesNavbar";
 import TalleresNavbar from "./TalleresNavbar";
@@ -15,6 +13,11 @@ import Grid from "@material-ui/core/Grid";
 import Rating from "@material-ui/lab/Rating";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
 
 class ReseñaScreen extends Component {
 
@@ -45,11 +48,13 @@ class ReseñaScreen extends Component {
             reseñas: [],
             taller: this.emptyTaller,
             errors: {},
-            formIsValid: true
+            formIsValid: true,
+            openDialogExito: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleValidation = this.handleValidation.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
 
     async componentDidMount() {
@@ -64,6 +69,12 @@ class ReseñaScreen extends Component {
                 this.setState({taller: taller});
             }
         }
+    }
+
+    handleClose(event) {
+        this.setState({
+            openDialogExito: false
+        });
     }
 
     handleChange(event) {
@@ -95,14 +106,7 @@ class ReseñaScreen extends Component {
     }
 
     dialogCreado() {
-        confirmAlert({
-            title: 'Operación Exitosa',
-            buttons: [
-                {
-                    label: 'Aceptar'
-                }
-            ]
-        })
+        this.setState({openDialogExito: true});
     }
 
     async handleSubmit(event) {
@@ -157,6 +161,26 @@ class ReseñaScreen extends Component {
                 <AppNavbar/>
                 }
                 <Container>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogExito}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Comentario guardado correctamente.
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={this.handleClose} color="primary">
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
                     {clienteAux !== null &&
                     <Typography variant="h4">Información del Taller</Typography>
                     }

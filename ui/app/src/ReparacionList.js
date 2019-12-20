@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {Container} from 'reactstrap';
 import TalleresNavbar from "./TalleresNavbar";
-import {confirmAlert} from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import './App.css';
 import ClientesNavbar from "./ClientesNavbar";
 import "react-datepicker/dist/react-datepicker.css";
@@ -17,6 +15,11 @@ import {
 import Typography from "@material-ui/core/Typography";
 import ReparacionesEnhancedTable from "./ReparacionesSortableTable";
 import Button from '@material-ui/core/Button';
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
 
 
 const override = css`
@@ -54,12 +57,23 @@ class ReparacionList extends Component {
             taller: '',
             cliente: '',
             estado: '',
-            id: ''
+            id: '',
+            activeId: '',
+            openDialogCancelar: false,
+            openDialogCanceladoExito: false
         };
         this.handleClick = this.handleClick.bind(this);
         this.dialogCancelarTurno = this.dialogCancelarTurno.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.edit = this.edit.bind(this);
         this.remove = this.remove.bind(this);
+    }
+
+    handleClose(event) {
+        this.setState({
+            openDialogCancelar: false,
+            openDialogCanceladoExito: false
+        });
     }
 
     handleClick(event) {
@@ -113,31 +127,11 @@ class ReparacionList extends Component {
     }
 
     dialogCancelacionCorrecta() {
-        confirmAlert({
-            title: 'Operación Exitosa',
-            buttons: [
-                {
-                    label: 'Aceptar',
-                    onClick: () => window.location.reload()
-                }
-            ]
-        })
+        this.setState({openDialogCancelar: false, openDialogCanceladoExito: true});
     }
 
     dialogCancelarTurno(idReparacion) {
-        confirmAlert({
-            title: 'Confirmar',
-            message: '¿Esta seguro de realizar esta acción?',
-            buttons: [
-                {
-                    label: 'Si',
-                    onClick: () => this.cancelarTurno(idReparacion)
-                },
-                {
-                    label: 'No'
-                }
-            ]
-        })
+        this.setState({openDialogCancelar: true, activeId: idReparacion});
     }
 
     edit(idReparacion) {
@@ -254,6 +248,49 @@ class ReparacionList extends Component {
                 <TalleresNavbar/>
                 }
                 <Container fluid>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogCanceladoExito}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Turno cancelado correctamente.
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => window.location.reload()} color="primary">
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogCancelar}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Confirmar"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    ¿Esta seguro de realizar esta acción?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => this.cancelarTurno(this.state.activeId)} color="primary">
+                                    Si
+                                </Button>
+                                <Button onClick={this.handleClose} color="primary">
+                                    No
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
                     {tallerUser !== null &&
                     <div className="float-right">
                         <Button type="button" variant="contained" color="primary" className={classes.button} onClick={() => this.props.history.push('/reservacion/new')}>

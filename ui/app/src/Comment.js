@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {Container, Form, Label} from 'reactstrap';
-import {confirmAlert} from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import "react-datepicker/dist/react-datepicker.css";
 import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField";

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Container, Form, FormGroup} from 'reactstrap';
 import ClientesNavbar from './ClientesNavbar';
-import {confirmAlert} from "react-confirm-alert";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
 import Grid from "@material-ui/core/Grid";

@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {ButtonGroup, Container, Form, FormGroup} from 'reactstrap';
-import {confirmAlert} from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ClientesNavbar from "./ClientesNavbar";
@@ -19,6 +17,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import MecanicosEnhancedTable from "./MecanicosSortableTable";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
 
 registerLocale("es", es);
 
@@ -74,7 +77,8 @@ class ReservacionScreen extends Component {
             formIsValid: true,
             startDate: null,
             flagMecanicos: null,
-            endDate: null
+            endDate: null,
+            openDialogExito: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleMecanicos = this.handleMecanicos.bind(this);
@@ -83,6 +87,7 @@ class ReservacionScreen extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.asignarMecanico = this.asignarMecanico.bind(this);
         this.desasignarMecanico = this.desasignarMecanico.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.validateReservacion = this.validateReservacion.bind(this);
         const taller = JSON.parse(localStorage.getItem("tallerUser"));
         const cliente = JSON.parse(localStorage.getItem("clienteUser"));
@@ -121,6 +126,12 @@ class ReservacionScreen extends Component {
 
         this.setState({itemReparacionTaller});
         console.log(this.state.itemReparacionTaller);
+    }
+
+    handleClose(event) {
+        this.setState({
+            openDialogExito: false
+        });
     }
 
     asignarMecanico(mecanico) {
@@ -369,27 +380,7 @@ class ReservacionScreen extends Component {
     }
 
     dialogCreado() {
-        confirmAlert({
-            title: 'Operación Exitosa',
-            buttons: [
-                {
-                    label: 'Aceptar',
-                    onClick: () => this.props.history.push('/reparaciones')
-                }
-            ]
-        })
-    }
-
-    dialogCreadoTaller() {
-        confirmAlert({
-            title: 'Operación Exitosa',
-            buttons: [
-                {
-                    label: 'Aceptar',
-                    onClick: () => this.props.history.push('/reparaciones')
-                }
-            ]
-        })
+        this.setState({openDialogExito: true});
     }
 
     async handleSubmit(event) {
@@ -440,8 +431,7 @@ class ReservacionScreen extends Component {
                         },
                         body: JSON.stringify(itemReparacionTaller),
                     });
-                    console.log(itemReparacionTaller);
-                    this.dialogCreadoTaller();
+                    this.dialogCreado();
                 }
             }
         })
@@ -502,6 +492,26 @@ class ReservacionScreen extends Component {
             <TalleresNavbar/>
             }
             <Container>
+                <div>
+                    <Dialog
+                        open={this.state.openDialogExito}
+                        onClose={this.handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Cambios guardados correctamente.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => this.props.history.push('/reparaciones')} color="primary">
+                                Aceptar
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
                 {clienteAux !== null &&
                 <Typography variant="h4">Información del Taller</Typography>
                 }
