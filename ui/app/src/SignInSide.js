@@ -74,7 +74,7 @@ const SignInSide = ({handleSubmit, handleChange, errores}) => {
                     <Typography component="h1" variant="h5">
                         Ingreso al Sistema
                     </Typography>
-                    <form className={classes.form} noValidate>
+                    <form className={classes.form} noValidate onSubmit={(event) => handleSubmit(event)}>
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -115,12 +115,11 @@ const SignInSide = ({handleSubmit, handleChange, errores}) => {
                             autoComplete="current-password"
                         />
                         <Button
-                            type="button"
+                            type="submit"
                             fullWidth
                             variant="contained"
                             color="primary"
                             className={classes.submit}
-                            onClick={(event) => handleSubmit(event)}
                         >
                             Ingresar
                         </Button>
