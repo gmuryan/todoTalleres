@@ -41,7 +41,7 @@ public class DataBaseLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
 //        Estado estado1 = new Estado("Pendiente Diagnóstico");
 //        estadoService.save(estado1);
-//        Estado estado6 = new Estado("En diagnoóstico");
+//        Estado estado6 = new Estado("En diagnóstico");
 //        estadoService.save(estado6);
 //        Estado estado2 = new Estado("Pendiente Confirmación");
 //        estadoService.save(estado2);

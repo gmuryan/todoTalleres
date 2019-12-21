@@ -306,6 +306,7 @@ class ReparacionList extends Component {
                         className={classes.textField}
                         label="ID"
                         margin="normal"
+                        style = {{width: 75}}
                         onChange={this.filterId}
                     />
                     &nbsp;&nbsp;

@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import TalleresNavbar from './TalleresNavbar';
 import {Container} from 'reactstrap';
-import {confirmAlert} from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import './App.css';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { css } from '@emotion/core';
@@ -10,6 +8,11 @@ import TextField from "@material-ui/core/TextField";
 import MecanicosEnhancedTable from "./MecanicosSortableTable";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
 
 const override = css`
     display: block;
@@ -32,11 +35,17 @@ class MecanicoList extends Component {
             isLoading: true,
             nombre: '',
             apellido: '',
-            mail: ''
+            mail: '',
+            activeId: '',
+            openDialogHabilitadoExito: false,
+            openDialogDeshabilitadoExito: false,
+            openDialogHabilitar: false,
+            openDialogDeshabilitar: false
         };
         this.dialogDeshabilitar = this.dialogDeshabilitar.bind(this);
         this.dialogHabilitar = this.dialogHabilitar.bind(this);
         this.edit = this.edit.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.remove = this.remove.bind(this);
     }
@@ -44,6 +53,15 @@ class MecanicoList extends Component {
     handleClick(event) {
         this.setState({
             currentPage: Number(event.target.id)
+        });
+    }
+
+    handleClose(event) {
+        this.setState({
+            openDialogHabilitadoExito: false,
+            openDialogDeshabilitadoExito: false,
+            openDialogDeshabilitar: false,
+            openDialogHabilitar: false
         });
     }
 
@@ -87,60 +105,20 @@ class MecanicoList extends Component {
         });
     }
 
-    dialogHabilitado(){
-        confirmAlert({
-            title: 'Operación Exitosa',
-            message: 'Mecanico Habilitado',
-            buttons: [
-                {
-                    label: 'Aceptar'
-                }
-            ]
-        })
+    dialogHabilitado() {
+        this.setState({openDialogHabilitar: false, openDialogHabilitadoExito: true});
     }
 
-    dialogEliminado(){
-        confirmAlert({
-            title: 'Operación Exitosa',
-            message: 'Mecanico Deshabilitado',
-            buttons: [
-                {
-                    label: 'Aceptar'
-                }
-            ]
-        })
+    dialogEliminado() {
+        this.setState({openDialogDeshabilitar: false, openDialogDeshabilitadoExito: true});
     }
 
     dialogDeshabilitar(mecanico) {
-        confirmAlert({
-            title: 'Confirmar',
-            message: '¿Esta seguro de realizar esta acción?',
-            buttons: [
-                {
-                    label: 'Si',
-                    onClick: () => this.remove(mecanico.idMecanico)
-                },
-                {
-                    label: 'No'
-                }
-            ]
-        })
+        this.setState({openDialogDeshabilitar: true, activeId: mecanico.idMecanico});
     };
 
     dialogHabilitar(mecanico) {
-        confirmAlert({
-            title: 'Confirmar',
-            message: '¿Esta seguro de realizar esta acción?',
-            buttons: [
-                {
-                    label: 'Si',
-                    onClick: () => this.habilitar(mecanico.idMecanico)
-                },
-                {
-                    label: 'No'
-                }
-            ]
-        })
+        this.setState({openDialogHabilitar: true, activeId: mecanico.idMecanico});
     };
 
     edit(idMecanico){
@@ -193,6 +171,92 @@ class MecanicoList extends Component {
             <div>
                 <TalleresNavbar/>
                 <Container fluid>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogHabilitadoExito}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Mecánico habilitado correctamente.
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={this.handleClose} color="primary">
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogDeshabilitadoExito}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Mecánico deshabilitado correctamente.
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={this.handleClose} color="primary">
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogDeshabilitar}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Confirmar"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    ¿Esta seguro de realizar esta acción?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => this.remove(this.state.activeId)} color="primary">
+                                    Si
+                                </Button>
+                                <Button onClick={this.handleClose} color="primary">
+                                    No
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogHabilitar}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Confirmar"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    ¿Esta seguro de realizar esta acción?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => this.habilitar(this.state.activeId)} color="primary">
+                                    Si
+                                </Button>
+                                <Button onClick={this.handleClose} color="primary">
+                                    No
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
                     <div className="float-right">
                         <Button type="button" variant="contained" color="primary" className={classes.button} onClick={() => this.props.history.push('/mecanicos/new')}>
                             Crear Mecánico

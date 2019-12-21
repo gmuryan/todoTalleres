@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Container, Form, FormGroup, Label} from 'reactstrap';
+import {Container, Form, FormGroup} from 'reactstrap';
 import TalleresNavbar from './TalleresNavbar';
-import {confirmAlert} from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'
 import Typography from "@material-ui/core/Typography"; // Import css
 import Button from '@material-ui/core/Button';
 import Grid from "@material-ui/core/Grid";
@@ -16,6 +14,11 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
 import {Visibility, VisibilityOff} from "@material-ui/icons";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
 
 class MiTaller extends Component {
 
@@ -47,16 +50,17 @@ class MiTaller extends Component {
             flag: false,
             formIsValid: true,
             mailCargado: '',
-            showPassword: false
+            showPassword: false,
+            openDialogExito: false
         };
         this.validateMailTaller = this.validateMailTaller.bind(this);
         this.validateMailCliente = this.validateMailCliente.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
         const taller = JSON.parse(localStorage.getItem("tallerUser"));
-        console.log(taller);
         if (taller === null) {
             localStorage.clear();
             this.props.history.push('/');
@@ -89,8 +93,22 @@ class MiTaller extends Component {
         const value = target.value;
         const name = target.name;
         let item = {...this.state.item};
-        item[name] = value;
-        this.setState({item});
+        if (name === "marca") {
+            item[name] = this.state.marcas.find(x => x.idMarca === value);
+            this.setState({item});
+        }else if(name === "clasificacion") {
+            item[name] = this.state.clasificaciones.find(x => x.idClasificacion === value);
+            this.setState({item});
+        }else{
+            item[name] = value;
+            this.setState({item});
+        }
+    }
+
+    handleClose(event) {
+        this.setState({
+            openDialogExito: false
+        });
     }
 
     handleMouseDownPassword(event){
@@ -252,15 +270,7 @@ class MiTaller extends Component {
     }
 
     dialogCreado() {
-        confirmAlert({
-            title: 'Operación Exitosa',
-            buttons: [
-                {
-                    label: 'Aceptar',
-                    onClick: () => this.props.history.push('/homeTaller')
-                }
-            ]
-        })
+        this.setState({openDialogExito: true});
     }
 
     async handleSubmit(event) {
@@ -287,29 +297,33 @@ class MiTaller extends Component {
         const {item, marcas, clasificaciones, flag} = this.state;
 
         if (flag === false && item.idTaller) {
-            console.log(item);
             item.repeatPassword = item.password;
             this.setState({flag: !this.state.flag});
         }
 
-        let optionItemsMarcas = marcas.map((marca) =>
-            <option key={marca.idMarca} selected={item.marca.idMarca === marca.idMarca}
-                    value={JSON.stringify(marca)}>{marca.descripcion}</option>
-        );
-        let newOptionsMarcas = marcas.map((marca) =>
-            <option key={marca.idMarca} value={JSON.stringify(marca)}>{marca.descripcion}</option>
-        );
-        let optionItemsClasifs = clasificaciones.map((clasif) =>
-            <option key={clasif.idClasificacion} selected={item.clasificacion.idClasificacion === clasif.idClasificacion}
-                    value={JSON.stringify(clasif)}>{clasif.descripcion}</option>
-        );
-        let newOptionsClasifs = clasificaciones.map((clasif) =>
-            <option key={clasif.idClasificacion} value={JSON.stringify(clasif)}>{clasif.descripcion}</option>
-        );
-
         return <div>
             <TalleresNavbar/>
             <Container>
+                <div>
+                    <Dialog
+                        open={this.state.openDialogExito}
+                        onClose={this.handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Cambios guardados correctamente.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => this.props.history.push('/homeTaller')} color="primary">
+                                Aceptar
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
                 <Typography variant="h4">
                     Editar Taller
                 </Typography>
@@ -491,12 +505,12 @@ class MiTaller extends Component {
                                     labelId="demo-simple-select-outlined-label"
                                     id="marca"
                                     name="marca"
-                                    value={item.marca}
+                                    value={this.state.item.marca ? this.state.item.marca.idMarca : ''}
                                     onChange={this.handleChange}
                                     className="select-material-ui"
                                 >
                                     {marcas.map(marca => (
-                                        <MenuItem key={marca.idMarca} value={JSON.stringify(marca)}>
+                                        <MenuItem key={marca.idMarca} value={marca.idMarca}>
                                             {marca.descripcion}
                                         </MenuItem>
                                     ))}
@@ -513,12 +527,13 @@ class MiTaller extends Component {
                                     labelId="demo-simple-select-outlined-label"
                                     id="clasificacion"
                                     name="clasificacion"
-                                    value={item.clasificacion}
+                                    value={this.state.item.clasificacion ? this.state.item.clasificacion.idClasificacion : ''}
                                     onChange={this.handleChange}
                                     className="select-material-ui"
                                 >
                                     {clasificaciones.map(clasificacion => (
-                                        <MenuItem key={clasificacion.idClasificacion} value={JSON.stringify(clasificacion)}>
+                                        <MenuItem key={clasificacion.idClasificacion}
+                                                  value={clasificacion.idClasificacion}>
                                             {clasificacion.descripcion}
                                         </MenuItem>
                                     ))}
@@ -527,54 +542,6 @@ class MiTaller extends Component {
                             </FormControl>
                         </Grid>
                     </Grid>
-                    {item.idTaller && (
-                        <FormGroup>
-                            <Label for="marca">Marca</Label>
-                            <br></br>
-                            <div>
-                                <select required="required" className="select" name="marca" id="marca"
-                                        onChange={this.handleChange} autoComplete="marca">
-                                    {optionItemsMarcas}
-                                </select>
-                            </div>
-                        </FormGroup>
-                    )}
-                    {item.idTaller == null && (
-                        <FormGroup>
-                            <br></br>
-                            <div>
-                                <select required="required" className="select" name="marca" id="marca"
-                                        onChange={this.handleChange} autoComplete="marca">
-                                    <option value="" default>Seleccionar Marca...</option>
-                                    {newOptionsMarcas}
-                                </select>
-                            </div>
-                            &nbsp;&nbsp;
-                        </FormGroup>
-                    )}
-                    {item.idTaller && (
-                        <FormGroup>
-                            <Label for="clasificacion">Especialización</Label>
-                            <br></br>
-                            <div>
-                                <select required="required" className="select" name="clasificacion" id="clasificacion"
-                                        onChange={this.handleChange} autoComplete="clasificacion">
-                                    {optionItemsClasifs}
-                                </select>
-                            </div>
-                        </FormGroup>
-                    )}
-                    {item.idTaller == null && (
-                        <FormGroup>
-                            <div>
-                                <select required="required" className="select" name="clasificacion" id="clasificacion"
-                                        onChange={this.handleChange} autoComplete="clasificacion">
-                                    <option value="" default>Seleccionar Especialización...</option>
-                                    {newOptionsClasifs}
-                                </select>
-                            </div>
-                        </FormGroup>
-                    )}
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField

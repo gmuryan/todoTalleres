@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Container, Form, FormGroup, Label} from 'reactstrap';
+import {Container, Form, FormGroup} from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import Typography from "@material-ui/core/Typography"; // Import css
 import Button from '@material-ui/core/Button';
@@ -79,8 +79,16 @@ class TallerEdit extends Component {
         const value = target.value;
         const name = target.name;
         let item = {...this.state.item};
-        item[name] = value;
-        this.setState({item});
+        if (name === "marca") {
+            item[name] = this.state.marcas.find(x => x.idMarca === value);
+            this.setState({item});
+        }else if(name === "clasificacion") {
+            item[name] = this.state.clasificaciones.find(x => x.idClasificacion === value);
+            this.setState({item});
+        }else{
+            item[name] = value;
+            this.setState({item});
+        }
     }
 
     handleClose(event) {
@@ -193,13 +201,13 @@ class TallerEdit extends Component {
         }
 
         //Marca
-        if (!fields["marca"]){
+        if (!fields["marca"]) {
             this.setState({formIsValid: false});
             errors["marca"] = "No puede estar vacío";
         }
 
         //Clasificacion
-        if (!fields["clasificacion"]){
+        if (!fields["clasificacion"]) {
             this.setState({formIsValid: false});
             errors["clasificacion"] = "No puede estar vacío";
         }
@@ -266,6 +274,7 @@ class TallerEdit extends Component {
     render() {
         const {item, marcas, clasificaciones, flag} = this.state;
 
+        console.log(JSON.stringify(this.state.item));
         const classes = {
             formControl: {
                 width: 1000,
@@ -280,22 +289,6 @@ class TallerEdit extends Component {
             item.repeatPassword = item.password;
             this.setState({flag: !this.state.flag});
         }
-
-        let optionItemsMarcas = marcas.map((marca) =>
-            <option key={marca.idMarca} selected={item.marca.idMarca === marca.idMarca}
-                    value={JSON.stringify(marca)}>{marca.descripcion}</option>
-        );
-        let newOptionsMarcas = marcas.map((marca) =>
-            <option key={marca.idMarca} value={JSON.stringify(marca)}>{marca.descripcion}</option>
-        );
-        let optionItemsClasifs = clasificaciones.map((clasif) =>
-            <option key={clasif.idClasificacion} selected={item.clasificacion.idClasificacion === clasif.idClasificacion}
-                    value={JSON.stringify(clasif)}>{clasif.descripcion}</option>
-        );
-        let newOptionsClasifs = clasificaciones.map((clasif) =>
-            <option key={clasif.idClasificacion} value={JSON.stringify(clasif)}>{clasif.descripcion}</option>
-        );
-
         return <div>
             <AppNavbar/>
             <Container>
@@ -471,7 +464,8 @@ class TallerEdit extends Component {
                     </Grid>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                            <FormControl variant="outlined" required className={classes.formControl} error={this.state.errors["marca"]}>
+                            <FormControl variant="outlined" required className={classes.formControl}
+                                         error={this.state.errors["marca"]}>
                                 <InputLabel id="demo-simple-select-outlined-label">
                                     Marca
                                 </InputLabel>
@@ -479,21 +473,23 @@ class TallerEdit extends Component {
                                     labelId="demo-simple-select-outlined-label"
                                     id="marca"
                                     name="marca"
-                                    value={item.marca}
+                                    value={this.state.item.marca ? this.state.item.marca.idMarca : ''}
                                     onChange={this.handleChange}
                                     className="select-material-ui"
                                 >
                                     {marcas.map(marca => (
-                                        <MenuItem key={marca.idMarca} value={JSON.stringify(marca)}>
+                                        <MenuItem key={marca.idMarca} value={marca.idMarca}>
                                             {marca.descripcion}
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {this.state.errors["marca"] && <FormHelperText>{this.state.errors["marca"]}</FormHelperText>}
+                                {this.state.errors["marca"] &&
+                                <FormHelperText>{this.state.errors["marca"]}</FormHelperText>}
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <FormControl variant="outlined" required className={classes.formControl} error={this.state.errors["clasificacion"]}>
+                            <FormControl variant="outlined" required className={classes.formControl}
+                                         error={this.state.errors["clasificacion"]}>
                                 <InputLabel id="demo-simple-select-outlined-label">
                                     Especialización
                                 </InputLabel>
@@ -501,69 +497,22 @@ class TallerEdit extends Component {
                                     labelId="demo-simple-select-outlined-label"
                                     id="clasificacion"
                                     name="clasificacion"
-                                    value={item.clasificacion}
+                                    value={this.state.item.clasificacion ? this.state.item.clasificacion.idClasificacion : ''}
                                     onChange={this.handleChange}
                                     className="select-material-ui"
                                 >
                                     {clasificaciones.map(clasificacion => (
-                                        <MenuItem key={clasificacion.idClasificacion} value={JSON.stringify(clasificacion)}>
+                                        <MenuItem key={clasificacion.idClasificacion}
+                                                  value={clasificacion.idClasificacion}>
                                             {clasificacion.descripcion}
                                         </MenuItem>
                                     ))}
                                 </Select>
-                            {this.state.errors["clasificacion"] && <FormHelperText>{this.state.errors["clasificacion"]}</FormHelperText>}
+                                {this.state.errors["clasificacion"] &&
+                                <FormHelperText>{this.state.errors["clasificacion"]}</FormHelperText>}
                             </FormControl>
                         </Grid>
                     </Grid>
-                    {item.idTaller && (
-                        <FormGroup>
-                            <Label for="marca">Marca</Label>
-                            <br></br>
-                            <div>
-                                <select required="required" className="select" name="marca" id="marca"
-                                        onChange={this.handleChange} autoComplete="marca">
-                                    {optionItemsMarcas}
-                                </select>
-                            </div>
-                            &nbsp;&nbsp;
-                        </FormGroup>
-                    )}
-                    {item.idTaller == null && (
-                        <FormGroup>
-                            <br></br>
-                            <div>
-                                <select required="required" className="select" name="marca" id="marca"
-                                        onChange={this.handleChange} autoComplete="marca">
-                                    <option value="" default>Seleccionar Marca...</option>
-                                    {newOptionsMarcas}
-                                </select>
-                            </div>
-                            &nbsp;&nbsp;
-                        </FormGroup>
-                    )}
-                    {item.idTaller && (
-                        <FormGroup>
-                            <Label for="clasificacion">Especialización</Label>
-                            <br></br>
-                            <div>
-                                <select required="required" className="select" name="clasificacion" id="clasificacion"
-                                        onChange={this.handleChange} autoComplete="clasificacion">
-                                    {optionItemsClasifs}
-                                </select>
-                            </div>
-                        </FormGroup>
-                    )}
-                    {item.idTaller == null && (
-                        <FormGroup>
-                            <div>
-                                <select required="required" className="select" name="clasificacion" id="clasificacion"
-                                        onChange={this.handleChange} autoComplete="clasificacion">
-                                    <option value="" default>Seleccionar Especialización...</option>
-                                    {newOptionsClasifs}
-                                </select>
-                            </div>
-                        </FormGroup>
-                    )}
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField

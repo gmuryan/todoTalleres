@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Container, Form, FormGroup, Label} from 'reactstrap';
-import {confirmAlert} from "react-confirm-alert";
 import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import TalleresNavbar from "./TalleresNavbar";
@@ -15,6 +14,11 @@ import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
 
 registerLocale("es", es);
 
@@ -50,11 +54,13 @@ class ReparacionEdit extends Component {
             endDate: null,
             flagMostrarPresupuesto: false,
             flagNuevoPresupuesto: false,
-            importeAux: ''
+            importeAux: '',
+            openDialogExito: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.guardarReparacion = this.guardarReparacion.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.asignarMecanico = this.asignarMecanico.bind(this);
         this.desasignarMecanico = this.desasignarMecanico.bind(this);
         const taller = JSON.parse(localStorage.getItem("tallerUser"));
@@ -107,6 +113,13 @@ class ReparacionEdit extends Component {
             });
         }
     }
+
+    handleClose(event) {
+        this.setState({
+            openDialogExito: false
+        });
+    }
+
 
     handleDate(date) {
         this.setState({
@@ -241,15 +254,7 @@ class ReparacionEdit extends Component {
     }
 
     dialogCreado() {
-        confirmAlert({
-            title: 'Operación Exitosa',
-            buttons: [
-                {
-                    label: 'Aceptar',
-                    onClick: () => this.props.history.push('/reparaciones')
-                }
-            ]
-        })
+        this.setState({openDialogExito: true});
     }
 
     async handleSubmit(event) {
@@ -294,6 +299,26 @@ class ReparacionEdit extends Component {
             <ClientesNavbar/>
             }
             <Container>
+                <div>
+                    <Dialog
+                        open={this.state.openDialogExito}
+                        onClose={this.handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Cambios guardados correctamente.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => this.props.history.push('/reparaciones')} color="primary">
+                                Aceptar
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
                 <Typography variant="h4">
                     Detalles de la Reparación
                 </Typography>

@@ -311,7 +311,9 @@ const ReparacionesEnhancedTable = ({rows, cancelarTurno, editar, clienteUser, ta
                                                 {clienteUser &&
                                                 infoIcon(row.idReparacion)
                                                 }
-                                                {cancelIcon(row.idReparacion)}
+                                                {row.estadoReparacion !== "Cancelado" &&
+                                                    cancelIcon(row.idReparacion)
+                                                }
                                             </TableCell>
                                             }
                                         </TableRow>

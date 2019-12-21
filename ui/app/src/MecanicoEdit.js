@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import {Container, Form, FormGroup} from 'reactstrap';
 import TalleresNavbar from './TalleresNavbar';
-import {confirmAlert} from "react-confirm-alert";
 import Typography from "@material-ui/core/Typography";
 import ReparacionesEnhancedTable from "./ReparacionesSortableTable";
 import Button from '@material-ui/core/Button';
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
 
 
 class MecanicoEdit extends Component {
@@ -34,8 +38,10 @@ class MecanicoEdit extends Component {
             item: this.emptyItem,
             errors: {},
             reparaciones: [],
-            flag: false
+            flag: false,
+            openDialogExito: false
         };
+        this.handleClose = this.handleClose.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -56,6 +62,12 @@ class MecanicoEdit extends Component {
         let item = {...this.state.item};
         item[name] = value;
         this.setState({item});
+    }
+
+    handleClose(event) {
+        this.setState({
+            openDialogExito: false
+        });
     }
 
     handleValidation(){
@@ -119,14 +131,7 @@ class MecanicoEdit extends Component {
     }
 
     dialogCreado(){
-        confirmAlert({
-            title: 'Operación Exitosa',
-            buttons: [
-                {
-                    label: 'Aceptar'
-                }
-            ]
-        })
+        this.setState({openDialogExito: true});
     }
 
 
@@ -143,7 +148,6 @@ class MecanicoEdit extends Component {
                 },
                 body: JSON.stringify(item),
             });
-            this.props.history.push('/mecanicos');
             this.dialogCreado();
         }
     }
@@ -156,6 +160,26 @@ class MecanicoEdit extends Component {
         return <div>
             <TalleresNavbar/>
             <Container>
+                <div>
+                    <Dialog
+                        open={this.state.openDialogExito}
+                        onClose={this.handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Cambios guardados correctamente.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => this.props.history.push('/mecanicos')} color="primary">
+                                Aceptar
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
                 {this.props.match.params.id !== 'new' &&
                 <Typography variant="h4">Editar Mecánico</Typography>
                 }
