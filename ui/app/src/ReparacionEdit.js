@@ -39,6 +39,7 @@ class ReparacionEdit extends Component {
         descripcionReparacion: '',
         patenteAuto: '',
         modeloAuto: '',
+        marcaAuto: '',
         nuevoPresupuesto: '',
         cliente: ''
     };
@@ -324,7 +325,48 @@ class ReparacionEdit extends Component {
                 </Typography>
                 <Form onSubmit={this.handleSubmit} noValidate>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Cliente"
+                                margin="normal"
+                                variant="outlined"
+                                name="cliente-readonly"
+                                fullWidth
+                                style={{
+                                    backgroundColor: "#e9ecef"
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.cliente.nombre + " " + item.cliente.apellido}
+                                autoComplete="cliente"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Patente del Auto"
+                                margin="normal"
+                                variant="outlined"
+                                name="patenteAuto"
+                                fullWidth
+                                style={{
+                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ""
+                                }}
+                                InputProps={{
+                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
+                                }}
+                                value={item.patenteAuto || ''}
+                                onChange={this.handleChange}
+                                error={this.state.errors["patenteAuto"]}
+                                helperText={this.state.errors["patenteAuto"]}
+                                autoComplete="patenteAuto"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 id="outlined-basic"
                                 label="Modelo del Auto"
@@ -345,7 +387,7 @@ class ReparacionEdit extends Component {
                                 autoComplete="modeloAuto"
                             />
                         </Grid>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 id="outlined-basic"
                                 label="Marca del Auto"
@@ -364,27 +406,6 @@ class ReparacionEdit extends Component {
                                 error={this.state.errors["marcaAuto"]}
                                 helperText={this.state.errors["marcaAuto"]}
                                 autoComplete="marcaAuto"
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <TextField
-                                id="outlined-basic"
-                                label="Patente del Auto"
-                                margin="normal"
-                                variant="outlined"
-                                name="patenteAuto"
-                                fullWidth
-                                style={{
-                                    backgroundColor: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado" ? "#e9ecef" : ""
-                                }}
-                                InputProps={{
-                                    readOnly: clienteUser || descEstado === "Cancelado" || descEstado === "Pendiente Confirmación" || descEstado === "En diagnóstico" || descEstado === "En reparación" || descEstado === "Listo para retirar" || descEstado === "Finalizado",
-                                }}
-                                value={item.patenteAuto || ''}
-                                onChange={this.handleChange}
-                                error={this.state.errors["patenteAuto"]}
-                                helperText={this.state.errors["patenteAuto"]}
-                                autoComplete="patenteAuto"
                             />
                         </Grid>
                     </Grid>

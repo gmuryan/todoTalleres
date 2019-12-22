@@ -5,6 +5,7 @@ import com.uade.todoTalleres.model.Reparacion;
 import com.uade.todoTalleres.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +59,11 @@ public class ClienteService {
         Optional<Cliente> cliente = this.findById(id);
         cliente.get().setActivo(true);
         clienteRepository.save(cliente.get());
+    }
+
+    @Transactional
+    public void actualizarNuevosPresupuestos(Long idCliente){
+        clienteRepository.updateNuevasReparacionesCliente(idCliente);
     }
 
     public List<Long>  getReparacionesNuevoPresupuesto (Long idCliente){

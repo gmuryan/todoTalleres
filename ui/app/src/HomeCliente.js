@@ -3,18 +3,26 @@ import './App.css';
 import ClientesNavbar from './ClientesNavbar';
 import {withRouter} from 'react-router-dom';
 import {Container } from 'reactstrap';
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 import Logo from "./logo.png";
 import Typography from "@material-ui/core/Typography";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
 
 class HomeCliente extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            nuevosPresupuestos: []
+            nuevosPresupuestos: [],
+            activeId: '',
+            openDialogExito: false,
+            stringFinal: ''
         };
+        this.handleClose = this.handleClose.bind(this);
         const cliente = JSON.parse(localStorage.getItem("clienteUser"));
         if (cliente === null){
             localStorage.clear();
@@ -27,16 +35,27 @@ class HomeCliente extends Component {
         if (cliente !== null) {
             const nuevosPresups = await (await fetch(`/api/nuevoPresupuesto/${cliente.idCliente}`)).json();
             this.setState({nuevosPresupuestos: nuevosPresups});
-            console.log(this.state.nuevosPresupuestos);
             if (this.state.nuevosPresupuestos.length > 0){
+                var nros = this.state.nuevosPresupuestos[0];
                 for (const [index, value] of this.state.nuevosPresupuestos.entries()) {
-                    this.dialogNuevoPresupuesto(value);
+                    if (index !== 0){
+                        nros = nros + ", " + value;
+                    }
                 }
+                this.setState({stringFinal: nros});
+                this.dialogNuevoPresupuesto();
             }
         }
     }
 
+    handleClose(event) {
+        this.setState({
+            openDialogExito: false
+        });
+    }
+
     async updateNuevoPresupuesto(value){
+        this.handleClose();
         await fetch(`/api/updateNuevoPresupuesto/${value}`, {
             method: 'PUT',
             headers: {
@@ -46,20 +65,12 @@ class HomeCliente extends Component {
         })
     }
 
-    dialogNuevoPresupuesto(value){
-        confirmAlert({
-            title: 'Nuevo Presupuesto',
-            message: 'Hay un nuevo presupuesto en la reparación con ID ' + value,
-            buttons: [
-                {
-                    label: 'Aceptar',
-                    onClick: () => this.updateNuevoPresupuesto(value)
-                }
-            ]
-        })
+    dialogNuevoPresupuesto(){
+        this.setState({openDialogExito: true});
     }
 
     render() {
+        const cliente = JSON.parse(localStorage.getItem("clienteUser"));
         return (
             <div>
                 <ClientesNavbar/>
@@ -67,6 +78,26 @@ class HomeCliente extends Component {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogExito}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Nuevo Presupuesto"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Hay nuevos presupuestos en la reparaciones con ID: {this.state.stringFinal}
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => this.updateNuevoPresupuesto(cliente.idCliente)} color="primary">
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
                     <div className="div-logo">
                         <img src={Logo} alt="logo"/>
                     </div>

@@ -3,6 +3,7 @@ package com.uade.todoTalleres.repository;
 import com.uade.todoTalleres.model.Cliente;
 import com.uade.todoTalleres.model.Reparacion;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -19,5 +20,9 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     @Query(value = "select * from reparacion where id_reparacion in (select r.id_reparacion from reparacion r inner join cliente c ON r.id_cliente = c.id_cliente where r.nuevo_presupuesto = true and r.id_cliente = ?1)", nativeQuery = true)
     List<Object[]> getReparacionesNuevoPresupuesto(Long id);
+
+    @Modifying
+    @Query(value = "update reparacion set nuevo_presupuesto = 0 where id_cliente = ?1", nativeQuery = true)
+    void updateNuevasReparacionesCliente(Long id);
 
 }

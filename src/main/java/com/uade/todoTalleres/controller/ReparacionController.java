@@ -128,9 +128,10 @@ public class ReparacionController {
     }
 
     @PutMapping("/updateNuevoPresupuesto/{id}")
-    ResponseEntity<Reparacion> updateNuevoPresupuesto(@PathVariable Long id){
-        log.info("Request to update reparacion: {}", id);
-        Optional<Reparacion> result = reparacionService.updateNuevoPresupuesto(id);
+    ResponseEntity<Cliente> updateNuevoPresupuesto(@PathVariable Long id){
+        log.info("Request to update cliente: {}", id);
+        Optional<Cliente> result = clienteService.findById(id);
+        clienteService.actualizarNuevosPresupuestos(id);
         return ResponseEntity.ok().body(result.get());
     }
 

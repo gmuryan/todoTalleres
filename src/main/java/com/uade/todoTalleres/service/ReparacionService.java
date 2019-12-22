@@ -74,6 +74,7 @@ public class ReparacionService {
     public Reparacion avanzarPendienteRegistracion(Reparacion reparacionEntity, Reparacion reparacionView){
         reparacionEntity.setModeloAuto(reparacionView.getModeloAuto());
         reparacionEntity.setPatenteAuto(reparacionView.getPatenteAuto());
+        reparacionEntity.setMarcaAuto(reparacionView.getMarcaAuto());
         Optional<Estado> estado = estadoService.findById(reparacionEntity.getEstadoReparacion().getIdEstado()+1);
         reparacionEntity.setEstadoReparacion(estado.get());
         return reparacionRepository.save(reparacionEntity);
