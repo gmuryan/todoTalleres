@@ -45,6 +45,7 @@ class ReparacionList extends Component {
             filtroFechaDevolucionDesde: null,
             filtroFechaDevolucionHasta: null,
             reparaciones: [],
+            errors: {},
             isLoading: true,
             fechaDevolucion: '',
             horaDevolucion: '',
@@ -54,6 +55,7 @@ class ReparacionList extends Component {
             estadoReparacion: '',
             descripcionProblema: '',
             descripcionReparacion: '',
+            motivoCancelacion: '',
             taller: '',
             cliente: '',
             estado: '',
@@ -65,6 +67,7 @@ class ReparacionList extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.dialogCancelarTurno = this.dialogCancelarTurno.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.edit = this.edit.bind(this);
         this.remove = this.remove.bind(this);
     }
@@ -80,6 +83,10 @@ class ReparacionList extends Component {
         this.setState({
             currentPage: Number(event.target.id)
         });
+    }
+
+    handleChange(event) {
+        this.setState({motivoCancelacion: event.target.value});
     }
 
     componentDidMount() {
@@ -100,6 +107,20 @@ class ReparacionList extends Component {
         }
     }
 
+    handleValidation() {
+        let errors = {};
+        let formIsValid = true;
+
+        //Contraseña
+        if (!this.state.motivoCancelacion) {
+            formIsValid = false;
+            errors["motivo"] = "No puede estar vacío";
+        }
+
+        this.setState({errors: errors});
+        return formIsValid;
+    }
+
     async remove(id) {
         await fetch(`/api/reparacion/${id}`, {
             method: 'DELETE',
@@ -115,15 +136,16 @@ class ReparacionList extends Component {
     }
 
     async cancelarTurno(idReparacion) {
-        await fetch(`/api/cancelarTurno/${idReparacion}`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(idReparacion),
-        });
-        this.dialogCancelacionCorrecta();
+        if (this.handleValidation()) {
+            await fetch(`/api/cancelarTurno?id=${encodeURIComponent(idReparacion)}&motivo=${encodeURIComponent(this.state.motivoCancelacion)}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            this.dialogCancelacionCorrecta();
+        }
     }
 
     dialogCancelacionCorrecta() {
@@ -223,7 +245,7 @@ class ReparacionList extends Component {
         if (this.state.filtroFechaDevolucionHasta) {
             filterReparaciones = filterReparaciones.filter(reparacion => this.esFechaDevolucionMayor(reparacion.fechaDevolucion ? reparacion.fechaDevolucion : "0"));
         }
-        if (this.state.id){
+        if (this.state.id) {
             filterReparaciones = filterReparaciones.filter(reparacion => reparacion.idReparacion.toString().indexOf(id) !== -1);
         }
 
@@ -277,23 +299,40 @@ class ReparacionList extends Component {
                         >
                             <DialogTitle id="alert-dialog-title">{"Confirmar"}</DialogTitle>
                             <DialogContent>
-                                <DialogContentText id="alert-dialog-description">
-                                    ¿Esta seguro de realizar esta acción?
+                                <DialogContentText>
+                                    Ingrese el motivo de la cancelación:
                                 </DialogContentText>
+                                <TextField
+                                    autoFocus
+                                    multiline
+                                    rows="4"
+                                    required
+                                    variant="outlined"
+                                    id="motivoCancelacion"
+                                    name="motivoCancelacion"
+                                    label="Motivo"
+                                    onChange={this.handleChange}
+                                    value={this.state.motivoCancelacion}
+                                    type="text"
+                                    error={this.state.errors["motivo"]}
+                                    helperText={this.state.errors["motivo"]}
+                                    fullWidth
+                                />
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={() => this.cancelarTurno(this.state.activeId)} color="primary">
-                                    Si
+                                    Aceptar
                                 </Button>
                                 <Button onClick={this.handleClose} color="primary">
-                                    No
+                                    Cancelar
                                 </Button>
                             </DialogActions>
                         </Dialog>
                     </div>
                     {tallerUser !== null &&
                     <div className="float-right">
-                        <Button type="button" variant="contained" color="primary" className={classes.button} onClick={() => this.props.history.push('/reservacion/new')}>
+                        <Button type="button" variant="contained" color="primary" className={classes.button}
+                                onClick={() => this.props.history.push('/reservacion/new')}>
                             Crear Reparación
                         </Button>
                     </div>
@@ -306,7 +345,7 @@ class ReparacionList extends Component {
                         className={classes.textField}
                         label="ID"
                         margin="normal"
-                        style = {{width: 75}}
+                        style={{width: 75}}
                         onChange={this.filterId}
                     />
                     &nbsp;&nbsp;
@@ -382,7 +421,8 @@ class ReparacionList extends Component {
                     </MuiPickersUtilsProvider>
 
                     <ReparacionesEnhancedTable rows={filterReparaciones} cancelarTurno={this.dialogCancelarTurno}
-                                               clienteUser={clienteUser} tallerUser={tallerUser} editar={this.edit} acciones={true}/>
+                                               clienteUser={clienteUser} tallerUser={tallerUser} editar={this.edit}
+                                               acciones={true}/>
                 </Container>
             </div>
         );

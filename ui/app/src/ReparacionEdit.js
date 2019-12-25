@@ -41,7 +41,8 @@ class ReparacionEdit extends Component {
         modeloAuto: '',
         marcaAuto: '',
         nuevoPresupuesto: '',
-        cliente: ''
+        cliente: '',
+        motivoCancelacion: ''
     };
 
 
@@ -223,7 +224,7 @@ class ReparacionEdit extends Component {
                 formIsValid = false;
                 errors["importeTotal"] = "Para utilizar la opción nuevo presupuesto debe ingresar un importe distinto al anterior";
             }
-            if (!this.state.flagNuevoPresupuesto && fields["importeTotal"] !== this.state.importeAux){
+            if (!this.state.flagNuevoPresupuesto && fields["importeTotal"] !== this.state.importeAux) {
                 formIsValid = false;
                 errors["importeTotal"] = "El importe debe mantenerse igual si no esta habilitada la opción de nuevo presupuesto";
             }
@@ -660,7 +661,28 @@ class ReparacionEdit extends Component {
                                 onChange={this.handleChange}
                             />
                         </Grid>
-
+                        {descEstado === "Cancelado" &&
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                id="outlined-multiline-static"
+                                name="motivoCancelacion"
+                                multiline
+                                fullWidth
+                                rows="4"
+                                label="Motivo de Cancelación"
+                                style={{
+                                    backgroundColor: "#e9ecef"
+                                }}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                value={item.motivoCancelacion || ''}
+                                margin="normal"
+                                variant="outlined"
+                                onChange={this.handleChange}
+                            />
+                        </Grid>
+                        }
                         {tallerUser !== null && item.fechaDevolucion === null && item.horaDevolucion === null && descEstado !== "Cancelado" && descEstado !== "Pendiente Diagnóstico" &&
                         <FormGroup className="col-md-6 mb-3">
                             <div>

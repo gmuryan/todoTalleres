@@ -119,11 +119,11 @@ public class ReparacionController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PutMapping("/cancelarTurno/{id}")
-    ResponseEntity<Reparacion> cancelarReparacion(@PathVariable Long id){
+    @PutMapping("/cancelarTurno")
+    ResponseEntity<Reparacion> cancelarReparacion(Long id, String motivo){
         log.info("Request to cancel reparacion: {}", id);
         Optional<Reparacion> result = reparacionService.findById(id);
-        reparacionService.cancelarTurno(result.get());
+        reparacionService.cancelarTurno(result.get(), motivo);
         return ResponseEntity.ok().body(result.get());
     }
 

@@ -79,6 +79,9 @@ public class Reparacion {
     @JoinColumn(name = "idCliente")
     private Cliente cliente;
 
+    @Column
+    private String motivoCancelacion;
+
     public Reparacion(){
 
     }
@@ -237,5 +240,13 @@ public class Reparacion {
 
     public void setMarcaAuto(String marcaAuto) {
         this.marcaAuto = marcaAuto;
+    }
+
+    public String getMotivoCancelacion() {
+        return motivoCancelacion;
+    }
+
+    public void setMotivoCancelacion(String motivoCancelacion) {
+        this.motivoCancelacion = motivoCancelacion;
     }
 }

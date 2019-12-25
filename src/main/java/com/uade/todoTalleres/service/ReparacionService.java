@@ -59,7 +59,9 @@ public class ReparacionService {
     }
 
     @Transactional
-    public void cancelarTurno(Reparacion reparacion){
+    public void cancelarTurno(Reparacion reparacion, String motivo){
+        reparacion.setMotivoCancelacion(motivo);
+        this.save(reparacion);
         reparacionRepository.cancelarTurno(reparacion.getIdReparacion());
     }
 
