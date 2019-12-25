@@ -16,6 +16,9 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 class TallerEdit extends Component {
 
@@ -46,13 +49,18 @@ class TallerEdit extends Component {
             flag: false,
             formIsValid: true,
             mailCargado: '',
-            openDialogExito: false
+            openDialogExito: false,
+            showPassword: false,
+            showRepeatPassword: false
         };
         this.validateMailTaller = this.validateMailTaller.bind(this);
         this.validateMailCliente = this.validateMailCliente.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
+        this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
+        this.handleClickShowRepeatPassword = this.handleClickShowRepeatPassword.bind(this);
         const admin = JSON.parse(localStorage.getItem("adminUser"));
         if (admin === null) {
             localStorage.clear();
@@ -95,6 +103,18 @@ class TallerEdit extends Component {
         this.setState({
             openDialogExito: false
         });
+    }
+
+    handleMouseDownPassword(event){
+        event.preventDefault();
+    }
+
+    handleClickShowPassword(event){
+        this.setState({showPassword: !this.state.showPassword});
+    }
+
+    handleClickShowRepeatPassword(event){
+        this.setState({showRepeatPassword: !this.state.showRepeatPassword});
     }
 
     validateMailTaller() {
@@ -436,7 +456,19 @@ class TallerEdit extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="password"
-                                type="password"
+                                type={this.state.showPassword ? 'text' : 'password'}
+                                InputProps={{
+                                    endAdornment:
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={this.handleClickShowPassword}
+                                                onMouseDown={this.handleMouseDownPassword}
+                                            >
+                                                {this.state.showPassword ? <Visibility/> : <VisibilityOff/>}
+                                            </IconButton>
+                                        </InputAdornment>
+                                }}
                                 fullWidth
                                 required
                                 value={item.password || ''}
@@ -454,7 +486,19 @@ class TallerEdit extends Component {
                                 margin="normal"
                                 variant="outlined"
                                 name="repeatPassword"
-                                type="password"
+                                type={this.state.showRepeatPassword ? 'text' : 'password'}
+                                InputProps={{
+                                    endAdornment:
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={this.handleClickShowRepeatPassword}
+                                                onMouseDown={this.handleMouseDownPassword}
+                                            >
+                                                {this.state.showRepeatPassword ? <Visibility/> : <VisibilityOff/>}
+                                            </IconButton>
+                                        </InputAdornment>
+                                }}
                                 fullWidth
                                 required
                                 value={item.repeatPassword || ''}
