@@ -129,20 +129,21 @@ class ClienteEdit extends Component {
                 errors["telefono"] = "Solo números";
             }
         }
+        if (this.props.match.params.id === 'new') {
+            //Contraseña
+            if (!fields["password"]) {
+                this.setState({formIsValid: false});
+                errors["password"] = "No puede estar vacío";
+            }
 
-        //Contraseña
-        if (!fields["password"]) {
-            this.setState({formIsValid: false});
-            errors["password"] = "No puede estar vacío";
-        }
-
-        //RepetirContraseña
-        if (!fields["repeatPassword"]) {
-            this.setState({formIsValid: false});
-            errors["repeatPassword"] = "No puede estar vacío";
-        } else if (fields["password"] !== fields["repeatPassword"]) {
-            this.setState({formIsValid: false});
-            errors["repeatPassword"] = "Debe ser igual a la contraseña";
+            //RepetirContraseña
+            if (!fields["repeatPassword"]) {
+                this.setState({formIsValid: false});
+                errors["repeatPassword"] = "No puede estar vacío";
+            } else if (fields["password"] !== fields["repeatPassword"]) {
+                this.setState({formIsValid: false});
+                errors["repeatPassword"] = "Debe ser igual a la contraseña";
+            }
         }
 
         this.setState({errors: errors});
@@ -311,6 +312,7 @@ class ClienteEdit extends Component {
                             />
                         </Grid>
                     </Grid>
+                    {this.props.match.params.id === 'new' &&
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField id="outlined-basic"
@@ -347,6 +349,7 @@ class ClienteEdit extends Component {
                             />
                         </Grid>
                     </Grid>
+                    }
                     <br></br>
                     <FormGroup>
                         <Button variant="contained" color="primary" type="submit">

@@ -20,6 +20,16 @@ import PeopleIcon from '@material-ui/icons/People';
 import TextsmsIcon from '@material-ui/icons/Textsms';
 import BuildIcon from '@material-ui/icons/Build';
 import StoreIcon from '@material-ui/icons/Store';
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -44,6 +54,14 @@ const MenuAppBar = ({logout, clienteUser, tallerUser, adminUser}) => {
     const [auth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [anchorSM, setAnchorSM] = React.useState(null);
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const [openDialogExito, setOpenDialogExito] = React.useState(false);
+    const [newPassword, setNewPassword] = React.useState(null);
+    const [repeatNewPassword, setRepeatNewPassword] = React.useState(null);
+    const [showRepeatPassword, setShowRepeatPassword] = React.useState(false);
+    const [errorPassword, setErrorPassword] = React.useState(null);
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [errorRepeatPassword, setErrorRepeatPassword] = React.useState(null);
     const [state, setState] = React.useState({
         top: false,
         left: false,
@@ -61,8 +79,94 @@ const MenuAppBar = ({logout, clienteUser, tallerUser, adminUser}) => {
         setAnchorEl(null);
     };
 
+    const handleClickOpenDialog = () => {
+        setOpenDialog(true);
+        setAnchorEl(false);
+    };
+
+    const handleClickShowPassword = event => {
+        setShowPassword(!showPassword);
+    }
+
+    const handleClickShowRepeatPassword = event => {
+        setShowRepeatPassword(!showRepeatPassword);
+    }
+
+    const handleMouseDownPassword = event => {
+        event.preventDefault();
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        setOpenDialogExito(false);
+    };
+
+    const handleOpenDialogExito = () =>{
+        setOpenDialogExito(true);
+    }
+
     const handleCloseMainMenu = () =>{
         setAnchorSM(null);
+    }
+
+    const handleNewPassword = event  => {
+        setNewPassword(event.target.value);
+    }
+
+    const handleRepeatNewPassword = event => {
+        setRepeatNewPassword(event.target.value);
+    }
+
+    const handleValidation = () => {
+        let formIsValid = true;
+        setErrorRepeatPassword(null);
+        setErrorPassword(null);
+
+        //Contraseña
+        if (!newPassword) {
+            formIsValid = false;
+            setErrorPassword("No puede estar vacío");
+        }
+
+        //RepetirContraseña
+        if (!repeatNewPassword) {
+            formIsValid = false;
+            setErrorRepeatPassword("No puede estar vacío");
+        } else if (newPassword !== repeatNewPassword) {
+            formIsValid = false;
+            setErrorRepeatPassword("Debe ser igual a la contraseña");
+        }
+        return formIsValid;
+    }
+
+    const handleSubmit = async() => {
+        if (handleValidation()){
+            await fetch(`/api/updatePassword?id=${encodeURIComponent(clienteUser.idCliente)}&nuevaPassword=${encodeURIComponent(newPassword)}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).then(() => {
+                handleCloseDialog();
+                handleOpenDialogExito();
+            });
+        }
+    }
+
+    const handleSubmitTaller = async() => {
+        if (handleValidation()){
+            await fetch(`/api/updatePasswordTaller?id=${encodeURIComponent(tallerUser.idTaller)}&nuevaPassword=${encodeURIComponent(newPassword)}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).then(() => {
+                handleCloseDialog();
+                handleOpenDialogExito();
+            });
+        }
     }
 
     const toggleDrawer = (side, open) => event => {
@@ -151,6 +255,98 @@ const MenuAppBar = ({logout, clienteUser, tallerUser, adminUser}) => {
 
     return (
         <div className={classes.root}>
+            <Dialog
+                open={openDialogExito}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Cambios guardados correctamente.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color="primary">
+                        Aceptar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="max-width-dialog-title"
+            >
+                <DialogTitle id="max-width-dialog-title">Blanquear Contraseña</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Ingrese la nueva contraseña
+                    </DialogContentText>
+                    <form className={classes.form} noValidate>
+                        <Grid container spacing={2}>
+                            <TextField id="newPassword"
+                                       label="Contraseña"
+                                       margin="normal"
+                                       variant="outlined"
+                                       name="newPassword"
+                                       type={showPassword ? 'text' : 'password'}
+                                       required
+                                       onChange={handleNewPassword}
+                                       InputProps={{
+                                           endAdornment:
+                                               <InputAdornment position="end">
+                                                   <IconButton
+                                                       aria-label="toggle password visibility"
+                                                       onClick={handleClickShowPassword}
+                                                       onMouseDown={handleMouseDownPassword}
+                                                   >
+                                                       {showPassword ? <Visibility/> : <VisibilityOff/>}
+                                                   </IconButton>
+                                               </InputAdornment>
+                                       }}
+                                       value={newPassword}
+                                       error={errorPassword}
+                                       helperText={errorPassword}
+                                       fullWidth/>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <TextField id="newPasswordRepeat"
+                                       label="Repetir Contraseña"
+                                       margin="normal"
+                                       variant="outlined"
+                                       name="newPasswordRepeat"
+                                       type={showRepeatPassword ? 'text' : 'password'}
+                                       required
+                                       onChange={handleRepeatNewPassword}
+                                       InputProps={{
+                                           endAdornment:
+                                               <InputAdornment position="end">
+                                                   <IconButton
+                                                       aria-label="toggle password visibility"
+                                                       onClick={handleClickShowRepeatPassword}
+                                                       onMouseDown={handleMouseDownPassword}
+                                                   >
+                                                       {showRepeatPassword ? <Visibility/> : <VisibilityOff/>}
+                                                   </IconButton>
+                                               </InputAdornment>
+                                       }}
+                                       value={repeatNewPassword}
+                                       error={errorRepeatPassword}
+                                       helperText={errorRepeatPassword}
+                                       fullWidth/>
+                        </Grid>
+                    </form>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={clienteUser ? handleSubmit : handleSubmitTaller} color="primary">
+                        Aceptar
+                    </Button>
+                    <Button onClick={handleCloseDialog} color="primary">
+                        Cancelar
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu"                            aria-controls="menu-appbar"
@@ -252,6 +448,9 @@ const MenuAppBar = ({logout, clienteUser, tallerUser, adminUser}) => {
                                 <Link to={'/miTaller/' + tallerUser.idTaller} className="link-menu-color" style={{ textDecoration: 'none' }}>
                                     <MenuItem onClick={handleClose}>Mi Taller</MenuItem>
                                 </Link>
+                                }
+                                {(tallerUser || clienteUser) &&
+                                <MenuItem onClick={handleClickOpenDialog}>Cambiar Contraseña</MenuItem>
                                 }
                                 <Link to='/' className="link-menu-color" style={{ textDecoration: 'none' }}>
                                     <MenuItem onClick={logout}>Salir</MenuItem>

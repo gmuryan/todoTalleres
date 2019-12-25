@@ -1,6 +1,7 @@
 package com.uade.todoTalleres;
 
 import com.uade.todoTalleres.model.*;
+import com.uade.todoTalleres.security.Hashing;
 import com.uade.todoTalleres.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,12 +87,18 @@ public class DataBaseLoader implements CommandLineRunner {
 //        Clasificacion todasClasif = new Clasificacion("Todas");
 //        clasificacionService.save(todasClasif);
 //        Cliente cliente = new Cliente("Pedro", "Kim", "44444444", "pedro@gmail.com", "pepe", true);
+//        String hashPw = Hashing.hash(cliente.getPassword());
+//        cliente.setPassword(hashPw);
 //        clienteService.save(cliente);
 //        Cliente clienteExterno = new Cliente("Cliente", "Externo", "43448897", "cliente@externo.com", "pepe", true);
+//        String hashPw2 = Hashing.hash(clienteExterno.getPassword());
+//        clienteExterno.setPassword(hashPw2);
 //        clienteService.save(clienteExterno);
 //        List<Marca> marcas = marcaService.findAll();
 //        List<Clasificacion> clasifs = clasificacionService.findAll();
 //        Taller taller = new Taller("Taller Mecánico Lautaro", "44444444", "Flores", "tallerlautaro@gmail.com", "Lautaro 366", marcas.get(0), null, null, null, clasifs.get(0), 20, 1 ,"pepe", "Historico taller del barrio de flores", true);
+//        String hashPw3 = Hashing.hash(taller.getPassword());
+//        taller.setPassword(hashPw3);
 //        tallerService.save(taller);
 //        List<Taller> ts = tallerService.findAll();
 //        Taller t = ts.get(0);

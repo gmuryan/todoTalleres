@@ -39,7 +39,7 @@ class Login extends Component {
             localStorage.setItem("adminUser", JSON.stringify(this.state));
             this.props.history.push('/home');
         } else {
-            await fetch(`/api/tallerByMail?mail=${encodeURIComponent(email)}`, {
+            await fetch(`/api/validarCredencialesTaller?mail=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -48,7 +48,7 @@ class Login extends Component {
             }).then(response => {
                 if (response.ok) {
                     response.json().then(json => {
-                        if (email === json.mail && password === json.password && json.activo) {
+                        if (json.activo) {
                             localStorage.clear();
                             localStorage.setItem("tallerUser", JSON.stringify(json));
                             this.props.history.push('/homeTaller');
@@ -56,9 +56,7 @@ class Login extends Component {
                     })
                 }
             });
-
-            console.log("test");
-            await fetch(`/api/clienteByMail?mail=${encodeURIComponent(email)}`, {
+            await fetch(`/api/validarCredencialesCliente?mail=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -67,7 +65,7 @@ class Login extends Component {
             }).then(response => {
                 if (response.ok) {
                     response.json().then(json => {
-                        if (email === json.mail && password === json.password && json.activo) {
+                        if (json.activo) {
                             localStorage.clear();
                             localStorage.setItem("clienteUser", JSON.stringify(json));
                             this.props.history.push('/homeCliente');

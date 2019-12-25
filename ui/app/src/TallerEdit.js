@@ -185,19 +185,21 @@ class TallerEdit extends Component {
             }
         }
 
-        //Contraseña
-        if (!fields["password"]) {
-            this.setState({formIsValid: false});
-            errors["password"] = "No puede estar vacío";
-        }
+        if (this.props.match.params.id === 'new') {
+            //Contraseña
+            if (!fields["password"]) {
+                this.setState({formIsValid: false});
+                errors["password"] = "No puede estar vacío";
+            }
 
-        //RepetirContraseña
-        if (!fields["repeatPassword"]) {
-            this.setState({formIsValid: false});
-            errors["repeatPassword"] = "No puede estar vacío";
-        } else if (fields["password"] !== fields["repeatPassword"]) {
-            this.setState({formIsValid: false});
-            errors["repeatPassword"] = "Debe ser igual a la contraseña";
+            //RepetirContraseña
+            if (!fields["repeatPassword"]) {
+                this.setState({formIsValid: false});
+                errors["repeatPassword"] = "No puede estar vacío";
+            } else if (fields["password"] !== fields["repeatPassword"]) {
+                this.setState({formIsValid: false});
+                errors["repeatPassword"] = "Debe ser igual a la contraseña";
+            }
         }
 
         //Marca
@@ -424,6 +426,7 @@ class TallerEdit extends Component {
                             />
                         </Grid>
                     </Grid>
+                    {this.props.match.params.id === 'new' &&
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -462,6 +465,7 @@ class TallerEdit extends Component {
                             />
                         </Grid>
                     </Grid>
+                    }
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <FormControl variant="outlined" required className={classes.formControl}

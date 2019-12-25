@@ -14,6 +14,10 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
+import Grid from "@material-ui/core/Grid";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import {Visibility, VisibilityOff} from "@material-ui/icons";
 
 const override = css`
     display: block;
@@ -28,16 +32,23 @@ class TallerList extends Component {
         super(props);
         this.state = {
             talleres: [],
+            errors: {},
             isLoading: true,
             nombre: '',
             barrio: '',
             clasificacion: '',
             marca: '',
             activeId: '',
+            newPassword: '',
+            newPasswordRepeat: '',
             openDialogHabilitadoExito: false,
             openDialogDeshabilitadoExito: false,
             openDialogHabilitar: false,
-            openDialogDeshabilitar: false
+            openDialogDeshabilitar: false,
+            openDialogCambiarPw: false,
+            openDialogExito: false,
+            showPassword: false,
+            showRepeatPassword: false
         };
         this.handleClick = this.handleClick.bind(this);
         this.dialogHabilitar = this.dialogHabilitar.bind(this);
@@ -47,6 +58,13 @@ class TallerList extends Component {
         this.reviews = this.reviews.bind(this);
         this.remove = this.remove.bind(this);
         this.book = this.book.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.cambiarPassword = this.cambiarPassword.bind(this);
+        this.cleanPassword = this.cleanPassword.bind(this);
+        this.dialogCreado = this.dialogCreado.bind(this);
+        this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
+        this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
+        this.handleClickShowRepeatPassword = this.handleClickShowRepeatPassword.bind(this);
         const admin = JSON.parse(localStorage.getItem("adminUser"));
         const cliente = JSON.parse(localStorage.getItem("clienteUser"));
         if (admin === null && cliente === null) {
@@ -66,7 +84,9 @@ class TallerList extends Component {
             openDialogHabilitadoExito: false,
             openDialogDeshabilitadoExito: false,
             openDialogDeshabilitar: false,
-            openDialogHabilitar: false
+            openDialogHabilitar: false,
+            openDialogCambiarPw: false,
+            openDialogExito: false
         });
     }
 
@@ -77,6 +97,18 @@ class TallerList extends Component {
             .then(response => response.json())
             .then(data => this.setState({talleres: data, isLoading: false}))
 
+    }
+
+    handleMouseDownPassword(event){
+        event.preventDefault();
+    }
+
+    handleClickShowPassword(event){
+        this.setState({showPassword: !this.state.showPassword});
+    }
+
+    handleClickShowRepeatPassword(event){
+        this.setState({showRepeatPassword: !this.state.showRepeatPassword});
     }
 
     async remove(id) {
@@ -109,6 +141,50 @@ class TallerList extends Component {
         });
     }
 
+    handleChange = event => {
+        event.preventDefault();
+        this.setState({
+            [event.target.id]: event.target.value
+        });
+    }
+
+    handleValidation(){
+        let errors = {};
+        let formIsValid = true;
+
+        //Contraseña
+        if (!this.state.newPassword) {
+            formIsValid = false;
+            errors["password"] = "No puede estar vacío";
+        }
+
+        //RepetirContraseña
+        if (!this.state.newPasswordRepeat) {
+            formIsValid = false;
+            errors["repeatPassword"] = "No puede estar vacío";
+        } else if (this.state.newPassword !== this.state.newPasswordRepeat) {
+            formIsValid = false;
+            errors["repeatPassword"] = "Debe ser igual a la contraseña";
+        }
+
+        this.setState({errors: errors});
+        return formIsValid;
+    }
+
+    async cambiarPassword(){
+        if (this.handleValidation()){
+            await fetch(`/api/updatePasswordTaller?id=${encodeURIComponent(this.state.activeId)}&nuevaPassword=${encodeURIComponent(this.state.newPassword)}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).then(() => {
+                this.handleClose();
+                this.dialogCreado();
+            });
+        }
+    }
 
     dialogHabilitado() {
         this.setState({openDialogHabilitar: false, openDialogHabilitadoExito: true});
@@ -125,6 +201,14 @@ class TallerList extends Component {
     dialogHabilitar(idTaller) {
         this.setState({openDialogHabilitar: true, activeId: idTaller});
     };
+
+    dialogCreado() {
+        this.setState({openDialogExito: true});
+    }
+
+    cleanPassword(idCliente){
+        this.setState({activeId: idCliente, openDialogCambiarPw: true})
+    }
 
     edit(idTaller) {
         this.props.history.push('/talleres/' + idTaller);
@@ -199,6 +283,98 @@ class TallerList extends Component {
                 }
                 <Container fluid>
                     <div>
+                        <Dialog
+                            open={this.state.openDialogExito}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Operación Exitosa"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Cambios guardados correctamente.
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={this.handleClose} color="primary">
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                        <Dialog
+                            open={this.state.openDialogCambiarPw}
+                            onClose={this.handleClose}
+                            aria-labelledby="max-width-dialog-title"
+                        >
+                            <DialogTitle id="max-width-dialog-title">Blanquear Contraseña</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Ingrese la nueva contraseña
+                                </DialogContentText>
+                                <form className={classes.form} noValidate>
+                                    <Grid container spacing={2}>
+                                        <TextField id="newPassword"
+                                                   label="Contraseña"
+                                                   margin="normal"
+                                                   variant="outlined"
+                                                   name="newPassword"
+                                                   type={this.state.showPassword ? 'text' : 'password'}
+                                                   InputProps={{
+                                                       endAdornment:
+                                                           <InputAdornment position="end">
+                                                               <IconButton
+                                                                   aria-label="toggle password visibility"
+                                                                   onClick={this.handleClickShowPassword}
+                                                                   onMouseDown={this.handleMouseDownPassword}
+                                                               >
+                                                                   {this.state.showPassword ? <Visibility/> : <VisibilityOff/>}
+                                                               </IconButton>
+                                                           </InputAdornment>
+                                                   }}
+                                                   required
+                                                   onChange={this.handleChange}
+                                                   value={this.state.newPassword}
+                                                   error={this.state.errors["password"]}
+                                                   helperText={this.state.errors["password"]}
+                                                   fullWidth/>
+                                    </Grid>
+                                    <Grid container spacing={2}>
+                                        <TextField id="newPasswordRepeat"
+                                                   label="Repetir Contraseña"
+                                                   margin="normal"
+                                                   variant="outlined"
+                                                   name="newPasswordRepeat"
+                                                   type={this.state.showRepeatPassword ? 'text' : 'password'}
+                                                   InputProps={{
+                                                       endAdornment:
+                                                           <InputAdornment position="end">
+                                                               <IconButton
+                                                                   aria-label="toggle password visibility"
+                                                                   onClick={this.handleClickShowRepeatPassword}
+                                                                   onMouseDown={this.handleMouseDownPassword}
+                                                               >
+                                                                   {this.state.showRepeatPassword ? <Visibility/> : <VisibilityOff/>}
+                                                               </IconButton>
+                                                           </InputAdornment>
+                                                   }}
+                                                   required
+                                                   onChange={this.handleChange}
+                                                   value={this.state.newPasswordRepeat}
+                                                   error={this.state.errors["repeatPassword"]}
+                                                   helperText={this.state.errors["repeatPassword"]}
+                                                   fullWidth/>
+                                    </Grid>
+                                </form>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={this.cambiarPassword} color="primary">
+                                    Aceptar
+                                </Button>
+                                <Button onClick={this.handleClose} color="primary">
+                                    Cancelar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                         <Dialog
                             open={this.state.openDialogHabilitadoExito}
                             onClose={this.handleClose}
@@ -330,7 +506,7 @@ class TallerList extends Component {
                     />
                     <TalleresEnhancedTable rows={filterTalleres} habilitarTaller={this.dialogHabilitar}
                                            deshabilitarTaller={this.dialogDeshabilitar} editar={this.edit}
-                                           verReseñas={this.reviews} reservar={this.book} usuarioCliente={clienteUser} usuarioAdmin={adminUser}/>
+                                           verReseñas={this.reviews} reservar={this.book} usuarioCliente={clienteUser} usuarioAdmin={adminUser} limpiarPassword={this.cleanPassword}/>
                 </Container>
             </div>
         );

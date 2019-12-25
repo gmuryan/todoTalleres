@@ -1,6 +1,7 @@
 package com.uade.todoTalleres.controller;
 
 import com.uade.todoTalleres.model.Cliente;
+import com.uade.todoTalleres.security.Hashing;
 import com.uade.todoTalleres.service.ClienteService;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -46,6 +47,17 @@ public class ClienteController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/validarCredencialesCliente")
+    ResponseEntity<?> getValidacionCredencialesCliente(String mail, String password){
+        if (clienteService.verificarInfoLogin(mail, password)){
+            Optional<Cliente> cliente = clienteService.findClienteByMail(mail);
+            return cliente.map(response -> ResponseEntity.ok().body(response))
+                    .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/nuevoPresupuesto/{id}")
     List<Long> getReparacionesNuevoPresupuesto(@PathVariable Long id){
         return clienteService.getReparacionesNuevoPresupuesto(id);
@@ -55,8 +67,18 @@ public class ClienteController {
     ResponseEntity<Cliente> createCliente(@Valid @RequestBody Cliente cliente) throws URISyntaxException {
         log.info("Request to create a client: {}", cliente);
         cliente.setActivo(true);
+        String hashPw = Hashing.hash(cliente.getPassword());
+        cliente.setPassword(hashPw);
         Cliente result = clienteService.save(cliente);
         return ResponseEntity.created(new URI("/api/cliente" + result.getIdCliente())).body(result);
+    }
+
+    @PutMapping("/updatePassword")
+    ResponseEntity<Cliente> updatePassword(Long id, String nuevaPassword){
+        log.info("Request to update client: {}", id);
+        Optional<Cliente> result = clienteService.findById(id);
+        clienteService.updatePassword(result.get(), nuevaPassword);
+        return ResponseEntity.ok().body(result.get());
     }
 
     @PutMapping("/cliente")
@@ -68,7 +90,6 @@ public class ClienteController {
             result.get().setApellido(cliente.getApellido());
             result.get().setTelefono(cliente.getTelefono());
             result.get().setMail(cliente.getMail());
-            result.get().setPassword(cliente.getPassword());
             clienteService.save(result.get());
             return ResponseEntity.ok().body(result.get());
         }else{

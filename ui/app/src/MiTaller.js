@@ -11,9 +11,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import IconButton from "@material-ui/core/IconButton";
-import {Visibility, VisibilityOff} from "@material-ui/icons";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -32,9 +29,7 @@ class MiTaller extends Component {
         marca: '',
         clasificacion: '',
         maximosVehiculos: '',
-        retrasosContemplados: '',
-        password: '',
-        repeatPassword: ''
+        retrasosContemplados: ''
     };
 
 
@@ -430,68 +425,6 @@ class MiTaller extends Component {
                                 value={item.descripcionTaller || ''}
                                 onChange={this.handleChange}
                                 autoComplete="descripcionTaller"
-                            />
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                id="outlined-basic"
-                                // className={classes.textField}
-                                label="Contraseña"
-                                margin="normal"
-                                variant="outlined"
-                                name="password"
-                                type={this.state.showPassword ? 'text' : 'password'}
-                                InputProps={{
-                                    endAdornment:
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={this.handleClickShowPassword}
-                                                onMouseDown={this.handleMouseDownPassword}
-                                            >
-                                                {this.state.showPassword ? <Visibility/> : <VisibilityOff/>}
-                                            </IconButton>
-                                        </InputAdornment>
-                                }}
-                                fullWidth
-                                required
-                                value={item.password || ''}
-                                onChange={this.handleChange}
-                                error={this.state.errors["password"]}
-                                helperText={this.state.errors["password"]}
-                                autoComplete="password"
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                id="outlined-basic"
-                                // className={classes.textField}
-                                label="Repetir Contraseña"
-                                margin="normal"
-                                variant="outlined"
-                                name="repeatPassword"
-                                type={this.state.showPassword ? 'text' : 'password'}
-                                InputProps={{
-                                    endAdornment:
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={this.handleClickShowPassword}
-                                                onMouseDown={this.handleMouseDownPassword}
-                                            >
-                                                {this.state.showPassword ? <Visibility/> : <VisibilityOff/>}
-                                            </IconButton>
-                                        </InputAdornment>
-                                }}
-                                fullWidth
-                                required
-                                value={item.repeatPassword || ''}
-                                onChange={this.handleChange}
-                                error={this.state.errors["repeatPassword"]}
-                                helperText={this.state.errors["repeatPassword"]}
-                                autoComplete="repeatPassword"
                             />
                         </Grid>
                     </Grid>

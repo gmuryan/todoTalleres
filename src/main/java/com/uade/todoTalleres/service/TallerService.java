@@ -1,9 +1,11 @@
 package com.uade.todoTalleres.service;
 
+import com.uade.todoTalleres.model.Cliente;
 import com.uade.todoTalleres.model.Mecanico;
 import com.uade.todoTalleres.model.Reparacion;
 import com.uade.todoTalleres.model.Taller;
 import com.uade.todoTalleres.repository.TallerRepository;
+import com.uade.todoTalleres.security.Hashing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +50,11 @@ public class TallerService {
     public Optional<Taller> findTallerByMail(String mail) {
         Optional<Taller> taller = tallerRepository.findByMail(mail);
         return taller;
+    }
+
+    public Boolean verificarInfoLogin (String mail, String password){
+        Optional<Taller> taller  = this.findTallerByMail(mail);
+        return Hashing.verifyHash(password, taller.get().getPassword()) && taller.get().isActivo();
     }
 
     public Optional<Mecanico> getMecanicoDiagnostico(Date fecha, LocalTime hora, Long id) {
@@ -244,6 +251,12 @@ public class TallerService {
             }
         }
         return dateFormat.format(calendar.getTime()) + "-" + horaReserva.toString();
+    }
+
+    public void updatePassword(Taller taller, String nuevaPassword){
+        String hashNuevaPw = Hashing.hash(nuevaPassword);
+        taller.setPassword(hashNuevaPw);
+        this.save(taller);
     }
 
     private boolean fechaEstaDisponible(Long idTaller, Date fechaReserva, LocalTime horaReserva) {

@@ -1,6 +1,8 @@
 package com.uade.todoTalleres.controller;
 
+import com.uade.todoTalleres.model.Cliente;
 import com.uade.todoTalleres.model.Taller;
+import com.uade.todoTalleres.security.Hashing;
 import com.uade.todoTalleres.service.MecanicoService;
 import com.uade.todoTalleres.service.TallerService;
 import org.slf4j.Logger;
@@ -48,6 +50,17 @@ public class TallerController {
         Optional<Taller> taller = tallerService.findTallerByMail(mail);
         return taller.map(response -> ResponseEntity.ok().body(response))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/validarCredencialesTaller")
+    ResponseEntity<?> getValidacionCredencialesTaller(String mail, String password){
+        if (tallerService.verificarInfoLogin(mail, password)){
+            Optional<Taller> taller = tallerService.findTallerByMail(mail);
+            return taller.map(response -> ResponseEntity.ok().body(response))
+                    .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/analyticsMecanicosReparaciones")
@@ -111,8 +124,18 @@ public class TallerController {
     ResponseEntity<Taller> createTaller(@Valid @RequestBody Taller taller) throws URISyntaxException {
         log.info("Request to create a taller: {}", taller);
         taller.setActivo(true);
+        String hashPw = Hashing.hash(taller.getPassword());
+        taller.setPassword(hashPw);
         Taller result = tallerService.save(taller);
         return ResponseEntity.created(new URI("/api/taller" + result.getIdTaller())).body(result);
+    }
+
+    @PutMapping("/updatePasswordTaller")
+    ResponseEntity<Taller> updatePassword(Long id, String nuevaPassword){
+        log.info("Request to update taller: {}", id);
+        Optional<Taller> result = tallerService.findById(id);
+        tallerService.updatePassword(result.get(), nuevaPassword);
+        return ResponseEntity.ok().body(result.get());
     }
 
     @PutMapping("/taller")
@@ -125,7 +148,6 @@ public class TallerController {
             result.get().setTelefono((taller.getTelefono()));
             result.get().setMail(taller.getMail());
             result.get().setUbicacion(taller.getUbicacion());
-            result.get().setPassword(taller.getPassword());
             result.get().setMarca(taller.getMarca());
             result.get().setClasificacion(taller.getClasificacion());
             result.get().setRetrasosContemplados(taller.getRetrasosContemplados());

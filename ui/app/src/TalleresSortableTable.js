@@ -17,6 +17,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import TextsmsIcon from '@material-ui/icons/Textsms';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import InfoIcon from '@material-ui/icons/Info';
+import LockOpenIcon from "@material-ui/icons/LockOpen";
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -127,7 +128,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TalleresEnhancedTable = ({rows, habilitarTaller, deshabilitarTaller, editar, verReseñas, reservar, usuarioAdmin, usuarioCliente}) => {
+const TalleresEnhancedTable = ({rows, habilitarTaller, deshabilitarTaller, editar, verReseñas, reservar, usuarioAdmin, usuarioCliente, limpiarPassword}) => {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -232,6 +233,15 @@ const TalleresEnhancedTable = ({rows, habilitarTaller, deshabilitarTaller, edita
         </Tooltip>
     );
 
+    const cleanPassword = (idTaller) => (
+        <Tooltip title="Blanquear Contraseña">
+            <IconButton aria-label="Blanquear Contraseña" onClick={() => limpiarPassword(idTaller)}>
+                <LockOpenIcon color="action"/>
+            </IconButton>
+        </Tooltip>
+    )
+
+
     const flattenRows = (rows) => (
         rows.map(r => ({...{...r}, marca: r.marca.descripcion, clasificacion:r.clasificacion.descripcion}))
     );
@@ -289,6 +299,9 @@ const TalleresEnhancedTable = ({rows, habilitarTaller, deshabilitarTaller, edita
                                                     }
                                                     {usuarioAdmin &&
                                                     editIcon(row.idTaller)
+                                                    }
+                                                    {usuarioAdmin &&
+                                                    cleanPassword(row.idTaller)
                                                     }
                                                     {usuarioAdmin &&
                                                     reviewsIcon(row.idTaller)

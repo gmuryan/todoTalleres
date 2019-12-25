@@ -43,9 +43,14 @@ const SignUp = ({handleSubmit, handleChange, errores}) => {
     const classes = useStyles();
 
     const [showPassword, setShowPassword] = React.useState(false);
+    const [showRepeatPassword, setShowRepeatPassword] = React.useState(false);
 
     const handleClickShowPassword = event => {
         setShowPassword(!showPassword);
+    }
+
+    const handleClickShowRepeatPassword = event => {
+        setShowRepeatPassword(!showRepeatPassword);
     }
 
     const handleMouseDownPassword = event => {
@@ -155,16 +160,16 @@ const SignUp = ({handleSubmit, handleChange, errores}) => {
                                 fullWidth
                                 name="repeatPassword"
                                 label="Repetir Contraseña"
-                                type={showPassword ? 'text' : 'password'}
+                                type={showRepeatPassword ? 'text' : 'password'}
                                 InputProps={{
                                     endAdornment:
                                         <InputAdornment position="end">
                                             <IconButton
                                                 aria-label="toggle password visibility"
-                                                onClick={handleClickShowPassword}
+                                                onClick={handleClickShowRepeatPassword}
                                                 onMouseDown={handleMouseDownPassword}
                                             >
-                                                {showPassword ? <Visibility/> : <VisibilityOff/>}
+                                                {showRepeatPassword ? <Visibility/> : <VisibilityOff/>}
                                             </IconButton>
                                         </InputAdornment>
                                 }}

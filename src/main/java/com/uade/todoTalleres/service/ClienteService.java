@@ -3,12 +3,14 @@ package com.uade.todoTalleres.service;
 import com.uade.todoTalleres.model.Cliente;
 import com.uade.todoTalleres.model.Reparacion;
 import com.uade.todoTalleres.repository.ClienteRepository;
+import com.uade.todoTalleres.security.Hashing;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 public class ClienteService {
@@ -37,6 +39,11 @@ public class ClienteService {
         return cliente;
     }
 
+    public Boolean verificarInfoLogin (String mail, String password){
+        Optional<Cliente> cliente  = this.findClienteByMail(mail);
+        return Hashing.verifyHash(password, cliente.get().getPassword()) && cliente.get().isActivo();
+    }
+
     public Cliente getClienteExterno(){
         return clienteRepository.getClienteExterno();
     }
@@ -53,6 +60,12 @@ public class ClienteService {
         Optional<Cliente> cliente = this.findById(id);
         cliente.get().setActivo(false);
         clienteRepository.save(cliente.get());
+    }
+
+    public void updatePassword(Cliente cliente, String nuevaPassword){
+        String hashNuevaPw = Hashing.hash(nuevaPassword);
+        cliente.setPassword(hashNuevaPw);
+        this.save(cliente);
     }
 
     public void habilitarById (Long id){

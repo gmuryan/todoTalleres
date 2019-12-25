@@ -14,6 +14,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -122,7 +123,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ClientesEnhancedTable = ({rows, habilitarCliente, deshabilitarCliente, editar}) => {
+const ClientesEnhancedTable = ({rows, habilitarCliente, deshabilitarCliente, editar, limpiarPassword}) => {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -203,6 +204,14 @@ const ClientesEnhancedTable = ({rows, habilitarCliente, deshabilitarCliente, edi
         </Tooltip>
     )
 
+    const cleanPassword = (idCliente) => (
+        <Tooltip title="Blanquear Contraseña">
+            <IconButton aria-label="Blanquear Contraseña" onClick={() => limpiarPassword(idCliente)}>
+                <LockOpenIcon color="action"/>
+            </IconButton>
+        </Tooltip>
+    )
+
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
@@ -246,6 +255,7 @@ const ClientesEnhancedTable = ({rows, habilitarCliente, deshabilitarCliente, edi
                                             <TableCell align="left">{row.activo ? "Si" : "No"}</TableCell>
                                             <TableCell component="th" scope="row">
                                                 {editIcon(row.idCliente)}
+                                                {cleanPassword(row.idCliente)}
                                                 {!row.activo &&
                                                     enableIcon(row)
                                                 }
