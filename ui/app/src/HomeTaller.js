@@ -12,6 +12,12 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
 
 
 class HomeTaller extends Component {
@@ -23,16 +29,30 @@ class HomeTaller extends Component {
             totalesReparaciones: [],
             nombresMecanicos: [],
             reparacionesMes: [],
+            cancelacionesRecientes: [],
+            openDialogCancelaciones: false,
+            stringFinalCancelaciones: '',
             flagGrafico: false,
             mes: ''
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         const taller = JSON.parse(localStorage.getItem("tallerUser"));
         console.log(taller);
         if (taller === null) {
             localStorage.clear();
             this.props.history.push('/');
         }
+    }
+
+    handleClose(event) {
+        this.setState({
+            openDialogCancelaciones: false,
+        });
+    }
+
+    dialogCancelacionesRecientes(){
+        this.setState({openDialogCancelaciones: true});
     }
 
     async handleChange(event) {
@@ -59,10 +79,34 @@ class HomeTaller extends Component {
             this.setState({totalesFacturacion: totalesFacturacion});
             const totalesReparaciones = await (await fetch(`/api/analyticsReparaciones/${tallerUser.idTaller}`)).json();
             this.setState({totalesReparaciones: totalesReparaciones});
+            const cancRecientes = await (await fetch(`/api/cancelacionesRecientesTaller/${tallerUser.idTaller}`)).json();
+            this.setState({cancelacionesRecientes: cancRecientes});
+            if (this.state.cancelacionesRecientes.length > 0){
+                var idsCancelaciones = this.state.cancelacionesRecientes[0];
+                for (const [index, value] of this.state.cancelacionesRecientes.entries()){
+                    if (index !== 0){
+                        idsCancelaciones = idsCancelaciones + ", " + value;
+                    }
+                }
+                this.setState({stringFinalCancelaciones: idsCancelaciones});
+                this.dialogCancelacionesRecientes();
+            }
         }
     }
 
+    async updateCancelacionesRecientes(value){
+        this.handleClose();
+        await fetch(`/api/updateCancelacionesRecientesTaller/${value}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+    }
+
     render() {
+        const tallerUser = JSON.parse(localStorage.getItem("tallerUser"));
         const dataFacturacion = {
             labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             datasets: [
@@ -121,6 +165,26 @@ class HomeTaller extends Component {
             <div>
                 <TalleresNavbar/>
                 <Container fluid>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogCancelaciones}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Cancelaciones Recientes"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Las reparaciones con las siguientes IDs fueron canceladas recientemente: {this.state.stringFinalCancelaciones}. Ingrese a la reparación para conocer los motivos.
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => this.updateCancelacionesRecientes(tallerUser.idTaller)} color="primary">
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
                     <div>
                         <Typography variant="h4">
                             Reparaciones 2019

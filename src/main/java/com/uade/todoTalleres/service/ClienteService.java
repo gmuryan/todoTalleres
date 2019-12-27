@@ -7,9 +7,7 @@ import com.uade.todoTalleres.security.Hashing;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -77,6 +75,16 @@ public class ClienteService {
     @Transactional
     public void actualizarNuevosPresupuestos(Long idCliente){
         clienteRepository.updateNuevasReparacionesCliente(idCliente);
+    }
+
+    @Transactional
+    public void actualizarCancelacionesRecientes(Long idCliente){
+        clienteRepository.updateCancelacionesRecientesCliente(idCliente);
+    }
+
+    public List<Long> getCancelacionesRecientesCliente(Long idCliente){
+        List<Long> reps = clienteRepository.getCancelacionesRecientesCliente(idCliente);
+        return reps;
     }
 
     public List<Long>  getReparacionesNuevoPresupuesto (Long idCliente){

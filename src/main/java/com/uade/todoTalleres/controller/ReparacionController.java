@@ -120,10 +120,10 @@ public class ReparacionController {
     }
 
     @PutMapping("/cancelarTurno")
-    ResponseEntity<Reparacion> cancelarReparacion(Long id, String motivo){
+    ResponseEntity<Reparacion> cancelarReparacion(Long id, String motivo, Boolean canceladoPorTaller){
         log.info("Request to cancel reparacion: {}", id);
         Optional<Reparacion> result = reparacionService.findById(id);
-        reparacionService.cancelarTurno(result.get(), motivo);
+        reparacionService.cancelarTurno(result.get(), motivo, canceladoPorTaller);
         return ResponseEntity.ok().body(result.get());
     }
 
@@ -132,6 +132,22 @@ public class ReparacionController {
         log.info("Request to update cliente: {}", id);
         Optional<Cliente> result = clienteService.findById(id);
         clienteService.actualizarNuevosPresupuestos(id);
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PutMapping("updateCancelacionesRecientes/{id}")
+    ResponseEntity<Cliente> updateCancelacionesRecientesCliente(@PathVariable Long id) {
+        log.info("Request to update cliente: {}", id);
+        Optional<Cliente> result = clienteService.findById(id);
+        clienteService.actualizarCancelacionesRecientes(id);
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PutMapping("updateCancelacionesRecientesTaller/{id}")
+    ResponseEntity<Taller> updateCancelacionesRecientesTaller(@PathVariable Long id) {
+        log.info("Request to update taller: {}", id);
+        Optional<Taller> result = tallerService.findById(id);
+        clienteService.actualizarCancelacionesRecientes(id);
         return ResponseEntity.ok().body(result.get());
     }
 

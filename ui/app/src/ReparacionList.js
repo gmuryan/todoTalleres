@@ -137,7 +137,9 @@ class ReparacionList extends Component {
 
     async cancelarTurno(idReparacion) {
         if (this.handleValidation()) {
-            await fetch(`/api/cancelarTurno?id=${encodeURIComponent(idReparacion)}&motivo=${encodeURIComponent(this.state.motivoCancelacion)}`, {
+            const cliente = JSON.parse(localStorage.getItem("clienteUser"));
+            const canceladoPorTaller = cliente === null;
+            await fetch(`/api/cancelarTurno?id=${encodeURIComponent(idReparacion)}&motivo=${encodeURIComponent(this.state.motivoCancelacion)}&canceladoPorTaller=${encodeURIComponent(canceladoPorTaller)}`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',

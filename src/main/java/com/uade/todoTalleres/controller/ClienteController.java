@@ -63,6 +63,11 @@ public class ClienteController {
         return clienteService.getReparacionesNuevoPresupuesto(id);
     }
 
+    @GetMapping("/cancelacionesRecientesCliente/{id}")
+    List<Long> getCancelacionesRecientesCliente(@PathVariable Long id){
+        return clienteService.getCancelacionesRecientesCliente(id);
+    }
+
     @PostMapping("/cliente")
     ResponseEntity<Cliente> createCliente(@Valid @RequestBody Cliente cliente) throws URISyntaxException {
         log.info("Request to create a client: {}", cliente);

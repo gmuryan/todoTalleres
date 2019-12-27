@@ -18,9 +18,11 @@ class HomeCliente extends Component {
         super(props);
         this.state = {
             nuevosPresupuestos: [],
-            activeId: '',
+            cancelacionesRecientes: [],
             openDialogExito: false,
-            stringFinal: ''
+            openDialogCancelaciones: false,
+            stringFinal: '',
+            stringFinalCancelaciones: ''
         };
         this.handleClose = this.handleClose.bind(this);
         const cliente = JSON.parse(localStorage.getItem("clienteUser"));
@@ -45,12 +47,25 @@ class HomeCliente extends Component {
                 this.setState({stringFinal: nros});
                 this.dialogNuevoPresupuesto();
             }
+            const cancRecientes = await (await fetch(`/api/cancelacionesRecientesCliente/${cliente.idCliente}`)).json();
+            this.setState({cancelacionesRecientes: cancRecientes});
+            if (this.state.cancelacionesRecientes.length > 0){
+                var idsCancelaciones = this.state.cancelacionesRecientes[0];
+                for (const [index, value] of this.state.cancelacionesRecientes.entries()){
+                    if (index !== 0){
+                        idsCancelaciones = idsCancelaciones + ", " + value;
+                    }
+                }
+                this.setState({stringFinalCancelaciones: idsCancelaciones});
+                this.dialogCancelacionesRecientes();
+            }
         }
     }
 
     handleClose(event) {
         this.setState({
-            openDialogExito: false
+            openDialogExito: false,
+            openDialogCancelaciones: false,
         });
     }
 
@@ -65,8 +80,23 @@ class HomeCliente extends Component {
         })
     }
 
+    async updateCancelacionesRecientes(value){
+        this.handleClose();
+        await fetch(`/api/updateCancelacionesRecientes/${value}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+    }
+
     dialogNuevoPresupuesto(){
         this.setState({openDialogExito: true});
+    }
+
+    dialogCancelacionesRecientes(){
+        this.setState({openDialogCancelaciones: true});
     }
 
     render() {
@@ -93,6 +123,26 @@ class HomeCliente extends Component {
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={() => this.updateNuevoPresupuesto(cliente.idCliente)} color="primary">
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                    <div>
+                        <Dialog
+                            open={this.state.openDialogCancelaciones}
+                            onClose={this.handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Cancelaciones Recientes"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Las reparaciones con las siguientes IDs fueron canceladas recientemente: {this.state.stringFinalCancelaciones}. Ingrese a la reparación para conocer los motivos.
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => this.updateCancelacionesRecientes(cliente.idCliente)} color="primary">
                                     Aceptar
                                 </Button>
                             </DialogActions>

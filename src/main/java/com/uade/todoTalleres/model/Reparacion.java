@@ -82,6 +82,12 @@ public class Reparacion {
     @Column
     private String motivoCancelacion;
 
+    @Column
+    private Boolean canceladoRecientemente;
+
+    @Column
+    private Boolean canceladoPorTaller;
+
     public Reparacion(){
 
     }
@@ -248,5 +254,21 @@ public class Reparacion {
 
     public void setMotivoCancelacion(String motivoCancelacion) {
         this.motivoCancelacion = motivoCancelacion;
+    }
+
+    public Boolean getCanceladoRecientemente() {
+        return canceladoRecientemente;
+    }
+
+    public void setCanceladoRecientemente(Boolean canceladoRecientemente) {
+        this.canceladoRecientemente = canceladoRecientemente;
+    }
+
+    public Boolean getCanceladoPorTaller() {
+        return canceladoPorTaller;
+    }
+
+    public void setCanceladoPorTaller(Boolean canceladoPorTaller) {
+        this.canceladoPorTaller = canceladoPorTaller;
     }
 }

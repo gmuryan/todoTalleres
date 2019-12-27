@@ -174,6 +174,11 @@ public class TallerController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/cancelacionesRecientesTaller/{id}")
+    List<Long> getCancelacionesRecientesTaller(@PathVariable Long id){
+        return tallerService.getCancelacionesRecientesTaller(id);
+    }
+
 
     @DeleteMapping("/taller/{id}")
     public ResponseEntity<?> deleteTaller (@PathVariable Long id){

@@ -9,6 +9,7 @@ import com.uade.todoTalleres.security.Hashing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
@@ -257,6 +258,16 @@ public class TallerService {
         String hashNuevaPw = Hashing.hash(nuevaPassword);
         taller.setPassword(hashNuevaPw);
         this.save(taller);
+    }
+
+    public List<Long> getCancelacionesRecientesTaller(Long idTaller){
+        List<Long> reps = tallerRepository.getCancelacionesRecientesTaller(idTaller);
+        return reps;
+    }
+
+    @Transactional
+    public void actualizarCancelacionesRecientesTaller(Long idTaller){
+        tallerRepository.updateCancelacionesRecientesTaller(idTaller);
     }
 
     private boolean fechaEstaDisponible(Long idTaller, Date fechaReserva, LocalTime horaReserva) {
