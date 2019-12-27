@@ -355,6 +355,7 @@ class ReparacionList extends Component {
                         className={classes.textField}
                         label="Estado"
                         margin="normal"
+                        style={{width: 150}}
                         onChange={this.filterEstado}
                     />
                     &nbsp;&nbsp;
@@ -367,6 +368,7 @@ class ReparacionList extends Component {
                             margin="normal"
                             id="date-picker-inline"
                             label="Fecha Reserva Desde"
+                            style={{width: 210}}
                             value={this.state.filtroFechaReservaDesde}
                             onChange={(date) => this.filterFechaReservaDesde(date)}
                             KeyboardButtonProps={{
@@ -383,6 +385,7 @@ class ReparacionList extends Component {
                             id="date-picker-inline"
                             label="Fecha Reserva Hasta"
                             value={this.state.filtroFechaReservaHasta}
+                            style={{width: 210}}
                             onChange={(date) => this.filterFechaReservaHasta(date)}
                             KeyboardButtonProps={{
                                 'aria-label': 'change date',
@@ -398,6 +401,7 @@ class ReparacionList extends Component {
                             id="date-picker-inline"
                             label="Fecha Devolución Desde"
                             value={this.state.filtroFechaDevolucionDesde}
+                            style={{width: 230}}
                             onChange={(date) => this.filterFechaDevolucionDesde(date)}
                             KeyboardButtonProps={{
                                 'aria-label': 'change date',
@@ -413,6 +417,7 @@ class ReparacionList extends Component {
                             id="date-picker-inline"
                             label="Fecha Devolución Hasta"
                             value={this.state.filtroFechaDevolucionHasta}
+                            style={{width: 230}}
                             onChange={(date) => this.filterFechaDevolucionHasta(date)}
                             KeyboardButtonProps={{
                                 'aria-label': 'change date',
