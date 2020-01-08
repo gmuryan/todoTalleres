@@ -22,7 +22,7 @@ const override = css`
     display: block;
     margin: 0 auto;
     border-color: red;
-    margin-top: 350px;
+    margin-top: 300px;
 `;
 
 class ClienteList extends Component {
