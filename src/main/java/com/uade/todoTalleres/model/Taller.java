@@ -45,7 +45,7 @@ public class Taller {
     @JsonIgnore
     @OneToMany
     @JoinColumn(name = "idTaller")
-    private List<Reseña> reseñas;
+    private List<Resenia> reseñas;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
@@ -86,7 +86,7 @@ public class Taller {
         return taller;
     }
 
-    public Taller(String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados, String password, String descripcionTaller, boolean activo) {
+    public Taller(String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Resenia> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados, String password, String descripcionTaller, boolean activo) {
         this.nombre = nombre;
         this.telefono = telefono;
         this.barrio = barrio;
@@ -104,7 +104,7 @@ public class Taller {
         this.activo = activo;
     }
 
-    public Taller(Long idTaller, String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Reseña> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados, String password, String descripcionTaller) {
+    public Taller(Long idTaller, String nombre, String telefono, String barrio, String mail, String ubicacion, Marca marca, List<Reparacion> reparaciones, List<Mecanico> mecanicos, List<Resenia> reseñas, Clasificacion clasificacion, int maximosVehiculos, int retrasosContemplados, String password, String descripcionTaller) {
         this.idTaller = idTaller;
         this.nombre = nombre;
         this.telefono = telefono;
@@ -186,11 +186,11 @@ public class Taller {
         this.reparaciones = reparaciones;
     }
 
-    public List<Reseña> getReseñas() {
+    public List<Resenia> getReseñas() {
         return reseñas;
     }
 
-    public void setReseñas(List<Reseña> reseñas) {
+    public void setReseñas(List<Resenia> reseñas) {
         this.reseñas = reseñas;
     }
 

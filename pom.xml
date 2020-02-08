@@ -10,8 +10,9 @@
 	</parent>
 	<groupId>com.uade</groupId>
 	<artifactId>todoTalleres</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>todoTalleres</name>
+	<packaging>war</packaging>
 	<description>Proyecto TodoTalleres</description>
 
 	<properties>

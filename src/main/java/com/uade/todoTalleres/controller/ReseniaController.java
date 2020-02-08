@@ -1,7 +1,7 @@
 package com.uade.todoTalleres.controller;
 
-import com.uade.todoTalleres.model.Reseña;
-import com.uade.todoTalleres.service.ReseñaService;
+import com.uade.todoTalleres.model.Resenia;
+import com.uade.todoTalleres.service.ReseniaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,47 +17,47 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-public class ReseñaController {
+public class ReseniaController {
 
-    private final Logger log = LoggerFactory.getLogger(ReseñaController.class);
+    private final Logger log = LoggerFactory.getLogger(ReseniaController.class);
 
-    private ReseñaService reseñaService;
+    private ReseniaService reseñaService;
 
-    public ReseñaController(ReseñaService reseñaService) {
+    public ReseniaController(ReseniaService reseñaService) {
         this.reseñaService = reseñaService;
     }
 
     @GetMapping("/reseñas")
-    Collection<Reseña> reseñas() {
+    Collection<Resenia> reseñas() {
         return reseñaService.findAll();
     }
 
     @GetMapping("/reseñas/{id}")
-    Collection<Reseña> reseñasByTaller(@PathVariable Long id){
+    Collection<Resenia> reseñasByTaller(@PathVariable Long id){
         return reseñaService.findAllByTaller(id);
     }
 
     @GetMapping("/reseña/{id}")
     ResponseEntity<?> getReseña(@PathVariable Long id) {
-        Optional<Reseña> reseña= reseñaService.findById(id);
+        Optional<Resenia> reseña= reseñaService.findById(id);
         return reseña.map(response -> ResponseEntity.ok().body(response))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/reseña")
-    ResponseEntity<Reseña> createResña(@Valid @RequestBody Reseña reseña) throws URISyntaxException {
+    ResponseEntity<Resenia> createResña(@Valid @RequestBody Resenia reseña) throws URISyntaxException {
         log.info("Request to create a reseña: {}", reseña);
         Date fechaComentario = new Date();
         fechaComentario.setDate(fechaComentario.getDate()+1);
         reseña.setFechaReseña(fechaComentario);
-        Reseña result = reseñaService.save(reseña);
+        Resenia result = reseñaService.save(reseña);
         return ResponseEntity.created(new URI("/api/reseña" + result.getIdReseña())).body(result);
     }
 
     @PutMapping("/reseña")
-    ResponseEntity<Reseña> updateReseña(@Valid @RequestBody Reseña reseña){
+    ResponseEntity<Resenia> updateReseña(@Valid @RequestBody Resenia reseña){
         log.info("Request to update mecanico: {}", reseña);
-        Optional<Reseña> result = reseñaService.findById(reseña.getIdReseña());
+        Optional<Resenia> result = reseñaService.findById(reseña.getIdReseña());
         if (result.get() != null){
             result.get().setComentario(reseña.getComentario());
             reseñaService.save(result.get());

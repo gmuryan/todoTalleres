@@ -1,39 +1,39 @@
 package com.uade.todoTalleres.service;
 
-import com.uade.todoTalleres.model.Reseña;
-import com.uade.todoTalleres.repository.ReseñaRepository;
+import com.uade.todoTalleres.model.Resenia;
+import com.uade.todoTalleres.repository.ReseniaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ReseñaService {
+public class ReseniaService {
 
-    private ReseñaRepository reseñaRepository;
+    private ReseniaRepository reseñaRepository;
 
-    public ReseñaService(ReseñaRepository reseñaRepository){
+    public ReseniaService(ReseniaRepository reseñaRepository){
         this.reseñaRepository = reseñaRepository;
     }
 
-    public Reseña save(Reseña reseña){
+    public Resenia save(Resenia reseña){
         return reseñaRepository.save(reseña);
     }
 
-    public Optional<Reseña> findById (long id){
-        Optional<Reseña> reseña = reseñaRepository.findById(id);
+    public Optional<Resenia> findById (long id){
+        Optional<Resenia> reseña = reseñaRepository.findById(id);
         return reseña;
     }
 
-    public List<Reseña> findAll(){
+    public List<Resenia> findAll(){
         return reseñaRepository.findAll();
     }
 
-    public List<Reseña> findAllByTaller(Long id){
+    public List<Resenia> findAllByTaller(Long id){
         return reseñaRepository.findAllByTaller(id);
     }
 
-    public void delete (Reseña reseña){
+    public void delete (Resenia reseña){
         reseñaRepository.delete(reseña);
     }
 

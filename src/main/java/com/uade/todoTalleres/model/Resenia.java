@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "reseña")
-public class Reseña {
+public class Resenia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +28,11 @@ public class Reseña {
 
     private Integer puntuacion;
 
-    public Reseña(){
+    public Resenia(){
 
     }
 
-    public Reseña(Long idReseña, Cliente cliente, Taller taller, String comentario, Integer puntuacion) {
+    public Resenia(Long idReseña, Cliente cliente, Taller taller, String comentario, Integer puntuacion) {
         this.idReseña = idReseña;
         this.cliente = cliente;
         this.taller = taller;
