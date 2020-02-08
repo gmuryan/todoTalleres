@@ -187,7 +187,7 @@ class HomeTaller extends Component {
                     </div>
                     <div>
                         <Typography variant="h4">
-                            Reparaciones 2019
+                            Reparaciones 2020
                         </Typography>
                         <div style={{height: '250px'}}>
                             <Bar
